@@ -1,0 +1,65 @@
+# ---------------------------------------------------------------------------
+# Plateful Consulting — production stack
+#
+#   app    the Next.js site
+#   caddy  public entry point; gets and renews the HTTPS certificate itself
+#
+# The two bind mounts are the only state that matters. Back those up and you
+# can rebuild everything else from scratch:
+#
+#   ./data      the SQLite database (articles, enquiries, subscribers)
+#   ./uploads   images uploaded through the Blog Studio
+# ---------------------------------------------------------------------------
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        # Baked into the client bundle at build time, so it must be set here
+        # and not only in .env.
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://platefulconsulting.com}
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # These override anything in .env — the paths inside the container are
+      # fixed and must line up with the volumes below.
+      DATABASE_URL: "file:/app/data/prod.db"
+      UPLOAD_DIR: "/app/storage/uploads"
+      PORT: "3000"
+    volumes:
+      - ./data:/app/data
+      - ./uploads:/app/storage/uploads
+    # Not published to the host: the only way in is through Caddy.
+    expose:
+      - "3000"
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+
+volumes:
+  # Holds the HTTPS certificates. Keeping it as a named volume means a rebuild
+  # never triggers a fresh certificate request against Let's Encrypt limits.
+  caddy_data:
+  caddy_config:

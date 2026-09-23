@@ -1,0 +1,10 @@
+# The container entrypoint is executed by /bin/sh on Linux. If Windows line
+# endings ever get committed into it, the server fails to start with a
+# misleading "no such file or directory" — force LF regardless of platform.
+*.sh text eol=lf
+scripts/docker-entrypoint.sh text eol=lf
+Dockerfile text eol=lf
+Caddyfile text eol=lf
+
+# Keep everything else normalised too.
+* text=auto

@@ -1,0 +1,39 @@
+# ---------------------------------------------------------------------------
+# Plateful Consulting — public entry point
+#
+# Caddy requests and renews the HTTPS certificate on its own. Nothing to run,
+# no cron job, no expiry to diary. It will keep retrying until the domain's DNS
+# points at this server, so a certificate error in the logs before the cutover
+# is expected and harmless.
+# ---------------------------------------------------------------------------
+
+{
+	# Where Let's Encrypt sends expiry warnings if renewal ever fails.
+	email info@platefulconsulting.com
+}
+
+platefulconsulting.com, www.platefulconsulting.com {
+	encode zstd gzip
+
+	header {
+		# Tell browsers to only ever use HTTPS for this domain.
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	# One canonical hostname. Google treats www and non-www as separate sites
+	# otherwise, which splits the ranking signal between them.
+	@www host www.platefulconsulting.com
+	redir @www https://platefulconsulting.com{uri} permanent
+
+	reverse_proxy app:3000
+
+	log {
+		output file /data/access.log {
+			roll_size 10MiB
+			roll_keep 5
+		}
+	}
+}

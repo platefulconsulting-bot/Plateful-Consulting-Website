@@ -1,0 +1,135 @@
+// ---------------------------------------------------------------------------
+// Plateful Consulting — data model
+//
+// Provider note: SQLite by default so the site runs with zero infrastructure
+// on a VPS, Docker host or locally. To deploy on Vercel/Netlify, switch
+// `provider` to "postgresql", point DATABASE_URL at Neon/Supabase and run
+// `npx prisma db push`. No application code changes are required.
+// ---------------------------------------------------------------------------
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// Studio login. Seeded from STUDIO_EMAIL / STUDIO_PASSWORD.
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         String   @default("editor") // "admin" | "editor"
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+/// Public-facing byline. Separate from User so founders can be credited
+/// without every author needing Studio access.
+model Author {
+  id     String  @id @default(cuid())
+  slug   String  @unique
+  name   String
+  role   String
+  bio    String
+  avatar String?
+  posts  Post[]
+}
+
+model Category {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  name        String
+  description String
+  /// Hex accent used for chips and the category hero.
+  accent      String  @default("#B47A17")
+  order       Int     @default(0)
+  posts       Post[]
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  slug  String @unique
+  name  String
+  posts Post[] @relation("PostTags")
+}
+
+model Post {
+  id       String @id @default(cuid())
+  /// Root-level slug, matching the legacy WordPress URLs exactly so that
+  /// existing Google rankings and backlinks survive the replatform.
+  slug     String @unique
+  title    String
+  excerpt  String
+
+  /// Sanitised HTML produced by the Studio editor (or the legacy importer).
+  contentHtml String
+
+  coverImage String?
+  coverAlt   String?
+
+  status         String   @default("draft") // "draft" | "published"
+  /// Set by the Studio on save. The seed uses this to know which posts are
+  /// hand-edited and must not be overwritten by a re-import — far more
+  /// reliable than comparing timestamps, which a re-seed itself changes.
+  editedInStudio Boolean  @default(false)
+  featured       Boolean  @default(false)
+  readingMinutes Int      @default(5)
+  views          Int      @default(0)
+
+  // SEO overrides. Fall back to title/excerpt when empty.
+  metaTitle       String?
+  metaDescription String?
+  ogImage         String?
+
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  authorId   String?
+  author     Author?   @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  tags       Tag[]     @relation("PostTags")
+
+  @@index([status, publishedAt])
+  @@index([categoryId])
+}
+
+/// Contact-form and lead-magnet submissions.
+model Enquiry {
+  id         String   @id @default(cuid())
+  name       String
+  email      String
+  phone      String?
+  restaurant String?
+  city       String?
+  service    String?
+  message    String
+  /// Which page or widget the lead came from, for attribution.
+  source     String   @default("contact")
+  handled    Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  source    String   @default("footer")
+  createdAt DateTime @default(now())
+}
+
+model Media {
+  id        String   @id @default(cuid())
+  url       String
+  filename  String
+  mime      String
+  size      Int
+  alt       String   @default("")
+  createdAt DateTime @default(now())
+}

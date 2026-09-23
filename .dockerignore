@@ -1,0 +1,24 @@
+# Build context excludes. Keeping this tight makes the upload and build fast.
+node_modules
+.next
+out
+.git
+.gitignore
+
+# Local state — production has its own on a mounted volume.
+prisma/*.db
+prisma/*.db-journal
+storage
+data
+uploads
+
+# Secrets never go into an image.
+.env
+.env.local
+.env.*.local
+
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.vercel

@@ -1,0 +1,694 @@
+@import "tailwindcss";
+
+/* Theme is an attribute on <html>, not a class, so dark: needs teaching. */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* ===========================================================================
+   PLATEFUL CONSULTING — DESIGN SYSTEM
+   ---------------------------------------------------------------------------
+   Palette derived from the brand's existing identity: a warm near-black
+   ground (#020101), heritage gold (#B47A17 / #F7D045), cream (#FFF9DF) and an
+   ember orange (#EA552B) for action. Every neutral carries a touch of brown so
+   the dark surfaces read as "roasted", never as flat grey.
+   =========================================================================== */
+
+@theme {
+  /* --- Neutrals: warm, brown-shifted blacks ------------------------------ */
+  --color-ink-950: #070504;
+  --color-ink-900: #0a0806;
+  --color-ink-850: #100d09;
+  --color-ink-800: #17120d;
+  --color-ink-750: #1f1912;
+  --color-ink-700: #2a2118;
+  --color-ink-600: #3a2f22;
+  --color-ink-500: #4f4130;
+  --color-ink-400: #6b5946;
+
+  /* --- Cream: the primary reading colour on dark ------------------------- */
+  --color-cream-50: #fffdf7;
+  --color-cream-100: #fff9df;
+  --color-cream-200: #f4eed9;
+  --color-cream-300: #ded6bd;
+  --color-cream-400: #b8ae94;
+  --color-cream-500: #8d836c;
+
+  /* --- Gold: the brand's precious accent --------------------------------- */
+  --color-gold-200: #fbe89a;
+  --color-gold-300: #f7d045;
+  --color-gold-400: #e0a82e;
+  --color-gold-500: #b47a17;
+  --color-gold-600: #8e5e10;
+  --color-gold-700: #64420c;
+
+  /* --- Ember: energy, urgency, primary CTA ------------------------------- */
+  --color-ember-300: #ff9a72;
+  --color-ember-400: #ff7a4d;
+  --color-ember-500: #ea552b;
+  --color-ember-600: #c4401c;
+
+  /* --- Support hues for data viz and category chips ---------------------- */
+  --color-basil-400: #5fb37a;
+  --color-basil-500: #3d8f58;
+  --color-berry-400: #c2557f;
+  --color-saffron-400: #f0a63c;
+
+  /* --- Platform identity -------------------------------------------------
+     The two aggregators the entire practice is built around. Used sparingly
+     and only to identify them — a restaurant owner should recognise within a
+     second that this is a Swiggy and Zomato specialist, not a generic agency.
+     ----------------------------------------------------------------------- */
+  --color-swiggy: #fc8019;
+  --color-swiggy-dim: #b8590f;
+  --color-zomato: #e23744;
+  --color-zomato-dim: #a1222c;
+
+  /* --- Absolute brand colours --------------------------------------------
+     These never flip. Text printed on a gold or ember surface has to stay
+     legible in both themes, so it cannot use the scales above, which invert.
+     ----------------------------------------------------------------------- */
+  --color-carbon: #0a0806;
+  --color-paper: #fffdf7;
+  --color-brand-gold: #f7d045;
+  --color-brand-gold-deep: #b47a17;
+  --color-brand-ember: #ff7a4d;
+  --color-brand-ember-deep: #c4401c;
+
+
+  /* --- Type ------------------------------------------------------------- */
+  --font-display: var(--font-sora), "Segoe UI", system-ui, sans-serif;
+  --font-body: var(--font-inter), "Segoe UI", system-ui, sans-serif;
+  --font-accent: var(--font-instrument), Georgia, "Times New Roman", serif;
+
+  /* Fluid display scale — clamp(min, preferred, max) */
+  --text-display-2xl: clamp(2.75rem, 1.2rem + 6.4vw, 6.5rem);
+  --text-display-xl: clamp(2.25rem, 1.1rem + 4.8vw, 4.75rem);
+  --text-display-lg: clamp(1.9rem, 1.15rem + 3.1vw, 3.5rem);
+  --text-display-md: clamp(1.6rem, 1.1rem + 2.1vw, 2.5rem);
+  --text-display-sm: clamp(1.35rem, 1.05rem + 1.2vw, 1.875rem);
+
+  /* --- Motion ----------------------------------------------------------- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* --- Elevation: warm shadows, never neutral black --------------------- */
+  --shadow-warm-sm: 0 1px 2px rgba(7, 5, 4, 0.4);
+  --shadow-warm-md: 0 8px 24px -8px rgba(7, 5, 4, 0.7);
+  --shadow-warm-lg: 0 24px 64px -16px rgba(7, 5, 4, 0.85);
+  --shadow-gold-glow: 0 0 0 1px rgba(180, 122, 23, 0.35), 0 12px 48px -12px rgba(224, 168, 46, 0.3);
+
+  --radius-card: 1.25rem;
+
+  /* --- Keyframes -------------------------------------------------------- */
+  --animate-marquee: marquee 42s linear infinite;
+  --animate-float-slow: float-slow 9s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.6s linear infinite;
+  --animate-pulse-ring: pulse-ring 2.8s ease-out infinite;
+}
+
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+@keyframes pulse-ring {
+  0% { transform: scale(0.85); opacity: 0.7; }
+  70% { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+
+/* ===========================================================================
+   THEMES
+   ---------------------------------------------------------------------------
+   The palette is authored dark-first and *flips* rather than being duplicated.
+   `ink` is always the ground and `cream` is always what is printed on it, so in
+   light mode `ink` becomes warm paper and `cream` becomes near-black. Every
+   utility in the app already compiles to var(--color-...), which means
+   redefining the variables here re-themes the entire site — marketing pages,
+   article bodies and the Studio — without touching a single component.
+
+   What must NOT flip: anything printed on an accent (text on a gold or ember
+   button) and the brand accents themselves. Those use the absolute tokens.
+   =========================================================================== */
+
+:root {
+  color-scheme: dark;
+  --stage-scrim: linear-gradient(
+    180deg,
+    rgba(10, 8, 6, 0.22) 0%,
+    rgba(10, 8, 6, 0.42) 32%,
+    rgba(10, 8, 6, 0.48) 70%,
+    rgba(10, 8, 6, 0.62) 100%
+  );
+}
+
+[data-theme=light] {
+  color-scheme: light;
+
+  /* Ground: warm paper, never clinical white. */
+  --color-ink-950: #ffffff;
+  --color-ink-900: #fdfaf2;
+  --color-ink-850: #f7f1e4;
+  --color-ink-800: #f2ead9;
+  --color-ink-750: #e9dfca;
+  --color-ink-700: #dcd0b6;
+  --color-ink-600: #c3b394;
+  --color-ink-500: #a08e6e;
+  --color-ink-400: #7d6d52;
+
+  /* Ink printed on that paper. */
+  --color-cream-50: #100c07;
+  --color-cream-100: #1a140d;
+  --color-cream-200: #2b2219;
+  --color-cream-300: #3e3123;
+  --color-cream-400: #5a4833;
+  --color-cream-500: #7a6647;
+
+  /* Accents darkened until they hold contrast on paper. */
+  --color-gold-200: #a5701a;
+  --color-gold-300: #8e5e10;
+  --color-gold-400: #7d5210;
+  --color-gold-500: #6b460d;
+  --color-gold-600: #57380a;
+  --color-gold-700: #3f2807;
+
+  --color-ember-300: #d2491f;
+  --color-ember-400: #c4401c;
+  --color-ember-500: #a83617;
+  --color-ember-600: #8c2c12;
+
+  --color-basil-400: #2f7d47;
+  --color-basil-500: #276a3c;
+  --color-berry-400: #9c3b60;
+  --color-saffron-400: #a3670f;
+
+  /* Platform colours, deepened just enough to read as text on paper. */
+  --color-swiggy: #d8650a;
+  --color-zomato: #c31f2c;
+
+  /* Shadows: soft neutral depth, not the warm black used on the dark ground. */
+  --shadow-warm-sm: 0 1px 2px rgba(60, 45, 25, 0.08);
+  --shadow-warm-md: 0 10px 28px -14px rgba(60, 45, 25, 0.26);
+  --shadow-warm-lg: 0 24px 64px -20px rgba(60, 45, 25, 0.3);
+  --shadow-gold-glow:
+    0 0 0 1px rgba(180, 122, 23, 0.4),
+    0 14px 44px -16px rgba(180, 122, 23, 0.32);
+
+  /* On paper the scrim lightens the 3D stage instead of darkening it. */
+  --stage-scrim: linear-gradient(
+    180deg,
+    rgba(253, 250, 242, 0.18) 0%,
+    rgba(253, 250, 242, 0.3) 32%,
+    rgba(253, 250, 242, 0.34) 70%,
+    rgba(253, 250, 242, 0.48) 100%
+  );
+}
+
+/* ===========================================================================
+   BASE
+   =========================================================================== */
+
+@layer base {
+  * {
+    border-color: color-mix(in oklab, var(--color-cream-100) 8%, transparent);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Sticky header height + breathing room for in-page anchors. */
+    scroll-padding-top: 6.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ink-900);
+    color: var(--color-cream-200);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-display);
+    color: var(--color-cream-50);
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  p { text-wrap: pretty; }
+
+  ::selection {
+    background: var(--color-brand-gold);
+    color: var(--color-carbon);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold-300);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Scrollbar — subtle, matches the ground rather than fighting it. */
+  ::-webkit-scrollbar { width: 11px; height: 11px; }
+  ::-webkit-scrollbar-track { background: var(--color-ink-900); }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ink-700);
+    border-radius: 99px;
+    border: 3px solid var(--color-ink-900);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-gold-700); }
+
+  /* Lenis smooth scrolling. The native `scroll-behavior: smooth` above must be
+     disabled while Lenis is driving, or the two interpolators fight each other
+     and anchor jumps overshoot. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  /* Opt a scrollable child out of Lenis (e.g. a long table of contents). */
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  /* Respect the OS setting. WebGL scenes also read this and freeze. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ===========================================================================
+   COMPONENTS
+   =========================================================================== */
+
+@layer components {
+
+  /* --- Layout ----------------------------------------------------------- */
+  .container-x {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 80rem;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) { .container-x { padding-inline: 2rem; } }
+  @media (min-width: 1280px) { .container-x { padding-inline: 2.5rem; } }
+
+  .section { padding-block: clamp(4rem, 2rem + 8vw, 8.5rem); }
+  .section-tight { padding-block: clamp(3rem, 1.5rem + 5vw, 5.5rem); }
+
+  /* --- Eyebrow: the small gold label above every section heading -------- */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-gold-400);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 1.75rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-gold-500));
+  }
+
+  /* --- Buttons ---------------------------------------------------------- */
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    letter-spacing: -0.01em;
+    padding: 0.9rem 1.6rem;
+    transition: transform 0.35s var(--ease-out-expo),
+                box-shadow 0.35s var(--ease-out-expo),
+                background-color 0.25s ease,
+                color 0.25s ease;
+    white-space: nowrap;
+  }
+  .btn:active { transform: translateY(1px) scale(0.99); }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--color-brand-ember), var(--color-brand-ember-deep));
+    color: var(--color-paper);
+    box-shadow: 0 10px 30px -10px rgba(234, 85, 43, 0.65);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 44px -12px rgba(234, 85, 43, 0.8);
+  }
+
+  .btn-gold {
+    background: linear-gradient(135deg, var(--color-brand-gold), var(--color-brand-gold-deep));
+    color: var(--color-carbon);
+    box-shadow: 0 10px 30px -10px rgba(224, 168, 46, 0.55);
+  }
+  .btn-gold:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 44px -12px rgba(224, 168, 46, 0.7);
+  }
+
+  .btn-outline {
+    border: 1px solid color-mix(in oklab, var(--color-cream-100) 22%, transparent);
+    color: var(--color-cream-100);
+    backdrop-filter: blur(8px);
+  }
+  .btn-outline:hover {
+    border-color: var(--color-gold-400);
+    color: var(--color-gold-300);
+    transform: translateY(-2px);
+  }
+
+  .btn-ghost { color: var(--color-cream-300); }
+  .btn-ghost:hover { color: var(--color-gold-300); }
+
+  .btn-sm { padding: 0.6rem 1.1rem; font-size: 0.875rem; }
+  .btn-lg { padding: 1.05rem 2rem; font-size: 1rem; }
+
+  /* --- Surfaces --------------------------------------------------------- */
+  .card {
+    position: relative;
+    border-radius: var(--radius-card);
+    /* Deliberately translucent: the scroll stage renders behind the whole
+       page, and a fully opaque card would punch a hole in it. Alpha alone,
+       no backdrop-filter — twenty blurred surfaces per page is a real cost
+       and the world behind is soft enough not to need it. */
+    background: linear-gradient(
+      160deg,
+      color-mix(in oklab, var(--color-ink-800) 80%, transparent),
+      color-mix(in oklab, var(--color-ink-850) 88%, transparent)
+    );
+    border: 1px solid color-mix(in oklab, var(--color-cream-100) 7%, transparent);
+    box-shadow: var(--shadow-warm-md);
+    transition: border-color 0.4s var(--ease-out-expo),
+                transform 0.5s var(--ease-out-expo),
+                box-shadow 0.5s var(--ease-out-expo);
+  }
+  .card-hover:hover {
+    border-color: color-mix(in oklab, var(--color-gold-400) 45%, transparent);
+    box-shadow: var(--shadow-gold-glow);
+  }
+
+  /* A 1px gradient hairline along the top edge — catches light like metal. */
+  .card-sheen::before {
+    content: "";
+    position: absolute;
+    inset-inline: 12%;
+    top: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-gold-400), transparent);
+    opacity: 0.55;
+  }
+
+  .glass {
+    background: color-mix(in oklab, var(--color-ink-850) 72%, transparent);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid color-mix(in oklab, var(--color-cream-100) 9%, transparent);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    background: color-mix(in oklab, var(--color-gold-500) 14%, transparent);
+    color: var(--color-gold-300);
+    border: 1px solid color-mix(in oklab, var(--color-gold-400) 26%, transparent);
+  }
+
+  /* --- Text treatments -------------------------------------------------- */
+  .text-gradient-gold {
+    background: linear-gradient(120deg, var(--color-gold-200), var(--color-gold-400) 45%, var(--color-ember-400));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .accent-serif {
+    font-family: var(--font-accent);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  /* Hairline grid used behind hero and CTA bands. */
+  .grid-lines {
+    background-image:
+      linear-gradient(color-mix(in oklab, var(--color-cream-100) 4%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklab, var(--color-cream-100) 4%, transparent) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  }
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+}
+
+/* ===========================================================================
+   ARTICLE TYPOGRAPHY
+   Blog bodies are stored as sanitised HTML, so these styles are written as
+   plain descendant selectors rather than utility classes.
+   =========================================================================== */
+
+.prose-pfc {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: var(--color-cream-300);
+}
+@media (min-width: 768px) { .prose-pfc { font-size: 1.125rem; } }
+
+.prose-pfc > * + * { margin-top: 1.5em; }
+
+.prose-pfc h2 {
+  font-size: var(--text-display-sm);
+  line-height: 1.2;
+  margin-top: 2.75em;
+  margin-bottom: 0.1em;
+  scroll-margin-top: 7rem;
+  color: var(--color-cream-50);
+}
+/* Gold rule above every H2 — gives long SEO articles a scannable rhythm. */
+.prose-pfc h2::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 2px;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, var(--color-gold-400), transparent);
+}
+
+.prose-pfc h3 {
+  font-size: 1.3rem;
+  line-height: 1.35;
+  margin-top: 2em;
+  margin-bottom: 0.1em;
+  scroll-margin-top: 7rem;
+  color: var(--color-cream-100);
+}
+
+.prose-pfc h4 {
+  font-size: 1.075rem;
+  margin-top: 1.75em;
+  color: var(--color-gold-300);
+  letter-spacing: 0.01em;
+}
+
+.prose-pfc a {
+  color: var(--color-gold-300);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--color-gold-400) 40%, transparent);
+  text-underline-offset: 3px;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+.prose-pfc a:hover {
+  color: var(--color-ember-300);
+  text-decoration-color: var(--color-ember-400);
+}
+
+.prose-pfc strong { color: var(--color-cream-50); font-weight: 650; }
+
+.prose-pfc ul, .prose-pfc ol { padding-left: 1.35rem; }
+.prose-pfc li { margin-top: 0.55em; padding-left: 0.35rem; }
+.prose-pfc ul > li { list-style: none; position: relative; }
+.prose-pfc ul > li::before {
+  content: "";
+  position: absolute;
+  left: -1rem;
+  top: 0.72em;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  transform: rotate(45deg);
+  background: var(--color-gold-400);
+}
+.prose-pfc ol > li { list-style: decimal; }
+.prose-pfc ol > li::marker { color: var(--color-gold-400); font-weight: 700; }
+
+.prose-pfc blockquote {
+  border-left: 2px solid var(--color-gold-500);
+  padding: 0.25rem 0 0.25rem 1.5rem;
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-size: 1.25em;
+  line-height: 1.55;
+  color: var(--color-cream-100);
+}
+
+/* Tables carry the real substance in these articles — commission rates,
+   ranking signals, budget splits. They get first-class treatment. */
+.prose-pfc .table-wrap {
+  overflow-x: auto;
+  border-radius: 0.9rem;
+  border: 1px solid color-mix(in oklab, var(--color-cream-100) 9%, transparent);
+  background: var(--color-ink-850);
+  -webkit-overflow-scrolling: touch;
+}
+.prose-pfc table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  min-width: 34rem;
+}
+.prose-pfc thead {
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--color-gold-500) 16%, transparent),
+    transparent
+  );
+}
+.prose-pfc th {
+  text-align: left;
+  padding: 0.9rem 1.1rem;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-gold-300);
+  white-space: nowrap;
+}
+.prose-pfc td {
+  padding: 0.85rem 1.1rem;
+  border-top: 1px solid color-mix(in oklab, var(--color-cream-100) 7%, transparent);
+  vertical-align: top;
+}
+.prose-pfc tbody tr:hover { background: color-mix(in oklab, var(--color-gold-500) 5%, transparent); }
+
+.prose-pfc img {
+  border-radius: 0.9rem;
+  border: 1px solid color-mix(in oklab, var(--color-cream-100) 8%, transparent);
+}
+
+.prose-pfc figure figcaption {
+  margin-top: 0.7rem;
+  font-size: 0.85rem;
+  color: var(--color-cream-500);
+  text-align: center;
+}
+
+.prose-pfc hr {
+  border: 0;
+  height: 1px;
+  margin-block: 3em;
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--color-gold-400) 45%, transparent), transparent);
+}
+
+.prose-pfc code {
+  font-size: 0.9em;
+  padding: 0.15em 0.4em;
+  border-radius: 0.35rem;
+  background: var(--color-ink-750);
+  color: var(--color-gold-200);
+}
+
+/* The "Direct Answer" lede that opens every Plateful article. */
+.prose-pfc .direct-answer {
+  position: relative;
+  border-radius: 1rem;
+  padding: 1.5rem 1.6rem 1.5rem 1.75rem;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--color-gold-500) 12%, var(--color-ink-850)),
+    var(--color-ink-850)
+  );
+  border: 1px solid color-mix(in oklab, var(--color-gold-400) 28%, transparent);
+  color: var(--color-cream-100);
+  font-size: 1.05em;
+  line-height: 1.7;
+}
+.prose-pfc .direct-answer::before {
+  content: "Direct answer";
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-gold-400);
+  margin-bottom: 0.6rem;
+}
+
+/* ===========================================================================
+   REVEAL
+   Driven by components/ui/Reveal, which only toggles `data-shown`. Kept here
+   rather than as utility classes so React never has to own the shown state.
+   =========================================================================== */
+
+[data-reveal] {
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+}
+[data-reveal][data-immediate] {
+  transition-duration: 0.6s;
+}
+[data-reveal]:not([data-shown]) {
+  opacity: 0;
+}
+[data-reveal="up"]:not([data-shown]) {
+  transform: translate3d(0, 2rem, 0);
+}
+[data-reveal="down"]:not([data-shown]) {
+  transform: translate3d(0, -2rem, 0);
+}
+[data-reveal="left"]:not([data-shown]) {
+  transform: translate3d(2rem, 0, 0);
+}
+[data-reveal="right"]:not([data-shown]) {
+  transform: translate3d(-2rem, 0, 0);
+}
