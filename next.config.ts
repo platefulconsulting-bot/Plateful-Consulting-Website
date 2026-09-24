@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "platefulconsulting.com" },
       { protocol: "https", hostname: "**.platefulconsulting.com" },
+      // Studio uploads when hosted on Vercel (Vercel Blob).
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
     ],
   },
   // three.js ships untranspiled ESM examples; keep them in the server bundle graph.

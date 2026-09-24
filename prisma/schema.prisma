@@ -1,10 +1,9 @@
 // ---------------------------------------------------------------------------
 // Plateful Consulting — data model
 //
-// Provider note: SQLite by default so the site runs with zero infrastructure
-// on a VPS, Docker host or locally. To deploy on Vercel/Netlify, switch
-// `provider` to "postgresql", point DATABASE_URL at Neon/Supabase and run
-// `npx prisma db push`. No application code changes are required.
+// Provider note: Postgres (Neon, connected through Vercel). The tables are
+// created and the legacy articles seeded automatically on each Vercel build
+// (see `vercel-build` in package.json and prisma/vercel-setup.ts).
 // ---------------------------------------------------------------------------
 
 generator client {
@@ -12,7 +11,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 

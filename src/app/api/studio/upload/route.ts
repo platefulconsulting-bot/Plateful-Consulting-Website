@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { writeFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
+import { put } from "@vercel/blob";
 
 import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -17,9 +18,10 @@ export const runtime = "nodejs";
  * into `public/`, whose contents Next.js indexes at build time — anything
  * written there after a build is served as a 404.
  *
- * On a serverless host (Vercel, Netlify Functions) the filesystem is read-only
- * and ephemeral — swap this handler for an S3/R2/Blob put and return the public
- * URL. Nothing else in the app needs to change; it only consumes `url`.
+ * On Vercel the filesystem is read-only and ephemeral, so when a Blob store is
+ * connected (BLOB_READ_WRITE_TOKEN is set) files go to Vercel Blob instead and
+ * `url` is the Blob's public address. Nothing else in the app needs to change;
+ * it only consumes `url`.
  */
 
 const MAX_BYTES = 5 * 1024 * 1024;
@@ -67,12 +69,21 @@ export async function POST(request: Request) {
 
   // Generated name: the original could collide, or carry a path traversal.
   const filename = `${randomUUID()}.${extension}`;
-  const directory = UPLOAD_DIR;
+  let url: string;
 
   try {
-    await mkdir(directory, { recursive: true });
-    const bytes = Buffer.from(await file.arrayBuffer());
-    await writeFile(join(directory, filename), bytes);
+    if (process.env.BLOB_READ_WRITE_TOKEN) {
+      const blob = await put(`uploads/${filename}`, file, {
+        access: "public",
+        contentType: file.type,
+      });
+      url = blob.url;
+    } else {
+      await mkdir(UPLOAD_DIR, { recursive: true });
+      const bytes = Buffer.from(await file.arrayBuffer());
+      await writeFile(join(UPLOAD_DIR, filename), bytes);
+      url = `/uploads/${filename}`;
+    }
   } catch (err) {
     console.error("[upload] write failed", err);
     return NextResponse.json(
@@ -81,15 +92,13 @@ export async function POST(request: Request) {
     );
   }
 
-  const url = `/uploads/${filename}`;
-
   // Recorded so the media can be listed and cleaned up later.
   try {
     await db.media.create({
       data: { url, filename, mime: file.type, size: file.size },
     });
   } catch (err) {
-    // The file is on disk and usable; a missing index row is not worth failing.
+    // The file is stored and usable; a missing index row is not worth failing.
     console.error("[upload] media row failed", err);
   }
 
