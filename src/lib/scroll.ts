@@ -177,6 +177,17 @@ export function sectionProgress(id: string) {
   return progressById.get(id) ?? 0;
 }
 
+/**
+ * For a pinned (sticky) section: 0 when its top reaches the viewport top, 1
+ * when its bottom reaches the viewport bottom — i.e. across the scroll distance
+ * during which its sticky child holds still.
+ */
+export function pinProgress(id: string) {
+  const e = entries.get(id);
+  if (!e) return 0;
+  return clamp01((scrollState.y - e.top) / Math.max(1, e.height - scrollState.viewportHeight));
+}
+
 export function subscribe(fn: () => void) {
   listeners.add(fn);
   return () => listeners.delete(fn);

@@ -5,14 +5,13 @@ import { ScrollStage } from "@/components/three/ScrollStage";
 import { StageSection } from "@/components/scroll/StageSection";
 import { Reveal } from "@/components/ui/Reveal";
 import { Counter } from "@/components/ui/Counter";
-import { TiltCard } from "@/components/ui/TiltCard";
 import { PostCard } from "@/components/site/PostCard";
-import { ServiceIcon } from "@/components/site/ServiceIcon";
+import { ServiceCarousel } from "@/components/site/ServiceCarousel";
 import { CTABand } from "@/components/site/CTABand";
 import { PlatformBand, PlatformChips } from "@/components/site/PlatformBand";
 import { ClientMarquee, ClientGrid } from "@/components/site/ClientWall";
 import { getFeaturedPosts, getPostCount } from "@/lib/posts";
-import { services, stats, processSteps, testimonials, contact, site } from "@/lib/site";
+import { stats, processSteps, testimonials, contact, site } from "@/lib/site";
 
 export const revalidate = 3600;
 
@@ -241,70 +240,16 @@ export default async function HomePage() {
       </StageSection>
 
       {/* =====================================================================
-          SERVICES
+          SERVICES — pinned; the ring turns once, then the page moves on.
+          No stage chapter: the ring is the set piece here, so the 3D
+          backdrop steps aside instead of competing with it.
           ===================================================================== */}
-      <StageSection
-        id="services" chapter="menu"
-        className="section relative overflow-hidden"
-        ariaLabelledby="services-title"
-      >
-
-        <div className="container-x relative">
-          <Reveal className="max-w-2xl">
-            <p className="eyebrow">What we do</p>
-            <h2
-              id="services-title"
-              className="mt-5 text-[length:var(--text-display-lg)] font-bold leading-[1.05]"
-            >
-              Eight services. One outcome.
-            </h2>
-            <p className="mt-6 text-lg leading-relaxed text-cream-300">
-              Everything below exists to move the same number: profitable revenue per outlet.
-              We sequence them in the order that compounds — operations, then listing, then
-              spend.
-            </p>
-          </Reveal>
-
-          <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {services.map((service, i) => (
-              <Reveal key={service.slug} delay={(i % 3) * 0.08}>
-                <TiltCard className="group h-full">
-                  <Link
-                    href={`/services#${service.slug}`}
-                    className="card card-hover card-sheen flex h-full flex-col p-7"
-                  >
-                    <ServiceIcon icon={service.icon} accent={service.accent} />
-
-                    <h3 className="mt-6 font-display text-lg font-semibold text-cream-50 transition-colors group-hover:text-gold-300">
-                      {service.name}
-                    </h3>
-                    <p className="mt-3 flex-1 text-sm leading-relaxed text-cream-400">
-                      {service.summary}
-                    </p>
-
-                    <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-gold-400 transition-transform duration-300 group-hover:translate-x-1">
-                      Explore
-                      <ArrowRight className="h-4 w-4" aria-hidden />
-                    </span>
-                  </Link>
-                </TiltCard>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal className="mt-10">
-            <Link href="/services" className="btn btn-gold">
-              See how each service works
-              <ArrowRight className="h-4 w-4" aria-hidden />
-            </Link>
-          </Reveal>
-        </div>
-      </StageSection>
+      <ServiceCarousel />
 
       {/* =====================================================================
           PROCESS
           ===================================================================== */}
-      <StageSection id="process" chapter="menu" className="section border-y border-cream-100/8 bg-ink-850/70" ariaLabelledby="process-title">
+      <StageSection id="process" chapter="bars" className="section border-y border-cream-100/8 bg-ink-850/70" ariaLabelledby="process-title">
         <div className="container-x">
           <Reveal className="max-w-2xl">
             <p className="eyebrow">How we work</p>
