@@ -1,16 +1,25 @@
 /**
- * Meta Pixel helpers.
+ * Ad-platform tracking helpers (Meta Pixel + Google tag).
  *
- * The pixel ID is public (it ships in every page anyway), so it falls back to
- * the PFC dataset when no env override is set.
+ * Both IDs are public (they ship in every page anyway), so they fall back to
+ * the PFC accounts when no env override is set.
  */
 export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID ?? "812104141846081";
+export const GOOGLE_TAG_ID = process.env.NEXT_PUBLIC_GOOGLE_TAG_ID ?? "AW-11159348982";
 
-type Fbq = (...args: unknown[]) => void;
+type Fn = (...args: unknown[]) => void;
 
-/** Fire a standard Meta event. A no-op until the pixel script has loaded. */
+// Meta standard event -> Google recommended event.
+const GOOGLE_EVENTS: Record<string, string> = {
+  PageView: "page_view",
+  Contact: "contact",
+  Lead: "generate_lead",
+};
+
+/** Fire an event on both platforms. A no-op until each script has loaded. */
 export function track(event: string, params?: Record<string, unknown>) {
   if (typeof window === "undefined") return;
-  const fbq = (window as unknown as { fbq?: Fbq }).fbq;
-  fbq?.("track", event, params);
+  const w = window as unknown as { fbq?: Fn; gtag?: Fn };
+  w.fbq?.("track", event, params);
+  w.gtag?.("event", GOOGLE_EVENTS[event] ?? event, params);
 }

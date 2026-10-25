@@ -71,9 +71,10 @@ export default function PrivacyPolicyPage() {
         information to third parties.
       </p>
       <p>
-        We use the Meta Pixel to measure visits and enquiries and to show our ads on Facebook and
-        Instagram to people who have visited this site. Meta may use cookies and similar
-        technologies for this under its own data policy.
+        We use the Meta Pixel and the Google tag to measure visits and enquiries and to show our
+        ads on Facebook, Instagram, WhatsApp, YouTube, Gmail and Google&apos;s partner sites to people
+        who have visited this site. Meta and Google may use cookies and similar technologies for
+        this under their own data policies.
       </p>
 
       <h2>Data retention</h2>
