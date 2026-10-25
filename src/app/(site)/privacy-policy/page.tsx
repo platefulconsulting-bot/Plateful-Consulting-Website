@@ -70,6 +70,11 @@ export default function PrivacyPolicyPage() {
         those policies and are not responsible for them. We do not sell your personal
         information to third parties.
       </p>
+      <p>
+        We use the Meta Pixel to measure visits and enquiries and to show our ads on Facebook and
+        Instagram to people who have visited this site. Meta may use cookies and similar
+        technologies for this under its own data policy.
+      </p>
 
       <h2>Data retention</h2>
       <p>

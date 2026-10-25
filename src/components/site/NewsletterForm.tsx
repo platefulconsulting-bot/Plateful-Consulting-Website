@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ArrowRight, Check, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/analytics";
 
 type State = "idle" | "loading" | "done" | "error";
 
@@ -30,6 +31,7 @@ export function NewsletterForm({ className, source = "footer" }: { className?: s
         return;
       }
 
+      track("Lead", { content_name: `newsletter_${source}` });
       setState("done");
       setMessage(data.message ?? "You're on the list.");
       setEmail("");

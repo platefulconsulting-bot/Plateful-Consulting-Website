@@ -3,6 +3,7 @@ import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { jsonLd, organizationSchema, websiteSchema } from "@/lib/seo";
 import { SmoothScroll } from "@/components/scroll/SmoothScroll";
+import { MetaPixel } from "./MetaPixel";
 
 /**
  * The public site's chrome.
@@ -21,6 +22,7 @@ export function SiteFrame({ children }: { children: ReactNode }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
       <SmoothScroll />
+      <MetaPixel />
       <Header />
       <main id="main" className="pt-20">
         {children}

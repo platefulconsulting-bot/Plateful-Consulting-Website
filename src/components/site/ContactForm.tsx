@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, Loader2, AlertCircle } from "lucide-react";
 import { services, cities } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/analytics";
 
 /**
  * Enquiry form.
@@ -50,6 +51,7 @@ export function ContactForm() {
         return;
       }
 
+      track("Lead", { content_name: "contact_form" });
       router.push("/thank-you");
     } catch {
       setState("error");
