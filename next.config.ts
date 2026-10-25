@@ -25,6 +25,9 @@ const nextConfig: NextConfig = {
       { source: "/home", destination: "/", permanent: true },
       { source: "/about", destination: "/about-us", permanent: true },
       { source: "/contact", destination: "/contact-us", permanent: true },
+      // Old WordPress "index.php" permalinks still crawled by Google (404s in Search Console).
+      { source: "/index.php", destination: "/", permanent: true },
+      { source: "/index.php/:path*", destination: "/:path*", permanent: true },
     ];
   },
   async headers() {
