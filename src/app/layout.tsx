@@ -76,6 +76,8 @@ export const metadata: Metadata = {
     },
   },
   formatDetection: { telephone: true, address: true, email: true },
+  // Google Search Console ownership (https://platefulconsulting.com/ property).
+  verification: { google: "xjHy68h_wZ2w4x7bSEgR6VDfagh5wcyYi_tUNkvmOW0" },
 };
 
 export const viewport: Viewport = {
