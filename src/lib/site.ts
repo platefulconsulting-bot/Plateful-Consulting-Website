@@ -190,6 +190,7 @@ export const services: Service[] = [
       "how-to-increase-zomato-orders-a-data-driven-guide-for-restaurants",
       "how-swiggy-ranking-algorithm-works-for-restaurants-2026",
       "why-most-restaurants-fail-on-swiggy-and-zomato-and-how-to-fix-it",
+      "swiggy-zomato-discounts-which-offers-make-money",
     ],
   },
   {

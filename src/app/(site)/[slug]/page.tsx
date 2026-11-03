@@ -10,9 +10,9 @@ import { ReadingProgress } from "@/components/blog/ReadingProgress";
 import { ArticleToc } from "@/components/blog/ArticleToc";
 import { ShareRow } from "@/components/blog/ShareRow";
 import { getAllPostSlugs, getPostBySlug, getRelatedPosts } from "@/lib/posts";
-import { enhanceArticle } from "@/lib/sanitize";
+import { enhanceArticle, extractFaqs } from "@/lib/sanitize";
 import { services } from "@/lib/site";
-import { jsonLd, articleSchema, breadcrumbSchema } from "@/lib/seo";
+import { jsonLd, articleSchema, breadcrumbSchema, faqSchema } from "@/lib/seo";
 import { absoluteUrl, formatDate, isoDate } from "@/lib/utils";
 
 export const revalidate = 3600;
@@ -74,6 +74,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   const related = await getRelatedPosts(post, 3);
   const { html, headings } = enhanceArticle(post.contentHtml);
+  const faqs = extractFaqs(post.contentHtml);
   const accent = post.category?.accent ?? "#B47A17";
   const url = absoluteUrl(`/${post.slug}`);
 
@@ -90,6 +91,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       { name: "Blogs", path: "/blogs" },
       { name: post.title, path: `/${post.slug}` },
     ]),
+    ...(faqs.length ? [faqSchema(faqs)] : []),
   );
 
   return (

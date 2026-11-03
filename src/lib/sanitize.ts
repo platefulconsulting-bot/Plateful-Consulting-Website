@@ -109,6 +109,30 @@ export function enhanceArticle(html: string) {
   return { html: out, headings };
 }
 
+/**
+ * Pulls question/answer pairs out of an article's "Frequently Asked Questions"
+ * section for FAQPage structured data. The section runs until the next h2, and
+ * articles write each pair one of two ways: `<h3>Question?</h3>` followed by
+ * the answer, or `<p><strong>Question?</strong><br>Answer</p>`. Anything not
+ * in either shape is skipped rather than guessed at.
+ */
+export function extractFaqs(html: string) {
+  const section = /<h2[^>]*>\s*(?:frequently asked questions|faqs?)\s*<\/h2>([\s\S]*?)(?=<h2|$)/i.exec(html);
+  if (!section) return [];
+  const body = section[1];
+
+  const collect = (pattern: RegExp) =>
+    [...body.matchAll(pattern)]
+      .map((m) => ({ q: htmlToText(m[1]), a: htmlToText(m[2]) }))
+      .filter((f) => f.q.endsWith("?") && f.a);
+
+  // A section can contain a stray h3 (a closing CTA, say), so take whichever
+  // shape the article actually uses for most of its questions.
+  const headed = collect(/<h3[^>]*>([\s\S]*?)<\/h3>([\s\S]*?)(?=<h3|$)/gi);
+  const inline = collect(/<p>\s*<strong>([\s\S]*?)<\/strong>\s*<br\s*\/?>([\s\S]*?)<\/p>/gi);
+  return headed.length >= inline.length ? headed : inline;
+}
+
 function slugifyHeading(text: string) {
   return (
     text
