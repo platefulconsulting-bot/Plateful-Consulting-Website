@@ -140,7 +140,9 @@ export const services: Service[] = [
     relatedPosts: [
       "how-to-start-a-cloud-kitchen-on-swiggy-and-zomato-2026-guide",
       "swiggy-listing-optimization-the-complete-guide-for-restaurant-owners",
+      "zomato-listing-optimization-the-complete-guide-for-restaurant-owners",
       "should-your-restaurant-be-on-both-swiggy-and-zomato",
+      "how-to-read-your-swiggy-and-zomato-payout-statement",
     ],
   },
   {
