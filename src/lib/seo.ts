@@ -156,3 +156,20 @@ export function jsonLd(...nodes: object[]) {
     "@graph": nodes,
   };
 }
+
+/** A free browser tool, e.g. the discount calculator. */
+export function webApplicationSchema(tool: { name: string; description: string; path: string }) {
+  return {
+    "@type": "WebApplication",
+    "@id": absoluteUrl(`${tool.path}#app`),
+    name: tool.name,
+    description: tool.description,
+    url: absoluteUrl(tool.path),
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Any",
+    inLanguage: "en-IN",
+    isAccessibleForFree: true,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
+    publisher: { "@id": ORG_ID },
+  };
+}

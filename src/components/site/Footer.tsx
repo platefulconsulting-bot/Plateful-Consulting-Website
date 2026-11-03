@@ -97,6 +97,8 @@ export async function Footer() {
               {[
                 { label: "About Us", href: "/about-us" },
                 { label: "Blogs", href: "/blogs" },
+                { label: "What's New", href: "/whats-new" },
+                { label: "Discount Calculator", href: "/tools/discount-calculator" },
                 { label: "Contact Us", href: "/contact-us" },
                 { label: "Terms & Conditions", href: "/terms-and-condition" },
                 { label: "Privacy Policy", href: "/privacy-policy" },
