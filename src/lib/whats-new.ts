@@ -1,16 +1,17 @@
 /**
  * "What's new" log.
  *
- * Newest first. Add an entry whenever something visitors can use goes live: a
- * tool, a batch of guides, a new service. Each entry links to the thing itself,
- * so the page also works as a crawlable hub for new content.
+ * Newest first. Two kinds of entry: things visitors can use on this site (a
+ * tool, a batch of guides, a new service), and industry updates — platform
+ * launches and changes restaurant owners should know about. Each entry links
+ * to the relevant page here, so the page also works as a crawlable hub.
  */
 
 export type WhatsNewEntry = {
-  /** ISO date, YYYY-MM-DD. */
+  /** ISO date, YYYY-MM-DD: when the entry was posted. */
   date: string;
   /** Short label shown as a chip. */
-  kind: "New tool" | "New guides" | "New feature" | "Update";
+  kind: "Industry update" | "New tool" | "New guides" | "New feature" | "Update";
   title: string;
   summary: string;
   links: { label: string; href: string }[];
@@ -19,11 +20,22 @@ export type WhatsNewEntry = {
 export const whatsNew: WhatsNewEntry[] = [
   {
     date: "2026-11-04",
-    kind: "New guides",
-    title: "Rapido Ownly for restaurants: is zero commission worth it?",
+    kind: "Industry update",
+    title: "Swiggy's Toing: budget food delivery, now in 11 cities",
     summary:
-      "How Rapido's zero-commission food delivery app works, what an Ownly order earns compared with Swiggy and Zomato, the risks to weigh, and how to list and price your menu on it.",
-    links: [{ label: "Read the guide", href: "/rapido-ownly-for-restaurants-is-zero-commission-worth-it" }],
+      "Toing is Swiggy's separate app for low-priced meals, mostly in the ₹100–₹250 range, aimed at students and young professionals. It started in Pune and, according to Swiggy, has reached 11 cities including Delhi NCR, Agra, Vadodara, Guwahati, Nashik and Nagpur. For restaurants, it is a channel for a value menu: smaller portions and single-serve meals priced to sell, not your regular menu discounted.",
+    links: [
+      { label: "Pricing your menu for delivery", href: "/restaurant-menu-pricing-strategy-for-online-delivery-in-india" },
+      { label: "Discounts that make money", href: "/swiggy-zomato-discounts-which-offers-make-money" },
+    ],
+  },
+  {
+    date: "2026-11-04",
+    kind: "Industry update",
+    title: "Rapido Ownly: zero-commission food delivery, now in Bengaluru and Hyderabad",
+    summary:
+      "Rapido's Ownly charges restaurants no commission, listing, subscription or marketing fees; customers pay a delivery fee instead. It went citywide in Bengaluru in March 2026, moved inside the main Rapido app in July, and launched in Hyderabad in September, with about 20,000 restaurant partners. Our guide covers what an Ownly order earns compared with Swiggy and Zomato, the risks, and how to price your menu on it.",
+    links: [{ label: "Read the Ownly guide", href: "/rapido-ownly-for-restaurants-is-zero-commission-worth-it" }],
   },
   {
     date: "2026-11-03",
