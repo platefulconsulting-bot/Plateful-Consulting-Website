@@ -18,6 +18,14 @@ export type WhatsNewEntry = {
 
 export const whatsNew: WhatsNewEntry[] = [
   {
+    date: "2026-11-04",
+    kind: "New guides",
+    title: "Rapido Ownly for restaurants: is zero commission worth it?",
+    summary:
+      "How Rapido's zero-commission food delivery app works, what an Ownly order earns compared with Swiggy and Zomato, the risks to weigh, and how to list and price your menu on it.",
+    links: [{ label: "Read the guide", href: "/rapido-ownly-for-restaurants-is-zero-commission-worth-it" }],
+  },
+  {
     date: "2026-11-03",
     kind: "New tool",
     title: "Free Swiggy & Zomato discount calculator",
