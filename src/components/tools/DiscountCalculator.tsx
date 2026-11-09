@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/analytics";
 
 /**
  * Swiggy & Zomato discount break-even calculator.
@@ -142,6 +143,17 @@ export function DiscountCalculator() {
 
     return { baseline, withOffer, orderValue, discount, extraFoodCost, lift, warning, daily };
   }, [aov, foodCostPct, packaging, commissionPct, ordersPerDay, offer, pct, cap, flat, freeItemCost, minOrder, offerAov]);
+
+  // Count a visitor as a calculator user once, the first time any input
+  // differs from the defaults (robust to effects running twice in dev).
+  const inputs = [aov, foodCostPct, packaging, commissionPct, ordersPerDay, offer, pct, cap, flat, freeItemCost, minOrder, offerAov].join("|");
+  const initialInputs = useRef(inputs);
+  const tracked = useRef(false);
+  useEffect(() => {
+    if (tracked.current || inputs === initialInputs.current) return;
+    tracked.current = true;
+    track("calculator_use", { tool: "discount_calculator" });
+  }, [inputs]);
 
   const { baseline, withOffer, lift } = result;
   const verdict =
