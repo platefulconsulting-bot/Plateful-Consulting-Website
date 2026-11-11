@@ -598,7 +598,7 @@ export const authorProfiles = {
     name: "Deepak Desh Bandhu",
     role: "Founder & Lead Consultant",
     summary:
-      "Deepak Desh Bandhu is the founder and lead consultant of Plateful Consulting. He has spent 7+ years working inside Swiggy and Zomato partner dashboards, has worked with 600+ restaurant outlets and has managed ₹8Cr+ in aggregator ad spend.",
+      "Deepak Desh Bandhu is the founder and lead consultant of Plateful Consulting. He has spent 7+ years working inside Swiggy and Zomato partner dashboards, has worked with 650+ restaurants and has managed ₹8Cr+ in aggregator ad spend.",
     story: [
       "Deepak learned the delivery platforms as an operator before he advised anyone on them. Around 2019 he bootstrapped his own cloud kitchen, serving Chinese and Continental food, and grew it to roughly ₹5 lakh a month in sales within six months.",
       "He kept that kitchen running through COVID, when delivery was the channel most restaurants depended on and every listing decision showed up in the next payout. He later relocated to Bangalore and took a job.",
@@ -606,7 +606,7 @@ export const authorProfiles = {
     ],
     credentials: [
       { value: "7+", label: "Years on Swiggy and Zomato" },
-      { value: "600+", label: "Restaurant outlets worked with" },
+      { value: "650+", label: "Restaurants worked with" },
       { value: "₹8Cr+", label: "Swiggy and Zomato ad spend managed" },
       { value: "2019", label: "Launched his own cloud kitchen" },
     ],
