@@ -432,7 +432,8 @@ export const clients = [
   { name: "Honey & Dough", logo: "/clients/honey-and-dough.png", type: "Bakery & café" },
   { name: "Limitless Luxe", logo: "/clients/limitless-luxe.png", type: "Bar & lounge · Noida" },
   { name: "GoodGaon", logo: "/clients/goodgaon.png", type: "Restaurant" },
-  { name: "The Burrito Bros", logo: "/clients/burrito-bros.png", type: "Indo-Mexican" },
+  { name: "The Burrito Bros", logo: "/clients/burrito-bros.png", type: "Indo-Mexican · Pune" },
+  { name: "Uncle Peter's Pancakes", logo: "/clients/uncle-peters-pancakes.png", type: "Pancakes & desserts" },
 ] as const;
 
 // ---------------------------------------------------------------------------
