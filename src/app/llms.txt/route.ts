@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { site, contact, services, faqs, leadFounder, topicHubs, authorHref, resultsPage } from "@/lib/site";
+import { site, contact, services, faqs, leadFounder, topicHubs, authorHref, resultsPage, cityPages } from "@/lib/site";
 import { absoluteUrl, metaDescription } from "@/lib/utils";
 
 /**
@@ -38,6 +38,7 @@ export async function GET() {
     `- [${resultsPage.title}](${absoluteUrl(resultsPage.path)}): ${metaDescription(resultsPage.metaDescription, 200)}`,
     `- [All guides](${absoluteUrl("/blogs")})`,
     ...topicHubs.map((h) => `- [${h.title}](${absoluteUrl(`/${h.slug}`)}): ${metaDescription(h.metaDescription, 200)}`),
+    ...cityPages.map((c) => `- [${c.title}](${absoluteUrl(`/${c.slug}`)}): ${metaDescription(c.metaDescription, 200)}`),
     `- [${leadFounder.name}, ${leadFounder.role}](${absoluteUrl(authorHref(leadFounder.slug))})`,
     `- [Commission Reduction Program: typically brings the real Swiggy & Zomato take-rate under 25%](${absoluteUrl("/commission-reduction")})`,
     `- [Swiggy & Zomato discount calculator](${absoluteUrl("/tools/discount-calculator")})`,

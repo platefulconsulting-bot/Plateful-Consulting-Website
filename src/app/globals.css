@@ -751,3 +751,18 @@
   from { transform: translate3d(-1.25rem, 0, 0); }
   to { transform: none; }
 }
+
+/* ---------------------------------------------------------------------------
+   /results city filter. CSS-only, so it works with JavaScript off: the radios
+   are real form controls (keyboard and screen-reader friendly), "All" is
+   checked by default, and picking a city hides the other cities' cases and
+   any group left empty.
+   --------------------------------------------------------------------------- */
+body:has(#city-filter-delhi-ncr:checked) [data-city]:not([data-city="delhi-ncr"]),
+body:has(#city-filter-hyderabad:checked) [data-city]:not([data-city="hyderabad"]),
+body:has(#city-filter-pune:checked) [data-city]:not([data-city="pune"]),
+body:has(#city-filter-delhi-ncr:checked) [data-city-group]:not(:has([data-city="delhi-ncr"])),
+body:has(#city-filter-hyderabad:checked) [data-city-group]:not(:has([data-city="hyderabad"])),
+body:has(#city-filter-pune:checked) [data-city-group]:not(:has([data-city="pune"])) {
+  display: none;
+}

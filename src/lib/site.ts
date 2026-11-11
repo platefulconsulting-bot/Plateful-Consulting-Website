@@ -889,9 +889,20 @@ export type CaseStudyRow = {
   change?: string;
 };
 
+/** Cities with named case studies and a city landing page. */
+export type CaseCity = "Delhi NCR" | "Hyderabad" | "Pune";
+
 export type CaseStudy = {
   slug: string;
   name: string;
+  /**
+   * City the outlet trades in, for the /results filter and the city pages.
+   * `null` where the source does not record the city: those cases show under
+   * "All" only, never under a guessed city.
+   */
+  city: CaseCity | null;
+  /** Slug of the long-form blog case study, when one is written. */
+  post?: string;
   /** Kind of outlet, e.g. "Dine-in · high average order value". */
   type: string;
   /** Chip text on the card: the headline result, stated plainly. */
@@ -914,9 +925,9 @@ export const resultsPage = {
   shortName: "Client results",
   metaTitle: "Client Results: Swiggy & Zomato Case Studies",
   metaDescription:
-    "Swiggy and Zomato sales before and after for nine Plateful Consulting client outlets, with ad spend and method shown. Individual results, not guarantees.",
+    "Swiggy and Zomato results for twelve client outlets in Delhi NCR, Hyderabad and Pune, with ad spend shown. Individual results, not guarantees.",
   intro:
-    "Plateful Consulting works inside a restaurant's Swiggy and Zomato dashboards: listing and visibility, menu, ad structure and new-customer targeting. For the nine outlets below, from Delhi NCR to Hyderabad, platform sales after onboarding ranged from 22.1% higher (Drama on Zomato) to several times the starting level for newer delivery brands. Balaji Dhaba, our first Hyderabad case, shows growth tracked over time on a monthly retainer, and Olantic 8 in Gurugram shows a brand-new delivery launch. Where we have spend data, ad or discount spend rose too, and we show it.",
+    "Plateful Consulting works inside a restaurant's Swiggy and Zomato dashboards: listing and visibility, menu, ad structure, discounts and new-customer targeting. For the twelve outlets below, across Delhi NCR, Hyderabad and Pune, platform sales after onboarding ranged from 22.1% higher (Drama on Zomato) to several times the starting level for newer delivery brands. Some cases track growth over time rather than a single before and after: Balaji Dhaba in Hyderabad on a monthly retainer, Punjabi Rasoi's recovery and second outlet, and launches such as Olantic 8 in Gurugram. Where we have spend data, ad or discount spend is shown next to sales.",
   disclaimer:
     "Results vary; these are individual client outcomes, not guarantees. City, cuisine, price point and starting position all change what is possible.",
   source:
@@ -945,6 +956,7 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: "drama",
     name: "Drama — An Ode to Indian Cinema",
+    city: null,
     type: "Dine-in · high average order value",
     highlight: "Combined net sale +51.8% a month",
     onboarded: "Results within two months of PFC taking over",
@@ -966,6 +978,8 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: "balaji-dhaba",
     name: "Balaji Dhaba, Marredpally, Hyderabad",
+    city: "Hyderabad",
+    post: "balaji-dhaba-case-study-hyderabad-zomato-swiggy",
     type: "Dhaba · delivery",
     highlight: "Zomato weekly orders ~236 → ~796 (3.4x)",
     onboarded: "Monthly retainer; Zomato tracked over about a year",
@@ -993,8 +1007,39 @@ export const caseStudies: CaseStudy[] = [
     ],
   },
   {
+    slug: "punjabi-rasoi",
+    name: "Punjabi Rasoi, Rohini (Delhi) & Noida",
+    city: "Delhi NCR",
+    post: "punjabi-rasoi-case-study-delhi-swiggy-zomato",
+    type: "North Indian · high-volume delivery, two outlets",
+    highlight: "Monthly online sales +71% after a winter dip, to ₹34.3 lakh",
+    onboarded: "Ongoing engagement; Rohini tracked over 16 reported months, Noida from its launch",
+    period:
+      "Rohini: months in a winter dip vs the latest reported months, with Swiggy sales from the first to the latest reported month. Noida: first month live vs month four. A recovery-and-margin story, not a before vs after comparison.",
+    beforeLabel: "Earlier",
+    afterLabel: "Later",
+    rows: [
+      { metric: "Rohini online sales / month (both platforms)", before: "₹20.1 lakh", after: "₹34.3 lakh", change: "+71%" },
+      { metric: "Rohini Swiggy sales / month", before: "₹7.85 lakh", after: "₹13.53 lakh", change: "+72%" },
+      { metric: "Rohini Swiggy effective discount", before: "27.3%", after: "13.4%" },
+      { metric: "Rohini Swiggy ad spend / month", before: "~₹70K", after: "~₹52K" },
+      { metric: "Rohini Swiggy ad return (platform-reported)", before: "6.2x", after: "up to 14.4x" },
+      { metric: "Noida online sales / month (new outlet)", before: "₹1.11 lakh", after: "₹6.03 lakh", change: "5.4x" },
+      { metric: "Noida orders / month", before: "140", after: "854" },
+    ],
+    work: "ROI-led ads on both platforms, shallower discounts while sales grew, monthly reviews of lost sales, availability and complaints, and the launch of a second outlet in Noida on Swiggy and Zomato.",
+    notes: [
+      "An earlier peak month (₹39.5 lakh) is still the Rohini outlet's best month on record, and the latest month is about 13% below it. Read this as a recovery and margin story, not straight-line growth.",
+      "Rohini did ₹4.26 crore in online sales across 16 reported months. Two months' reports are missing and are not shown, and there is no pre-PFC baseline.",
+      "Ad return is as reported by the platform ad dashboards. The Swiggy ad return peaked at 14.4x while monthly Swiggy ad spend came down; Zomato's held at 6–8x.",
+      "PFC does not claim credit for rating changes, so ratings are not shown.",
+    ],
+  },
+  {
     slug: "olantic-8",
     name: "Olantic 8, Gurugram",
+    city: "Delhi NCR",
+    post: "olantic-8-case-study-gurugram-swiggy-zomato",
     type: "Indian tandoor & Chinese · new delivery launch",
     highlight: "Online sales 12.9x in six months from launch",
     onboarded: "Launched on Swiggy and Zomato by PFC",
@@ -1017,8 +1062,62 @@ export const caseStudies: CaseStudy[] = [
     ],
   },
   {
+    slug: "burrito-bros",
+    name: "The Burrito Bros, Koregaon Park, Pune",
+    city: "Pune",
+    post: "burrito-bros-case-study-pune-swiggy-zomato",
+    type: "Mexican · delivery",
+    highlight: "Monthly online sales 7.6x on a six-month plan",
+    onboarded: "Six-month growth plan; target met and handed over at the end of the plan",
+    period:
+      "Onboarding month vs month six. The onboarding month is not a clean pre-PFC baseline: no earlier data was shared.",
+    beforeLabel: "Onboarding month",
+    afterLabel: "Month six",
+    rows: [
+      { metric: "Online sales / month (both platforms)", before: "₹56.1K", after: "₹4.25 lakh", change: "7.6x" },
+      { metric: "Orders / month", before: "132", after: "1,417", change: "10.7x" },
+      { metric: "Zomato sales / month", before: "₹31,447", after: "₹3,31,392", change: "10.5x" },
+      { metric: "Zomato rating", before: "1.8", after: "4.3" },
+      { metric: "Zomato kitchen prep time", before: "14 min", after: "8 min" },
+      { metric: "Zomato ad return (platform-reported)", before: "2.4x", after: "5.1x" },
+    ],
+    work: "Rating repair first, through rating drives and complaint handling; a delivery-ready menu with basket-size levers; ads scaled only as returns held; faster kitchen prep; and a clean handover of logins, IDs and the full discount list at the end of the plan.",
+    notes: [
+      "Zero lost sales and zero cancellations on both platforms in the last three months of the plan.",
+      "Swiggy sales dipped mid-plan during a duplicate-outlet visibility issue on Swiggy's side, which was later resolved. Zomato grew every month.",
+      "Figures are for The Burrito Bros brand only. A second brand launched from the same kitchen is not included.",
+      "Ad return is as reported by the platform ad dashboards. Monthly Zomato ad spend grew from about ₹5.5K to ₹63K over the plan as returns held. A rating depends on the kitchen and its customers too, so we never promise one.",
+    ],
+  },
+  {
+    slug: "mohan-sweets",
+    name: "Mohan Sweets, Palam / Dabri, Dwarka, New Delhi",
+    city: "Delhi NCR",
+    post: "mohan-sweets-case-study-delhi-swiggy-zomato",
+    type: "Sweets & snacks · delivery",
+    highlight: "Monthly online sales 29x vs the month before PFC",
+    onboarded: "Six-month plan; the ₹5–6 lakh monthly target was hit ahead of the plan",
+    period: "The month before PFC vs month five. Swiggy is compared from its first month live.",
+    beforeLabel: "Month before PFC",
+    afterLabel: "Month five",
+    rows: [
+      { metric: "Online sales / month (both platforms)", before: "₹23.2K", after: "₹6.71 lakh", change: "29x" },
+      { metric: "Zomato orders / month", before: "84", after: "1,623", change: "19x" },
+      { metric: "Swiggy sales / month (from first month live)", before: "₹12.4K", after: "₹2.23 lakh", change: "18x" },
+      { metric: "Zomato online availability", before: "78%", after: "99%+" },
+      { metric: "Zomato ad return (platform-reported)", before: "1.2x", after: "6.2x" },
+    ],
+    work: "Swiggy launched from near zero, a delivery-ready sweets and snacks menu on both apps, Zomato availability fixed before scaling spend, ads scaled on returns and fast kitchen prep.",
+    notes: [
+      "When the owners prioritised margin over volume, deep discount codes were replaced with flat, approved discounts.",
+      "One month's report is missing from the record, so that month is not shown. Month-five figures are rounded from the report text.",
+      "Ad return is as reported by the platform ad dashboards; the latest Zomato figure is from month six. Swiggy ad-return figures that look like outliers are left out.",
+    ],
+  },
+  {
     slug: "ivoryy-fusion-bar",
     name: "Ivoryy Fusion Bar, Connaught Place, New Delhi",
+    city: "Delhi NCR",
     type: "Premium fusion dining · about ₹1,800 for two",
     highlight: "₹12 lakh → ₹70 lakh a month in four months",
     onboarded: "Four months with PFC",
@@ -1041,6 +1140,7 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: "limitless",
     name: "Limitless",
+    city: null,
     type: "Drama's second outlet",
     highlight: "Swiggy net order value +243.9%",
     onboarded: "Results within two months",
@@ -1060,6 +1160,7 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: "pasta-express",
     name: "Pasta Express",
+    city: null,
     type: "Delivery brand",
     highlight: "Zomato orders 149 → 746 a month",
     onboarded: "Results in the first month",
@@ -1077,6 +1178,7 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: "regenta-inn",
     name: "Regenta Inn",
+    city: null,
     type: "Delivery",
     highlight: "Swiggy orders 66 → 388 a month",
     onboarded: "Results in the first month",
@@ -1093,6 +1195,7 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: "tsoyum",
     name: "TsoYum!",
+    city: null,
     type: "New delivery brand",
     highlight: "Swiggy orders 32 → 233 a month",
     onboarded: "Results within two months of launch",
@@ -1109,6 +1212,7 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: "good-gaon",
     name: "Good Gaon",
+    city: null,
     type: "Delivery",
     highlight: "Swiggy orders 78 → 260 a month",
     onboarded: "Results within two months",
@@ -1126,3 +1230,195 @@ export const caseStudies: CaseStudy[] = [
     ],
   },
 ];
+
+// ---------------------------------------------------------------------------
+// City landing pages (/swiggy-zomato-consultant-<city>). Every local claim is
+// an observation from the named case studies above or existing site copy:
+// no market statistics, prices or guarantees.
+// ---------------------------------------------------------------------------
+
+export type CityPage = {
+  slug: string;
+  city: CaseCity;
+  /** Name used for schema.org areaServed (City). */
+  areaServed: string;
+  title: string;
+  /** Short name for footer links, breadcrumbs and chips. */
+  shortName: string;
+  metaTitle: string;
+  metaDescription: string;
+  /** Answer-first intro, 40–60 words. */
+  intro: string;
+  /** Case-study slugs, in display order. */
+  cases: string[];
+  differences: { title: string; body: string }[];
+  faqs: { q: string; a: string }[];
+  guides: { label: string; href: string }[];
+};
+
+const noGuaranteeFaq = {
+  q: "Do you guarantee results?",
+  a: "No. Results depend on your location, cuisine, price point and starting position, and no one outside Swiggy and Zomato controls their algorithms. What we commit to is the diagnosis, the execution and regular reporting against the numbers that matter.",
+};
+
+export const cityPages: CityPage[] = [
+  {
+    slug: "swiggy-zomato-consultant-delhi-ncr",
+    city: "Delhi NCR",
+    areaServed: "Delhi NCR",
+    title: "Swiggy & Zomato Consultant in Delhi NCR",
+    shortName: "Delhi NCR",
+    metaTitle: "Swiggy & Zomato Consultant in Delhi NCR",
+    metaDescription:
+      "Swiggy and Zomato consultant for Delhi NCR restaurants, based in Noida, with named results from Connaught Place, Rohini, Dwarka, Noida and Gurugram.",
+    intro:
+      "Plateful Consulting is a Swiggy and Zomato consultant for Delhi NCR restaurants, based in Noida. We work inside your partner dashboards on listing, menu, ads, discounts and kitchen operations. NCR clients include a Connaught Place fusion bar, a two-outlet North Indian kitchen in Rohini and Noida, a Dwarka sweet shop and a Gurugram delivery launch.",
+    cases: ["ivoryy-fusion-bar", "punjabi-rasoi", "mohan-sweets", "olantic-8"],
+    differences: [
+      {
+        title: "Many formats, one order of work",
+        body: "Our NCR cases range from premium dine-in in Connaught Place to a sweet shop in Dwarka and a new delivery kitchen in Gurugram. The order of work stays the same: fix availability, menu and prep time, then scale ads as they pay back.",
+      },
+      {
+        title: "Second outlets across the NCR",
+        body: "Brands here often grow by opening in another part of the NCR. Punjabi Rasoi added a Noida outlet to its Rohini kitchen, and it went from ₹1.11 lakh to ₹6.03 lakh a month in its first three months.",
+      },
+      {
+        title: "Margin matters at scale",
+        body: "For high-volume NCR kitchens the win is profitable growth. Punjabi Rasoi's Swiggy effective discount fell from 27.3% to 13.4% while Swiggy sales grew, and Mohan Sweets moved from deep discount codes to flat, approved discounts when the owners prioritised margin.",
+      },
+    ],
+    faqs: [
+      {
+        q: "Do you work with restaurants across Delhi, Noida and Gurugram?",
+        a: "Yes. Our office is in Sector 142, Noida, and our named NCR clients trade in Connaught Place, Rohini and Dwarka in Delhi, in Noida and in Gurugram. Aggregator work is largely remote, inside your Swiggy and Zomato dashboards; photography and event execution are scheduled on site.",
+      },
+      {
+        q: "Can you help us launch a second outlet on Swiggy and Zomato?",
+        a: "Yes. We set up the listings on both apps, the delivery menu and the first ads, then review the new outlet every month. Punjabi Rasoi's Noida outlet grew from ₹1.11 lakh to ₹6.03 lakh a month in its first three months. Results vary by location, cuisine and starting point.",
+      },
+      {
+        q: "We are a sweet shop with very little online business. Where do we start?",
+        a: "With the basics before ads: being online when customers order, a complete menu with photos and variants, and fast prep. Mohan Sweets in Dwarka lifted Zomato availability from 78% to 99%+ first, launched Swiggy from near zero and then scaled ads as they paid back.",
+      },
+      {
+        q: "How long before we see results?",
+        a: "Operational fixes such as acceptance rate and prep-time accuracy typically move ranking within two to four weeks. Menu and listing changes show up in conversion almost immediately. Rating recovery is the slowest lever and generally takes six to eight weeks of consistent review velocity.",
+      },
+      noGuaranteeFaq,
+    ],
+    guides: [
+      { label: "What to look for in a restaurant consultant in Delhi NCR", href: "/best-restaurant-consultant-in-delhi-ncr-what-to-look-for" },
+      { label: "Is hiring a Swiggy and Zomato consultant worth it?", href: "/is-hiring-a-swiggy-and-zomato-consultant-worth-it-roi-case-study" },
+      { label: "Swiggy growth guide for restaurants", href: "/swiggy-growth-guide" },
+      { label: "Swiggy and Zomato commission and payouts", href: "/restaurant-commission-and-payouts" },
+    ],
+  },
+  {
+    slug: "swiggy-zomato-consultant-hyderabad",
+    city: "Hyderabad",
+    areaServed: "Hyderabad",
+    title: "Swiggy & Zomato Consultant in Hyderabad",
+    shortName: "Hyderabad",
+    metaTitle: "Swiggy & Zomato Consultant in Hyderabad",
+    metaDescription:
+      "Swiggy and Zomato consultant for Hyderabad restaurants: listing, menu conversion and ads, with Balaji Dhaba's 3.4x growth in weekly Zomato orders.",
+    intro:
+      "Plateful Consulting is a Swiggy and Zomato consultant working with Hyderabad restaurants remotely, inside their partner dashboards. We fix the inputs that decide ranking and conversion, then scale ads only as they pay back. Balaji Dhaba in Marredpally, on a monthly retainer, grew its average weekly Zomato orders from about 236 to about 796.",
+    cases: ["balaji-dhaba"],
+    differences: [
+      {
+        title: "Dhaba-scale volume",
+        body: "Balaji Dhaba runs at hundreds of delivered orders a week on each app: about 796 a week on Zomato on average and up to 906 a week on Swiggy at its peak. At that volume, small gains in conversion and ad efficiency add up to lakhs a month.",
+      },
+      {
+        title: "Conversion before more spend",
+        body: "Menu-to-order conversion on Zomato rose from 7.6% to 8.8%, so more of the people who opened the menu went on to order.",
+      },
+      {
+        title: "Ads judged on return",
+        body: "Zomato tags most of this outlet's sales as ad-attributed, so ads are budgeted against what they return. Over about ten weeks, Swiggy ads returned 16.6x as reported by the platform.",
+      },
+    ],
+    faqs: [
+      {
+        q: "Do you work with restaurants in Hyderabad?",
+        a: "Yes. Aggregator work is largely remote, inside your Swiggy and Zomato partner dashboards, so we work with Hyderabad restaurants from our Noida office. Balaji Dhaba in Marredpally works with us on a monthly retainer.",
+      },
+      {
+        q: "Can a long-established dhaba still grow on Zomato and Swiggy?",
+        a: "Yes. Balaji Dhaba's average weekly Zomato orders grew from about 236 to about 796 over roughly a year, and monthly Zomato sales rose from ₹7.60 lakh to ₹12.17 lakh over five months. Growth came from visibility, menu conversion and ads together.",
+      },
+      {
+        q: "Do Swiggy and Zomato ads pay off for a high-volume restaurant?",
+        a: "They can when they are budgeted against what they return rather than as a fixed monthly spend. Over about ten weeks, Balaji Dhaba's Swiggy ads returned 16.6x as reported by the platform. Platform-reported returns are not the same as profit, so we read them next to net sales.",
+      },
+      {
+        q: "How does an engagement work?",
+        a: "In four stages: a growth audit of your Swiggy and Zomato dashboards, a written plan with owners and targets, execution across menu, listing, ads and operations, then ongoing reporting on orders, average order value and net realisation.",
+      },
+      noGuaranteeFaq,
+    ],
+    guides: [
+      { label: "Zomato growth guide for restaurants", href: "/zomato-growth-guide" },
+      { label: "Swiggy growth guide for restaurants", href: "/swiggy-growth-guide" },
+      { label: "Swiggy ads strategy without wasting budget", href: "/swiggy-ads-strategy-how-to-get-5x-roas-without-wasting-budget" },
+      { label: "Zomato ads: strategy and budget guide", href: "/zomato-ads-for-restaurants-complete-strategy-and-budget-guide" },
+    ],
+  },
+  {
+    slug: "swiggy-zomato-consultant-pune",
+    city: "Pune",
+    areaServed: "Pune",
+    title: "Swiggy & Zomato Consultant in Pune",
+    shortName: "Pune",
+    metaTitle: "Swiggy & Zomato Consultant in Pune",
+    metaDescription:
+      "Swiggy and Zomato consultant for Pune restaurants and cloud kitchens: ratings, menu, ads and kitchen speed, with The Burrito Bros' 7.6x sales growth.",
+    intro:
+      "Plateful Consulting is a Swiggy and Zomato consultant for Pune restaurants and cloud kitchens, working inside your partner dashboards on ratings, menu, ads and kitchen speed. On a six-month plan, The Burrito Bros in Koregaon Park grew monthly online sales 7.6x, lifted its Zomato rating from 1.8 to 4.3 and met its target before handover.",
+    cases: ["burrito-bros"],
+    differences: [
+      {
+        title: "Rating first, then scale",
+        body: "A 1.8 Zomato rating was holding The Burrito Bros back. Rating drives and complaint handling came before bigger ad budgets, and Zomato sales grew 10.5x over the plan.",
+      },
+      {
+        title: "Delivery kitchens and second brands",
+        body: "A second brand from the same kitchen can add storefronts, but it needs its own menu, rating and listing work. We report each brand separately, which is why The Burrito Bros' headline numbers exclude its second brand.",
+      },
+      {
+        title: "Kitchen speed and platform checks",
+        body: "Zomato prep time fell from 14 to 8 minutes, with zero lost sales and cancellations in the last three months of the plan. When Swiggy visibility dipped because of a duplicate-outlet issue on Swiggy's side, it was taken up with the platform and resolved.",
+      },
+    ],
+    faqs: [
+      {
+        q: "Do you work with restaurants and cloud kitchens in Pune?",
+        a: "Yes. Aggregator work is largely remote, inside your Swiggy and Zomato partner dashboards. The Burrito Bros in Koregaon Park worked with us on a six-month growth plan that met its target and closed with a full handover.",
+      },
+      {
+        q: "Our Zomato rating is low. Can we still grow?",
+        a: "Usually the rating has to be fixed first, because it limits visibility and conversion. The Burrito Bros went from 1.8 to 4.3 on Zomato through rating drives and complaint handling before ads were scaled. A rating also depends on your food and customers, so no one can promise a number.",
+      },
+      {
+        q: "Should we launch a second delivery brand from the same kitchen?",
+        a: "Sometimes. It adds storefronts, but each brand needs its own menu, listing and rating work, and a weak one can pull attention from the main brand. We plan it as a separate brand with its own numbers rather than assume it will add sales.",
+      },
+      {
+        q: "What happens at the end of a fixed-term plan?",
+        a: "A clean handover. At the end of The Burrito Bros' six-month plan, all logins, IDs and the full discount list were handed back so the team could run the outlet without us.",
+      },
+      noGuaranteeFaq,
+    ],
+    guides: [
+      { label: "How to improve Zomato ratings", href: "/how-to-improve-zomato-ratings-7-proven-tactics-that-work" },
+      { label: "How to start a cloud kitchen on Swiggy and Zomato", href: "/how-to-start-a-cloud-kitchen-on-swiggy-and-zomato-2026-guide" },
+      { label: "Handling negative reviews on Zomato", href: "/how-to-handle-negative-reviews-on-zomato-without-losing-rankings" },
+      { label: "Zomato growth guide for restaurants", href: "/zomato-growth-guide" },
+    ],
+  },
+];
+
+export const cityPageBySlug = (slug: string) => cityPages.find((c) => c.slug === slug);
+export const cityPageByCity = (city: CaseCity) => cityPages.find((c) => c.city === city);

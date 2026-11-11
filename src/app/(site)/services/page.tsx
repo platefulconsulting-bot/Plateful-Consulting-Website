@@ -10,7 +10,7 @@ import { ServiceIcon } from "@/components/site/ServiceIcon";
 import { CTABand } from "@/components/site/CTABand";
 import { PostCard } from "@/components/site/PostCard";
 import { getPostsBySlugs } from "@/lib/posts";
-import { services, processSteps, servicesAnswer, servicesFaqs, topicHubs } from "@/lib/site";
+import { services, processSteps, servicesAnswer, servicesFaqs, topicHubs, cityPages } from "@/lib/site";
 import { jsonLd, breadcrumbSchema, serviceSchema, faqSchema } from "@/lib/seo";
 import { FaqList } from "@/components/site/FaqList";
 
@@ -296,6 +296,17 @@ export default async function ServicesPage() {
               See what this produced for named clients: before-and-after Swiggy &amp; Zomato results
               <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden />
             </Link>
+            <p className="mt-3 text-sm leading-relaxed text-cream-400">
+              By city:{" "}
+              {cityPages.map((c, i) => (
+                <span key={c.slug}>
+                  <Link href={`/${c.slug}`} className="font-medium text-gold-400 hover:text-gold-300">
+                    Swiggy &amp; Zomato consultant in {c.shortName}
+                  </Link>
+                  {i < cityPages.length - 1 ? " · " : ""}
+                </span>
+              ))}
+            </p>
           </Reveal>
         </div>
       </StageSection>
