@@ -955,8 +955,8 @@ export const resultsPage = {
 export const caseStudies: CaseStudy[] = [
   {
     slug: "drama",
-    name: "Drama — An Ode to Indian Cinema",
-    city: null,
+    name: "Drama — An Ode to Indian Cinema, Delhi",
+    city: "Delhi NCR",
     type: "Dine-in · high average order value",
     highlight: "Combined net sale +51.8% a month",
     onboarded: "Results within two months of PFC taking over",
@@ -1139,8 +1139,8 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "limitless",
-    name: "Limitless",
-    city: null,
+    name: "Limitless, Noida",
+    city: "Delhi NCR",
     type: "Drama's second outlet",
     highlight: "Swiggy net order value +243.9%",
     onboarded: "Results within two months",
@@ -1159,8 +1159,8 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "pasta-express",
-    name: "Pasta Express",
-    city: null,
+    name: "Pasta Express, Delhi",
+    city: "Delhi NCR",
     type: "Delivery brand",
     highlight: "Zomato orders 149 → 746 a month",
     onboarded: "Results in the first month",
@@ -1177,8 +1177,8 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "regenta-inn",
-    name: "Regenta Inn",
-    city: null,
+    name: "Regenta Inn, Hyderabad",
+    city: "Hyderabad",
     type: "Delivery",
     highlight: "Swiggy orders 66 → 388 a month",
     onboarded: "Results in the first month",
@@ -1194,8 +1194,8 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "tsoyum",
-    name: "TsoYum!",
-    city: null,
+    name: "TsoYum!, Noida",
+    city: "Delhi NCR",
     type: "New delivery brand",
     highlight: "Swiggy orders 32 → 233 a month",
     onboarded: "Results within two months of launch",
@@ -1211,8 +1211,8 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "good-gaon",
-    name: "Good Gaon",
-    city: null,
+    name: "Good Gaon, Gurugram",
+    city: "Delhi NCR",
     type: "Delivery",
     highlight: "Swiggy orders 78 → 260 a month",
     onboarded: "Results within two months",
@@ -1272,8 +1272,8 @@ export const cityPages: CityPage[] = [
     metaDescription:
       "Swiggy and Zomato consultant for Delhi NCR restaurants, based in Noida, with named results from Connaught Place, Rohini, Dwarka, Noida and Gurugram.",
     intro:
-      "Plateful Consulting is a Swiggy and Zomato consultant for Delhi NCR restaurants, based in Noida. We work inside your partner dashboards on listing, menu, ads, discounts and kitchen operations. NCR clients include a Connaught Place fusion bar, a two-outlet North Indian kitchen in Rohini and Noida, a Dwarka sweet shop and a Gurugram delivery launch.",
-    cases: ["ivoryy-fusion-bar", "punjabi-rasoi", "mohan-sweets", "olantic-8"],
+      "Plateful Consulting is a Swiggy and Zomato consultant for Delhi NCR restaurants, based in Noida. We work inside your partner dashboards on listing, menu, ads, discounts and kitchen operations. NCR clients include Drama in Delhi, a Connaught Place fusion bar, a two-outlet North Indian kitchen in Rohini and Noida, a Dwarka sweet shop, and delivery brands in Noida and Gurugram.",
+    cases: ["drama", "ivoryy-fusion-bar", "punjabi-rasoi", "mohan-sweets", "olantic-8", "limitless", "pasta-express", "tsoyum", "good-gaon"],
     differences: [
       {
         title: "Many formats, one order of work",
@@ -1322,10 +1322,10 @@ export const cityPages: CityPage[] = [
     shortName: "Hyderabad",
     metaTitle: "Swiggy & Zomato Consultant in Hyderabad",
     metaDescription:
-      "Swiggy and Zomato consultant for Hyderabad restaurants: listing, menu conversion and ads, with Balaji Dhaba's 3.4x growth in weekly Zomato orders.",
+      "Swiggy and Zomato consultant for Hyderabad restaurants. Named results: Balaji Dhaba, 3.4x weekly Zomato orders; Regenta Inn, 5.2x Swiggy sales.",
     intro:
-      "Plateful Consulting is a Swiggy and Zomato consultant working with Hyderabad restaurants remotely, inside their partner dashboards. We fix the inputs that decide ranking and conversion, then scale ads only as they pay back. Balaji Dhaba in Marredpally, on a monthly retainer, grew its average weekly Zomato orders from about 236 to about 796.",
-    cases: ["balaji-dhaba"],
+      "Plateful Consulting is a Swiggy and Zomato consultant working with Hyderabad restaurants remotely, inside their partner dashboards. We fix the inputs that decide ranking and conversion, then scale ads only as they pay back. Balaji Dhaba in Marredpally grew its average weekly Zomato orders from about 236 to about 796, and Regenta Inn's Swiggy orders went from 66 to 388 a month.",
+    cases: ["balaji-dhaba", "regenta-inn"],
     differences: [
       {
         title: "Dhaba-scale volume",
