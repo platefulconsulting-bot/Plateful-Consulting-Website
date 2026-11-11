@@ -25,6 +25,17 @@ const nextConfig: NextConfig = {
       { source: "/home", destination: "/", permanent: true },
       { source: "/about", destination: "/about-us", permanent: true },
       { source: "/contact", destination: "/contact-us", permanent: true },
+      // Merged duplicate guides (Nov 2026): the URL with more Search Console impressions survives.
+      {
+        source: "/swiggy-vs-zomato-for-restaurants-which-platform-drives-more-sales",
+        destination: "/swiggy-dineout-vs-zomato-dine-in",
+        permanent: true,
+      },
+      {
+        source: "/how-to-increase-swiggy-orders-in-30-days",
+        destination: "/how-to-increase-swiggy-orders",
+        permanent: true,
+      },
       // Old WordPress "index.php" permalinks still crawled by Google (404s in Search Console).
       { source: "/index.php", destination: "/", permanent: true },
       { source: "/index.php/:path*", destination: "/:path*", permanent: true },
