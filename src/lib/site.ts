@@ -430,6 +430,7 @@ export const clients = [
   { name: "Drama", logo: "/clients/drama.png", type: "Bar & lounge" },
   { name: "Snowberry", logo: "/clients/snowberry.png", type: "Desserts" },
   { name: "Honey & Dough", logo: "/clients/honey-and-dough.png", type: "Bakery & café" },
+  { name: "Limitless Luxe", logo: "/clients/limitless-luxe.png", type: "Bar & lounge · Noida" },
 ] as const;
 
 // ---------------------------------------------------------------------------
