@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ogImageUrl } from "@/lib/utils";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
 
@@ -15,7 +16,7 @@ import { jsonLd, breadcrumbSchema, serviceSchema } from "@/lib/seo";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Swiggy & Zomato Sales Consulting Services (Pan India)",
+  title: { absolute: "Swiggy & Zomato Sales Consulting Services | PFC" },
   description:
     "Specialised Swiggy and Zomato dine-in and delivery sales consulting: listing, onboarding, menu optimisation, aggregator ads management, food photography, Meta ads, events and licensing.",
   alternates: { canonical: "/services" },
@@ -24,6 +25,7 @@ export const metadata: Metadata = {
     description:
       "Driving real, measurable sales growth for restaurants on aggregator platforms.",
     url: "/services",
+    images: [{ url: ogImageUrl("Swiggy & Zomato Sales Consulting Services"), width: 1200, height: 630 }],
   },
 };
 

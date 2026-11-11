@@ -50,7 +50,10 @@ export const metadata: Metadata = {
     "aggregator ads management",
     "restaurant growth Delhi NCR",
   ],
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    types: { "application/rss+xml": [{ url: "/feed.xml", title: "Plateful Consulting guides" }] },
+  },
   openGraph: {
     type: "website",
     locale: site.locale,
@@ -58,11 +61,13 @@ export const metadata: Metadata = {
     siteName: site.name,
     title: "Swiggy & Zomato Sales Consultant in India | Plateful Consulting",
     description: site.description,
+    images: [{ url: "/og", width: 1200, height: 630, alt: "Plateful Consulting — Swiggy & Zomato sales consultants" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Swiggy & Zomato Sales Consultant in India",
     description: site.description,
+    images: ["/og"],
   },
   robots: {
     index: true,

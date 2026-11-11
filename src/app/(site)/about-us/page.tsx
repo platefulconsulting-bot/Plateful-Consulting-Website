@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ogImageUrl } from "@/lib/utils";
 import Link from "next/link";
 import { ArrowRight, MapPin, Phone, Quote } from "lucide-react";
 
@@ -16,7 +17,7 @@ import { cn } from "@/lib/utils";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "About Us — Swiggy & Zomato Sales Growth Consultants",
+  title: { absolute: "About Plateful Consulting | Swiggy & Zomato Growth Experts" },
   description:
     "Plateful Consulting is a specialist Swiggy and Zomato restaurant sales consulting firm helping restaurants grow consistent, high-margin revenue. 650+ restaurants, PAN India, 7+ years.",
   alternates: { canonical: "/about-us" },
@@ -24,6 +25,7 @@ export const metadata: Metadata = {
     title: "About Plateful Consulting",
     description: "We don't manage platforms. We drive sales.",
     url: "/about-us",
+    images: [{ url: ogImageUrl("About Plateful Consulting"), width: 1200, height: 630 }],
   },
 };
 

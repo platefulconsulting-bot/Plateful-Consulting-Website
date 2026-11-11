@@ -20,6 +20,8 @@ export function organizationSchema() {
     name: site.name,
     legalName: site.legalName,
     url: site.url,
+    logo: { "@type": "ImageObject", url: absoluteUrl("/brand/PFC-LOGO.webp"), width: 512, height: 512 },
+    image: absoluteUrl("/og"),
     description: site.description,
     slogan: site.tagline,
     foundingDate: String(site.founded),
@@ -106,12 +108,14 @@ export function articleSchema(post: {
   readingMinutes: number;
   author: { name: string; role: string } | null;
   category: { name: string } | null;
+  image?: string;
 }) {
   return {
     "@type": "Article",
     "@id": absoluteUrl(`/${post.slug}#article`),
     headline: post.title,
     description: post.excerpt,
+    ...(post.image ? { image: [post.image] } : {}),
     url: absoluteUrl(`/${post.slug}`),
     datePublished: isoDate(post.publishedAt),
     dateModified: isoDate(post.updatedAt),
@@ -120,7 +124,13 @@ export function articleSchema(post: {
     isPartOf: { "@id": SITE_ID },
     publisher: { "@id": ORG_ID },
     author: post.author
-      ? { "@type": "Person", name: post.author.name, jobTitle: post.author.role }
+      ? {
+          "@type": "Person",
+          name: post.author.name,
+          jobTitle: post.author.role,
+          url: absoluteUrl("/about-us"),
+          worksFor: { "@id": ORG_ID },
+        }
       : { "@id": ORG_ID },
     mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(`/${post.slug}`) },
   };

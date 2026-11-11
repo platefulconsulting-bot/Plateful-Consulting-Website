@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ogImageUrl } from "@/lib/utils";
 import Link from "next/link";
 import { Search, ArrowLeft, ArrowRight, X } from "lucide-react";
 
@@ -11,7 +12,7 @@ import { jsonLd, breadcrumbSchema } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Blogs — Swiggy & Zomato Growth Guides for Restaurants",
+  title: { absolute: "Swiggy & Zomato Growth Guides for Restaurants | PFC Blog" },
   description:
     "In-depth guides on Swiggy and Zomato ranking, commissions, menu optimisation, ads and ratings — written from inside real restaurant partner dashboards.",
   alternates: { canonical: "/blogs" },
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
     title: "Plateful Consulting — Restaurant growth guides",
     description: "How the platforms actually rank, price and charge you.",
     url: "/blogs",
+    images: [{ url: ogImageUrl("Swiggy & Zomato Growth Guides for Restaurants"), width: 1200, height: 630 }],
   },
 };
 

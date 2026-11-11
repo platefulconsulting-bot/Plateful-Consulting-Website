@@ -63,6 +63,35 @@ export function hashRatio(input: string) {
   return ((h >>> 0) % 10000) / 10000;
 }
 
+/**
+ * Search-snippet description. Google shows ~155 characters; anything longer is
+ * cut mid-word. Excerpts migrated from WordPress were already hard-cut at 158
+ * characters, so a dangling partial word is dropped and the text ends on a
+ * full word.
+ */
+export function metaDescription(text: string | null | undefined, max = 155) {
+  const clean = (text ?? "").replace(/\s+/g, " ").trim();
+  if (clean.length <= max && /[.!?…)"”]$/.test(clean)) return clean;
+  const cut = clean.length <= max ? clean : clean.slice(0, max + 1);
+  const words = cut.replace(/\s+\S*$/, "").replace(/[\s,;:–—-]+$/, "");
+  return `${words}…`;
+}
+
+/** Page title that stays near 60 characters with the brand suffix. */
+export function seoTitle(title: string, brand = "Plateful Consulting") {
+  const full = `${title} | ${brand}`;
+  if (full.length <= 60) return full;
+  const short = `${title} | PFC`;
+  return short.length <= 65 ? short : title;
+}
+
+/** Branded 1200×630 share card rendered by /og. */
+export function ogImageUrl(title: string, label?: string | null) {
+  const params = new URLSearchParams({ title });
+  if (label) params.set("label", label);
+  return `/og?${params.toString()}`;
+}
+
 export function truncate(text: string, max: number) {
   if (text.length <= max) return text;
   return `${text.slice(0, max).replace(/\s+\S*$/, "")}…`;

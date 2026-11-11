@@ -22,7 +22,7 @@ export function Logo({
   const mark = (
     <Image
       src="/brand/PFC-LOGO.webp"
-      alt=""
+      alt="Plateful Consulting logo"
       width={512}
       height={512}
       priority

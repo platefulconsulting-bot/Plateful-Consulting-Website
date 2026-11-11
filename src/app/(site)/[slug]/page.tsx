@@ -13,7 +13,7 @@ import { getAllPostSlugs, getPostBySlug, getRelatedPosts } from "@/lib/posts";
 import { enhanceArticle, extractFaqs } from "@/lib/sanitize";
 import { services } from "@/lib/site";
 import { jsonLd, articleSchema, breadcrumbSchema, faqSchema } from "@/lib/seo";
-import { absoluteUrl, formatDate, isoDate } from "@/lib/utils";
+import { absoluteUrl, formatDate, isoDate, metaDescription, ogImageUrl, seoTitle } from "@/lib/utils";
 
 export const revalidate = 3600;
 
@@ -45,10 +45,11 @@ export async function generateMetadata({
   if (!post) return {};
 
   const title = post.metaTitle ?? post.title;
-  const description = post.metaDescription ?? post.excerpt;
+  const description = metaDescription(post.metaDescription ?? post.excerpt);
+  const image = post.ogImage ?? post.coverImage ?? ogImageUrl(post.title, post.category?.name);
 
   return {
-    title: post.title,
+    title: { absolute: seoTitle(title) },
     description,
     alternates: { canonical: `/${post.slug}` },
     openGraph: {
@@ -61,9 +62,9 @@ export async function generateMetadata({
       authors: post.author ? [post.author.name] : undefined,
       section: post.category?.name,
       tags: post.tags.map((t) => t.name),
-      images: post.ogImage ?? post.coverImage ? [post.ogImage ?? post.coverImage!] : undefined,
+      images: [{ url: image, width: 1200, height: 630, alt: post.title }],
     },
-    twitter: { card: "summary_large_image", title, description },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
   };
 }
 
@@ -85,7 +86,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     services.find((s) => s.slug === "delivery-sales-growth")!;
 
   const schema = jsonLd(
-    articleSchema(post),
+    articleSchema({
+      ...post,
+      excerpt: metaDescription(post.excerpt, 300),
+      image: absoluteUrl(post.ogImage ?? post.coverImage ?? ogImageUrl(post.title, post.category?.name)),
+    }),
     breadcrumbSchema([
       { name: "Home", path: "/" },
       { name: "Blogs", path: "/blogs" },

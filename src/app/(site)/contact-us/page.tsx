@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ogImageUrl } from "@/lib/utils";
 import { Suspense } from "react";
 import { Mail, Phone, MapPin, Clock, Instagram, Youtube, MessageCircle } from "lucide-react";
 
@@ -9,7 +10,7 @@ import { contact, faqs, site } from "@/lib/site";
 import { jsonLd, breadcrumbSchema, faqSchema, organizationSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Contact Us — Book a Swiggy & Zomato Growth Audit",
+  title: { absolute: "Contact Us | Book a Swiggy & Zomato Growth Audit | PFC" },
   description:
     "Talk to Plateful Consulting about growing your restaurant's Swiggy and Zomato sales. Call +91 81300 32195, email info@platefulconsulting.com, or request a growth audit.",
   alternates: { canonical: "/contact-us" },
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
     title: "Contact Plateful Consulting",
     description: "Book a Swiggy & Zomato growth audit for your restaurant.",
     url: "/contact-us",
+    images: [{ url: ogImageUrl("Book a Swiggy & Zomato Growth Audit"), width: 1200, height: 630 }],
   },
 };
 
