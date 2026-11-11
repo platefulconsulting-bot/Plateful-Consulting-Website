@@ -287,6 +287,16 @@ export default async function ServicesPage() {
               </Reveal>
             ))}
           </ol>
+
+          <Reveal className="mt-10">
+            <Link
+              href="/results"
+              className="inline-flex items-center gap-1.5 font-display text-lg font-semibold text-cream-100 transition-colors hover:text-gold-300"
+            >
+              See what this produced for named clients: before-and-after Swiggy &amp; Zomato results
+              <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden />
+            </Link>
+          </Reveal>
         </div>
       </StageSection>
 

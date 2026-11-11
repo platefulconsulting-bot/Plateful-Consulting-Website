@@ -406,11 +406,15 @@ export default async function HomePage() {
             ))}
           </div>
 
-          <Reveal className="mt-8">
-            <p className="text-sm text-cream-500">
+          <Reveal className="mt-8 flex flex-wrap items-center justify-between gap-5">
+            <p className="max-w-2xl text-sm text-cream-500">
               Figures are as reported by the businesses themselves. Results vary by city,
               cuisine, price point and starting position.
             </p>
+            <Link href="/results" className="btn btn-outline btn-sm">
+              See the before-and-after numbers
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
           </Reveal>
         </div>
       </StageSection>

@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { site, contact, services, faqs, leadFounder, topicHubs, authorHref } from "@/lib/site";
+import { site, contact, services, faqs, leadFounder, topicHubs, authorHref, resultsPage } from "@/lib/site";
 import { absoluteUrl, metaDescription } from "@/lib/utils";
 
 /**
@@ -35,6 +35,7 @@ export async function GET() {
     "## Key pages",
     `- [About ${site.name}](${absoluteUrl("/about-us")})`,
     `- [Services](${absoluteUrl("/services")})`,
+    `- [${resultsPage.title}](${absoluteUrl(resultsPage.path)}): ${metaDescription(resultsPage.metaDescription, 200)}`,
     `- [All guides](${absoluteUrl("/blogs")})`,
     ...topicHubs.map((h) => `- [${h.title}](${absoluteUrl(`/${h.slug}`)}): ${metaDescription(h.metaDescription, 200)}`),
     `- [${leadFounder.name}, ${leadFounder.role}](${absoluteUrl(authorHref(leadFounder.slug))})`,

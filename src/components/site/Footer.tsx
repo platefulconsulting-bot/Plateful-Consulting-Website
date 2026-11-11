@@ -96,6 +96,7 @@ export async function Footer() {
             <ul className="mt-5 space-y-2.5">
               {[
                 { label: "About Us", href: "/about-us" },
+                { label: "Client Results", href: "/results" },
                 { label: "Blogs", href: "/blogs" },
                 { label: "What's New", href: "/whats-new" },
                 { label: "Discount Calculator", href: "/tools/discount-calculator" },

@@ -61,6 +61,7 @@ export const nav = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about-us" },
   { label: "Services", href: "/services" },
+  { label: "Results", href: "/results" },
   { label: "Blogs", href: "/blogs" },
   { label: "What's New", href: "/whats-new" },
   { label: "Contact Us", href: "/contact-us" },
@@ -853,3 +854,204 @@ export const topicHubs: TopicHub[] = [
 ];
 
 export const topicHubBySlug = (slug: string) => topicHubs.find((h) => h.slug === slug);
+
+// ---------------------------------------------------------------------------
+// Client results (/results). Every figure comes from the client's own Swiggy /
+// Zomato partner dashboards or PFC's daily sales register, and the clients
+// approved being named. Copy numbers exactly as supplied: never round up and
+// never add a figure that is not in the source.
+// ---------------------------------------------------------------------------
+
+export type CaseStudyRow = {
+  metric: string;
+  before: string;
+  after: string;
+  /** Change as stated in the source, e.g. "+51.8%". Omitted when none was given. */
+  change?: string;
+};
+
+export type CaseStudy = {
+  slug: string;
+  name: string;
+  /** Kind of outlet, e.g. "Dine-in · high average order value". */
+  type: string;
+  /** Chip text on the card: the headline result, stated plainly. */
+  highlight: string;
+  onboarded: string;
+  /** The before and after windows being compared. */
+  period: string;
+  beforeLabel: string;
+  afterLabel: string;
+  rows: CaseStudyRow[];
+  /** Generic description of the work. No invented specifics. */
+  work: string;
+  /** Caveats that belong next to the numbers (spend increases, prior trend). */
+  notes: string[];
+};
+
+export const resultsPage = {
+  path: "/results",
+  title: "Client results: Swiggy & Zomato growth case studies",
+  shortName: "Client results",
+  metaTitle: "Client Results: Swiggy & Zomato Case Studies",
+  metaDescription:
+    "Before-and-after Swiggy and Zomato sales for seven Plateful Consulting client outlets, with ad spend and method shown. Individual results, not guarantees.",
+  intro:
+    "Plateful Consulting works inside a restaurant's Swiggy and Zomato dashboards: listing and visibility, menu, ad structure and new-customer targeting. For the seven outlets below, platform sales after onboarding ranged from 22.1% higher (Drama on Zomato) to several times the starting level for newer delivery brands. Where we have spend data, ad or discount spend rose too, and we show it.",
+  disclaimer:
+    "Results vary; these are individual client outcomes, not guarantees. City, cuisine, price point and starting position all change what is possible.",
+  source:
+    "Source: each client's Swiggy and Zomato partner dashboards and PFC's daily sales register. Clients approved being named.",
+  method: [
+    {
+      title: "Fixed before and after windows",
+      body: "Each case compares a period before PFC took over with a period after, from the same source. Where the two windows are different lengths, we show per-day figures so the comparison is like for like.",
+    },
+    {
+      title: "Net sale and GMV are labelled",
+      body: "Net sale is what the platform reports after discounts; GMV is gross order value before them. They are not interchangeable, so each row uses the metric name from the partner dashboard it came from.",
+    },
+    {
+      title: "Spend is shown next to sales",
+      body: "Most of these outlets also spent more on platform ads or discounts after onboarding. Where we have that figure it sits beside the sales number, and for Drama we show net sale earned per ₹1 of added ad spend.",
+    },
+    {
+      title: "Transition and partial months are left out",
+      body: "The month PFC takes over mixes old and new settings, and a month still in progress is incomplete. Where a case uses monthly averages, both are excluded; the period line on each case says exactly what was compared.",
+    },
+  ],
+} as const;
+
+export const caseStudies: CaseStudy[] = [
+  {
+    slug: "drama",
+    name: "Drama — An Ode to Indian Cinema",
+    type: "Dine-in · high average order value",
+    highlight: "Combined net sale +51.8% a month",
+    onboarded: "PFC took over on 11 May 2026",
+    period:
+      "Mar–Apr 2026 monthly average vs Jun–Jul 2026 monthly average. May (the transition month) and the partial August are excluded.",
+    beforeLabel: "Before (Mar–Apr avg)",
+    afterLabel: "After (Jun–Jul avg)",
+    rows: [
+      { metric: "Combined net sale / month", before: "₹33.81 lakh", after: "₹51.32 lakh", change: "+51.8%" },
+      { metric: "Swiggy net sale / month", before: "₹13.62 lakh", after: "₹26.67 lakh", change: "+95.8%" },
+      { metric: "Zomato net sale / month", before: "₹20.19 lakh", after: "₹24.66 lakh", change: "+22.1%" },
+      { metric: "Ad spend / month (both platforms)", before: "₹1.94 lakh", after: "₹6.19 lakh" },
+      { metric: "New customers / month", before: "372", after: "754" },
+    ],
+    work: "Visibility and listing work, ad restructuring on both platforms and new-customer acquisition targeting.",
+    notes: [
+      "Ad spend rose from ₹1.94 lakh to ₹6.19 lakh a month. Each ₹1 of added ad spend came with ₹4.12 of added net sale overall: ₹5.67 on Swiggy and ₹2.29 on Zomato.",
+    ],
+  },
+  {
+    slug: "ivoryy-fusion-bar",
+    name: "Ivoryy Fusion Bar, Connaught Place, New Delhi",
+    type: "Premium fusion dining · about ₹1,800 for two",
+    highlight: "Swiggy GMV ≈5x per day",
+    onboarded: "Onboarded on 12 Nov 2025",
+    period:
+      "1–11 Nov 2025 (11 days) vs 12–30 Nov 2025 (19 days). The windows differ in length, so the comparison is per day.",
+    beforeLabel: "Before (1–11 Nov, per day)",
+    afterLabel: "After (12–30 Nov, per day)",
+    rows: [
+      { metric: "Swiggy GMV / day", before: "~₹9,140", after: "~₹45,340", change: "≈5x" },
+      { metric: "Zomato GMV / day", before: "~₹29,060", after: "~₹68,040", change: "≈2.3x" },
+      { metric: "Swiggy rating", before: "4.4", after: "4.4" },
+      { metric: "Zomato rating", before: "4.35", after: "4.37" },
+    ],
+    work: "Visibility and listing work and ad restructuring on Swiggy and Zomato.",
+    notes: [
+      "Window totals: Swiggy GMV ₹1,00,545 in 11 days, then ₹8,61,473 in 19 days. Zomato GMV ₹3,19,684, then ₹12,92,822.",
+      "Ad spend also increased: Swiggy ₹12,555 (11 days) to ₹67,979 (19 days); Zomato ₹30,000 to ₹65,000 over the same windows.",
+    ],
+  },
+  {
+    slug: "limitless",
+    name: "Limitless",
+    type: "Drama's second outlet",
+    highlight: "Swiggy net order value +243.9%",
+    onboarded: "Second outlet of the Drama group",
+    period: "May 2026 vs July 2026.",
+    beforeLabel: "May 2026",
+    afterLabel: "July 2026",
+    rows: [
+      { metric: "Swiggy net order value", before: "₹5.23 lakh", after: "₹18.00 lakh", change: "+243.9%" },
+      { metric: "Bookings", before: "132", after: "439" },
+      { metric: "New users", before: "99", after: "347" },
+    ],
+    work: "Swiggy visibility and new-user acquisition targeting. The focus now is discount efficiency.",
+    notes: [
+      "Discount spend also rose sharply, from ₹2.28 lakh in June to ₹14.44 lakh in July. Growth bought with discounts is expensive, so the work now is holding sales while spending less on discounts.",
+    ],
+  },
+  {
+    slug: "pasta-express",
+    name: "Pasta Express",
+    type: "Delivery brand",
+    highlight: "Zomato delivered orders 149 → 746",
+    onboarded: "Onboarded on 1 May 2025",
+    period: "May 2025 vs June 2025.",
+    beforeLabel: "May 2025",
+    afterLabel: "June 2025",
+    rows: [
+      { metric: "Zomato sales", before: "₹47,264", after: "₹2,21,291" },
+      { metric: "Zomato delivered orders", before: "149", after: "746" },
+      { metric: "Swiggy sales", before: "₹18,244", after: "₹48,941" },
+    ],
+    work: "Listing, menu and ads work on both platforms.",
+    notes: [],
+  },
+  {
+    slug: "regenta-inn",
+    name: "Regenta Inn",
+    type: "Delivery",
+    highlight: "Swiggy orders 66 → 388",
+    onboarded: "Onboarded in May 2025",
+    period: "May 2025 vs June 2025.",
+    beforeLabel: "May 2025",
+    afterLabel: "June 2025",
+    rows: [
+      { metric: "Swiggy sales", before: "₹29,192", after: "₹1,51,589" },
+      { metric: "Swiggy orders", before: "66", after: "388" },
+    ],
+    work: "Swiggy listing, menu and ads work.",
+    notes: [],
+  },
+  {
+    slug: "tsoyum",
+    name: "TsoYum!",
+    type: "New delivery brand",
+    highlight: "Swiggy orders 32 → 233",
+    onboarded: "Onboarded on 1 Apr 2025 as a new brand",
+    period: "April 2025 vs June 2025.",
+    beforeLabel: "April 2025",
+    afterLabel: "June 2025",
+    rows: [
+      { metric: "Swiggy sales", before: "₹10,935", after: "₹92,180" },
+      { metric: "Swiggy orders", before: "32", after: "233" },
+    ],
+    work: "Listing, menu and ads work for a newly launched brand.",
+    notes: ["TsoYum! was new, so April is its launch month and the starting base is small."],
+  },
+  {
+    slug: "good-gaon",
+    name: "Good Gaon",
+    type: "Delivery",
+    highlight: "Swiggy orders 78 → 260",
+    onboarded: "Onboarded on 1 Apr 2025",
+    period: "April 2025 vs June 2025.",
+    beforeLabel: "April 2025",
+    afterLabel: "June 2025",
+    rows: [
+      { metric: "Swiggy sales", before: "₹27,172", after: "₹86,177" },
+      { metric: "Swiggy orders", before: "78", after: "260" },
+      { metric: "Zomato sales", before: "₹97,827", after: "₹1,87,043" },
+    ],
+    work: "Listing, menu and ads work on both platforms.",
+    notes: [
+      "Zomato sales were already rising before onboarding, so not all of the Zomato change should be read as PFC's effect.",
+    ],
+  },
+];

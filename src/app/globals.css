@@ -608,6 +608,20 @@
   vertical-align: top;
 }
 .prose-pfc tbody tr:hover { background: color-mix(in oklab, var(--color-gold-500) 5%, transparent); }
+/* Row headers (the metric column on /results) read as body cells, not as
+   the uppercase column labels above them. */
+.prose-pfc tbody th {
+  padding: 0.85rem 1.1rem;
+  border-top: 1px solid color-mix(in oklab, var(--color-cream-100) 7%, transparent);
+  vertical-align: top;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: normal;
+  color: var(--color-cream-200);
+}
 
 .prose-pfc img {
   border-radius: 0.9rem;
