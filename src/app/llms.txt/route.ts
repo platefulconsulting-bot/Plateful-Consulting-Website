@@ -39,6 +39,7 @@ export async function GET() {
     `- [All guides](${absoluteUrl("/blogs")})`,
     ...topicHubs.map((h) => `- [${h.title}](${absoluteUrl(`/${h.slug}`)}): ${metaDescription(h.metaDescription, 200)}`),
     `- [${leadFounder.name}, ${leadFounder.role}](${absoluteUrl(authorHref(leadFounder.slug))})`,
+    `- [Commission Reduction Program: typically brings the real Swiggy & Zomato take-rate under 25%](${absoluteUrl("/commission-reduction")})`,
     `- [Swiggy & Zomato discount calculator](${absoluteUrl("/tools/discount-calculator")})`,
     `- [Contact / book a growth audit](${absoluteUrl("/contact-us")})`,
     `- [RSS feed](${absoluteUrl("/feed.xml")})`,

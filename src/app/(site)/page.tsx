@@ -127,6 +127,28 @@ export default async function HomePage() {
           <ClientMarquee />
         </div>
 
+        {/* Commission Reduction Program banner */}
+        <div className="container-x pt-10">
+          <Link
+            href="/commission-reduction"
+            className="group card card-sheen flex flex-col gap-4 border-gold-400/30 p-6 transition-colors hover:border-gold-400/60 md:flex-row md:items-center md:justify-between md:p-7"
+          >
+            <div>
+              <p className="eyebrow">New · Commission Reduction Program</p>
+              <p className="mt-3 font-display text-xl font-semibold text-cream-50 md:text-2xl">
+                Paying 30–40% to Swiggy &amp; Zomato? We typically bring your real take-rate under 25%.
+              </p>
+              <p className="mt-1.5 text-sm text-cream-400">
+                Commission, ads and discounts, added up. See what you could keep a year.
+              </p>
+            </div>
+            <span className="btn btn-primary shrink-0">
+              Calculate my savings
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
+            </span>
+          </Link>
+        </div>
+
         {/* Definition-style answer: the one paragraph an AI assistant or a
             featured snippet should be able to lift verbatim. */}
         <section className="section-tight" aria-labelledby="about-title">

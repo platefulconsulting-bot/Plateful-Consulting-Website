@@ -47,6 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.6,
     })),
+    { url: absoluteUrl("/commission-reduction"), lastModified: STATIC_UPDATED, changeFrequency: "monthly", priority: 0.9 },
     { url: absoluteUrl("/tools/discount-calculator"), lastModified: STATIC_UPDATED, changeFrequency: "monthly", priority: 0.8 },
     { url: absoluteUrl("/whats-new"), lastModified: latestPost, changeFrequency: "weekly", priority: 0.6 },
     { url: absoluteUrl("/terms-and-condition"), lastModified: LEGAL_UPDATED, changeFrequency: "yearly", priority: 0.2 },

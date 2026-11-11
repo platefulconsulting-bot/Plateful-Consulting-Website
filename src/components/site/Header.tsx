@@ -62,12 +62,12 @@ export function Header() {
           <nav aria-label="Primary" className="hidden lg:block">
             <ul className="flex items-center gap-1">
               {nav.map((item) => (
-                <li key={item.href}>
+                <li key={item.href} className={item.href === "/" ? "hidden xl:block" : undefined}>
                   <Link
                     href={item.href}
                     aria-current={isActive(item.href) ? "page" : undefined}
                     className={cn(
-                      "relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300",
+                      "relative whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium transition-colors duration-300 xl:px-4",
                       isActive(item.href)
                         ? "text-gold-300"
                         : "text-cream-300 hover:text-cream-50",
@@ -86,7 +86,7 @@ export function Header() {
           <div className="flex items-center gap-3">
             <a
               href={contact.primaryPhone.href}
-              className="hidden items-center gap-2 text-sm font-medium text-cream-300 transition-colors hover:text-gold-300 xl:flex"
+              className="hidden items-center gap-2 whitespace-nowrap text-sm font-medium text-cream-300 transition-colors hover:text-gold-300 2xl:flex"
             >
               <Phone className="h-4 w-4" aria-hidden />
               {contact.primaryPhone.label}
