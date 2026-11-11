@@ -761,7 +761,11 @@ export const topicHubs: TopicHub[] = [
       {
         name: "Getting expert help",
         description: "When to bring in a consultant, and what to check before you hire one.",
-        slugs: ["best-restaurant-consultant-in-delhi-ncr-what-to-look-for"],
+        slugs: [
+          "best-restaurant-consultant-in-delhi-ncr-what-to-look-for",
+          "what-does-a-restaurant-consultant-actually-do-roles-cost-roi",
+          "is-hiring-a-swiggy-and-zomato-consultant-worth-it-roi-case-study",
+        ],
       },
     ],
     keywords: ["Swiggy"],
@@ -909,9 +913,9 @@ export const resultsPage = {
   shortName: "Client results",
   metaTitle: "Client Results: Swiggy & Zomato Case Studies",
   metaDescription:
-    "Swiggy and Zomato sales before and after for eight Plateful Consulting client outlets, with ad spend and method shown. Individual results, not guarantees.",
+    "Swiggy and Zomato sales before and after for nine Plateful Consulting client outlets, with ad spend and method shown. Individual results, not guarantees.",
   intro:
-    "Plateful Consulting works inside a restaurant's Swiggy and Zomato dashboards: listing and visibility, menu, ad structure and new-customer targeting. For the eight outlets below, from New Delhi to Hyderabad, platform sales after onboarding ranged from 22.1% higher (Drama on Zomato) to several times the starting level for newer delivery brands. Balaji Dhaba, our first Hyderabad case, shows growth tracked over time on a monthly retainer. Where we have spend data, ad or discount spend rose too, and we show it.",
+    "Plateful Consulting works inside a restaurant's Swiggy and Zomato dashboards: listing and visibility, menu, ad structure and new-customer targeting. For the nine outlets below, from Delhi NCR to Hyderabad, platform sales after onboarding ranged from 22.1% higher (Drama on Zomato) to several times the starting level for newer delivery brands. Balaji Dhaba, our first Hyderabad case, shows growth tracked over time on a monthly retainer, and Olantic 8 in Gurugram shows a brand-new delivery launch. Where we have spend data, ad or discount spend rose too, and we show it.",
   disclaimer:
     "Results vary; these are individual client outcomes, not guarantees. City, cuisine, price point and starting position all change what is possible.",
   source:
@@ -984,6 +988,30 @@ export const caseStudies: CaseStudy[] = [
       "Over six months, Zomato sales totalled ₹59.6 lakh from 15,262 delivered orders. Across about 10 weeks, Swiggy revenue was ₹37.5 lakh from 7,363 orders, and Swiggy ads returned 16.6x (₹17.2 lakh of ads GMV on ₹1.04 lakh of spend).",
       "Growth came from a mix of visibility, conversion and ads. Zomato tags most of this outlet's sales as ad-attributed.",
       "The Swiggy figures compare weeks within the tracked window, not before and after PFC.",
+      "PFC does not claim credit for rating changes, so ratings are not shown.",
+    ],
+  },
+  {
+    slug: "olantic-8",
+    name: "Olantic 8, Gurugram",
+    type: "Indian tandoor & Chinese · new delivery launch",
+    highlight: "Online sales 12.9x in six months from launch",
+    onboarded: "Launched on Swiggy and Zomato by PFC",
+    period: "First full month live vs month seven. A launch-growth story from a new listing, not a before vs after comparison.",
+    beforeLabel: "First full month",
+    afterLabel: "Month seven",
+    rows: [
+      { metric: "Online sales / month (both platforms)", before: "₹28.2K", after: "₹3.65 lakh", change: "12.9x" },
+      { metric: "Orders / month", before: "98", after: "1,058", change: "10.8x" },
+      { metric: "Zomato sales / month", before: "₹8,085", after: "₹1,73,542", change: "21x" },
+      { metric: "Swiggy sales / month", before: "₹20,140", after: "₹1,91,467", change: "9.5x" },
+      { metric: "Swiggy ad return (platform-reported)", before: "4.6x", after: "8.9x" },
+      { metric: "Zomato kitchen prep time", before: "26 min", after: "11 min" },
+    ],
+    work: "Two-platform launch, a delivery-first menu, ads scaled only as they paid back, shared discounts with Swiggy (70:30), monthly ops reviews and two extra brand storefronts from the same kitchen.",
+    notes: [
+      "Seven-month total: ₹13.68 lakh in online sales from 4,024 orders. Average order value held around ₹330–355 after the first month, so growth came from more orders, not bigger bills.",
+      "Ad return is as reported by the platforms' ad dashboards. Swiggy ad spend grew from about ₹4.6K to ₹40.6K a month as returns held; Zomato's return fell from an early 9.3x on a tiny budget to 4.8x as spend scaled.",
       "PFC does not claim credit for rating changes, so ratings are not shown.",
     ],
   },

@@ -7,7 +7,7 @@ import { jsonLd, breadcrumbSchema } from "@/lib/seo";
 import { formatDate, ogImageUrl } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "What's New — Tools & Guides for Restaurant Growth",
+  title: { absolute: "What's New: Restaurant Growth Tools & Guides | PFC" },
   description:
     "The latest free tools, guides and features from Plateful Consulting for restaurants growing on Swiggy and Zomato.",
   alternates: { canonical: "/whats-new" },

@@ -12,7 +12,7 @@ const DESCRIPTION =
   "Free calculator for restaurants: see what a Swiggy or Zomato offer does to your earnings per order, and how many extra orders it needs to break even.";
 
 export const metadata: Metadata = {
-  title: "Swiggy & Zomato Discount Calculator for Restaurants",
+  title: { absolute: "Swiggy & Zomato Discount Calculator | PFC" },
   description: DESCRIPTION,
   alternates: { canonical: PATH },
   openGraph: {

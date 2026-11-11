@@ -12,7 +12,10 @@ export function GoogleTag() {
     <>
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_TAG_ID}`}
-        strategy="afterInteractive"
+        // The library is the heaviest third-party script on mobile, so it loads
+        // once the page is idle. The inline queue below runs early, so the page
+        // view and any early events are buffered in dataLayer and sent on load.
+        strategy="lazyOnload"
       />
       <Script id="google-tag" strategy="afterInteractive">
         {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}

@@ -13,7 +13,7 @@ import { getAllPostSlugs, getPostBySlug, getRelatedPosts } from "@/lib/posts";
 import { enhanceArticle, extractFaqs } from "@/lib/sanitize";
 import { services, authorHref } from "@/lib/site";
 import { jsonLd, articleSchema, breadcrumbSchema, faqSchema } from "@/lib/seo";
-import { absoluteUrl, formatDate, isoDate, metaDescription, ogImageUrl, seoTitle } from "@/lib/utils";
+import { absoluteUrl, formatDate, isoDate, metaDescription, ogImageUrl, sentenceExcerpt, seoTitle } from "@/lib/utils";
 
 export const revalidate = 3600;
 
@@ -50,6 +50,9 @@ export async function generateMetadata({
 
   return {
     title: { absolute: seoTitle(title) },
+    authors: post.author
+      ? [{ name: post.author.name, url: absoluteUrl(authorHref(post.author.slug)) }]
+      : undefined,
     description,
     alternates: { canonical: `/${post.slug}` },
     openGraph: {
@@ -94,7 +97,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const schema = jsonLd(
     articleSchema({
       ...post,
-      excerpt: metaDescription(post.excerpt, 300),
+      // Full sentences for the schema description: the hand-written meta
+      // description when there is one, else the excerpt cut at a sentence.
+      excerpt: post.metaDescription ?? sentenceExcerpt(post.excerpt),
       image: absoluteUrl(post.ogImage ?? post.coverImage ?? ogImageUrl(post.title, post.category?.name)),
     }),
     breadcrumbSchema([

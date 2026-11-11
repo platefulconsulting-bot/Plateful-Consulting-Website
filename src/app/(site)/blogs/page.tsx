@@ -12,7 +12,7 @@ import { jsonLd, breadcrumbSchema } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import { topicHubs } from "@/lib/site";
 
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   title: { absolute: "Swiggy & Zomato Growth Guides for Restaurants | PFC Blog" },
   description:
     "Guides to Swiggy and Zomato ranking, commission, menu optimisation, ads and ratings, written from inside real restaurant partner dashboards.",
@@ -26,6 +26,23 @@ export const metadata: Metadata = {
 };
 
 type SearchParams = Promise<{ page?: string; category?: string; tag?: string; q?: string }>;
+
+/**
+ * Paginated listing pages canonicalise to themselves (page 2 is not a copy of
+ * page 1, and most older guides are only linked from there). Category, tag and
+ * search views still canonicalise to /blogs.
+ */
+export async function generateMetadata({ searchParams }: { searchParams: SearchParams }): Promise<Metadata> {
+  const params = await searchParams;
+  const page = Math.max(1, Number.parseInt(params.page ?? "1", 10) || 1);
+  const filtered = Boolean(params.category || params.tag || params.q);
+  if (page === 1 || filtered) return baseMetadata;
+  return {
+    ...baseMetadata,
+    title: { absolute: `Swiggy & Zomato Growth Guides, Page ${page} | PFC Blog` },
+    alternates: { canonical: `/blogs?page=${page}` },
+  };
+}
 
 export default async function BlogsPage({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;

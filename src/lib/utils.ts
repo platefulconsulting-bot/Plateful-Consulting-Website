@@ -77,6 +77,15 @@ export function metaDescription(text: string | null | undefined, max = 155) {
   return `${words}…`;
 }
 
+/** Excerpt trimmed to whole sentences (no trailing ellipsis), max ~300 chars. */
+export function sentenceExcerpt(text: string | null | undefined, max = 300) {
+  const clean = (text ?? "").replace(/\s+/g, " ").trim();
+  if (clean.length <= max && /[.!?]$/.test(clean)) return clean;
+  const cut = clean.slice(0, max);
+  const end = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("? "), cut.lastIndexOf("! "));
+  return end > 60 ? cut.slice(0, end + 1) : metaDescription(clean, max);
+}
+
 /** Page title that stays near 60 characters with the brand suffix. */
 export function seoTitle(title: string, brand = "Plateful Consulting") {
   // A hand-written meta title from the Studio that already carries a brand
@@ -85,7 +94,7 @@ export function seoTitle(title: string, brand = "Plateful Consulting") {
   const full = `${title} | ${brand}`;
   if (full.length <= 60) return full;
   const short = `${title} | PFC`;
-  return short.length <= 65 ? short : title;
+  return short.length <= 60 ? short : title;
 }
 
 /** Branded 1200×630 share card rendered by /og. */

@@ -32,7 +32,7 @@ const instrument = Instrument_Serif({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: "Swiggy & Zomato Sales Consultant in India | Plateful Consulting",
+    default: "Swiggy & Zomato Consultant in India | Plateful Consulting",
     template: "%s | Plateful Consulting",
   },
   description: site.metaDescription,

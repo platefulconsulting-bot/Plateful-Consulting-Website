@@ -20,7 +20,7 @@ export function organizationSchema() {
     name: site.name,
     legalName: site.legalName,
     url: site.url,
-    logo: { "@type": "ImageObject", url: absoluteUrl("/brand/PFC-LOGO.webp"), width: 512, height: 512 },
+    logo: { "@type": "ImageObject", url: absoluteUrl("/brand/PFC-LOGO.webp"), width: 2000, height: 2000 },
     image: absoluteUrl("/og"),
     description: site.description,
     slogan: site.tagline,
