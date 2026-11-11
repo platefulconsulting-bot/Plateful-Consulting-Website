@@ -431,6 +431,8 @@ export const clients = [
   { name: "Snowberry", logo: "/clients/snowberry.png", type: "Desserts" },
   { name: "Honey & Dough", logo: "/clients/honey-and-dough.png", type: "Bakery & café" },
   { name: "Limitless Luxe", logo: "/clients/limitless-luxe.png", type: "Bar & lounge · Noida" },
+  { name: "GoodGaon", logo: "/clients/goodgaon.png", type: "Restaurant" },
+  { name: "The Burrito Bros", logo: "/clients/burrito-bros.png", type: "Indo-Mexican" },
 ] as const;
 
 // ---------------------------------------------------------------------------
