@@ -57,7 +57,10 @@ export const contact = {
   socials: [
     { name: "Instagram", href: "https://www.instagram.com/platefulconsulting.pfc/", handle: "@platefulconsulting.pfc" },
     { name: "YouTube", href: "https://www.youtube.com/@PlatefulConsulting", handle: "@PlatefulConsulting" },
+    { name: "LinkedIn", href: "https://www.linkedin.com/company/97416455/", handle: "Plateful Consulting" },
   ],
+  /** Google Business Profile (knowledge panel). Used in schema sameAs, not shown as an icon. */
+  googleBusinessProfile: "https://www.google.com/search?kgmid=/g/11vby1v2tp",
 } as const;
 
 export const nav = [
@@ -602,6 +605,7 @@ export const authorProfiles = {
     slug: "deepak-desh-bandhu",
     name: "Deepak Desh Bandhu",
     role: "Founder & Lead Consultant",
+    linkedin: "https://www.linkedin.com/in/deepakdeshbandhu/",
     /** Search snippet for the profile page: ≤155 characters, full sentence. */
     metaDescription:
       "Deepak Desh Bandhu, founder of Plateful Consulting, has spent 7+ years inside Swiggy and Zomato dashboards and worked with 650+ restaurants.",

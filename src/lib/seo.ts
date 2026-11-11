@@ -37,7 +37,7 @@ export function organizationSchema() {
     },
     telephone: contact.phones.map((p) => p.label.replace(/\s/g, "")),
     email: contact.primaryEmail.label,
-    sameAs: contact.socials.map((s) => s.href),
+    sameAs: [...contact.socials.map((s) => s.href), contact.googleBusinessProfile],
     founder: founders.map((f) => ({
       "@type": "Person",
       ...(authorHref(f.slug).startsWith("/author/")
@@ -199,6 +199,7 @@ export function personSchema(person: {
   jobTitle: string;
   description: string;
   knowsAbout: readonly string[];
+  sameAs?: readonly string[];
 }) {
   const url = absoluteUrl(`/author/${person.slug}`);
   return {
@@ -210,6 +211,7 @@ export function personSchema(person: {
     url,
     worksFor: { "@id": ORG_ID },
     knowsAbout: [...person.knowsAbout],
+    ...(person.sameAs?.length ? { sameAs: [...person.sameAs] } : {}),
     mainEntityOfPage: { "@type": "ProfilePage", "@id": url },
   };
 }

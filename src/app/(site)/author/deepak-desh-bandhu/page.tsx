@@ -51,6 +51,7 @@ export default async function AuthorPage() {
       jobTitle: author.role,
       description: author.summary,
       knowsAbout: author.knowsAbout,
+      sameAs: [author.linkedin],
     }),
     breadcrumbSchema([
       { name: "Home", path: "/" },
@@ -116,6 +117,16 @@ export default async function AuthorPage() {
                 {author.role}, {site.name}
               </p>
               <p className="mt-5 text-lg leading-relaxed text-cream-300">{author.summary}</p>
+              <p className="mt-4">
+                <a
+                  href={author.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer me"
+                  className="text-sm font-semibold text-gold-300 underline-offset-4 hover:underline"
+                >
+                  Connect with Deepak on LinkedIn
+                </a>
+              </p>
             </Reveal>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react";
+import { Instagram, Youtube, Mail, Phone, MapPin, Linkedin } from "lucide-react";
 import { site, contact, services, cities, topicHubs } from "@/lib/site";
 import { getLatestPosts } from "@/lib/posts";
 import { Logo } from "./Logo";
@@ -55,6 +55,8 @@ export async function Footer() {
                   >
                     {s.name === "Instagram" ? (
                       <Instagram className="h-5 w-5" aria-hidden />
+                    ) : s.name === "LinkedIn" ? (
+                      <Linkedin className="h-5 w-5" aria-hidden />
                     ) : (
                       <Youtube className="h-5 w-5" aria-hidden />
                     )}
