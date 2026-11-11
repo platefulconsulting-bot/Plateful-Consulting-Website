@@ -36,6 +36,7 @@ export async function GET() {
     `- [About ${site.name}](${absoluteUrl("/about-us")})`,
     `- [Services](${absoluteUrl("/services")})`,
     `- [${resultsPage.title}](${absoluteUrl(resultsPage.path)}): ${metaDescription(resultsPage.metaDescription, 200)}`,
+    `- [PFC Growth Benchmarks 2026](${absoluteUrl("/swiggy-zomato-growth-benchmarks-2026-pfc-client-data")}): first-party benchmarks from 12 Plateful Consulting client case studies (sales multiples, order value, platform-reported ad returns, operations).`,
     `- [All guides](${absoluteUrl("/blogs")})`,
     ...topicHubs.map((h) => `- [${h.title}](${absoluteUrl(`/${h.slug}`)}): ${metaDescription(h.metaDescription, 200)}`),
     ...cityPages.map((c) => `- [${c.title}](${absoluteUrl(`/${c.slug}`)}): ${metaDescription(c.metaDescription, 200)}`),
