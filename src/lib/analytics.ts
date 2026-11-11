@@ -14,9 +14,9 @@ export const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID ?? "G-FJ1W2HRJFD";
  * a label is empty that conversion simply isn't sent; GA4 still gets the event.
  */
 export const ADS_LABELS = {
-  lead: process.env.NEXT_PUBLIC_GADS_LEAD_LABEL ?? "",
-  call: process.env.NEXT_PUBLIC_GADS_CALL_LABEL ?? "",
-  whatsapp: process.env.NEXT_PUBLIC_GADS_WHATSAPP_LABEL ?? "",
+  lead: process.env.NEXT_PUBLIC_GADS_LEAD_LABEL ?? "ah5JCOi9zbYdEPbNmMkp",
+  call: process.env.NEXT_PUBLIC_GADS_CALL_LABEL ?? "7DCNCO69zbYdEPbNmMkp",
+  whatsapp: process.env.NEXT_PUBLIC_GADS_WHATSAPP_LABEL ?? "S1ZsCOu9zbYdEPbNmMkp",
 };
 export type AdsConversion = keyof typeof ADS_LABELS;
 
