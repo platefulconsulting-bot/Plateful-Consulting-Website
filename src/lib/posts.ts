@@ -215,3 +215,35 @@ export async function incrementViews(slug: string) {
     // A missing post or a read-only replica is not worth a 500.
   }
 }
+
+/** Every published article credited to one author, newest first. */
+export async function getPostsByAuthor(authorSlug: string) {
+  return db.post.findMany({
+    where: { ...PUBLISHED, author: { slug: authorSlug } },
+    select: cardSelect,
+    orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
+  });
+}
+
+/**
+ * Published articles whose title contains any of the keywords
+ * (case-insensitive), newest first. Topic hubs use it to pick up articles
+ * published after the hub's hand-picked list was written.
+ */
+export async function getPostsByTitleKeywords(
+  keywords: readonly string[],
+  options: { excludeSlugs?: readonly string[]; limit?: number } = {},
+) {
+  if (!keywords.length) return [];
+  const { excludeSlugs = [], limit = 6 } = options;
+  return db.post.findMany({
+    where: {
+      ...PUBLISHED,
+      ...(excludeSlugs.length ? { NOT: { slug: { in: [...excludeSlugs] } } } : {}),
+      OR: keywords.map((k) => ({ title: { contains: k, mode: "insensitive" as const } })),
+    },
+    select: cardSelect,
+    orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
+    take: limit,
+  });
+}

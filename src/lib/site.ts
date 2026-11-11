@@ -586,3 +586,270 @@ export const faqs = [
     a: "It depends on outlet count, the services in scope and whether we are executing or advising. The growth audit is where every engagement starts — get in touch and we will scope it against your current numbers rather than quote blind.",
   },
 ] as const;
+
+// ---------------------------------------------------------------------------
+// Author profiles. Only people listed here get an /author/<slug> page; every
+// other byline links to the about page.
+// ---------------------------------------------------------------------------
+
+export const authorProfiles = {
+  "deepak-desh-bandhu": {
+    slug: "deepak-desh-bandhu",
+    name: "Deepak Desh Bandhu",
+    role: "Founder & Lead Consultant",
+    summary:
+      "Deepak Desh Bandhu is the founder and lead consultant of Plateful Consulting. He has spent 7+ years working inside Swiggy and Zomato partner dashboards, has worked with 600+ restaurant outlets and has managed ₹8Cr+ in aggregator ad spend.",
+    story: [
+      "Deepak learned the delivery platforms as an operator before he advised anyone on them. Around 2019 he bootstrapped his own cloud kitchen, serving Chinese and Continental food, and grew it to roughly ₹5 lakh a month in sales within six months.",
+      "He kept that kitchen running through COVID, when delivery was the channel most restaurants depended on and every listing decision showed up in the next payout. He later relocated to Bangalore and took a job.",
+      "He then co-founded Plateful Consulting with a couple of friends who had also run their own kitchens. The practice is built on that operator experience: the work starts in the partner dashboards, and every recommendation is measured against what reaches the restaurant after commission.",
+    ],
+    credentials: [
+      { value: "7+", label: "Years on Swiggy and Zomato" },
+      { value: "600+", label: "Restaurant outlets worked with" },
+      { value: "₹8Cr+", label: "Swiggy and Zomato ad spend managed" },
+      { value: "2019", label: "Launched his own cloud kitchen" },
+    ],
+    knowsAbout: [
+      "Swiggy restaurant growth",
+      "Zomato restaurant growth",
+      "Swiggy and Zomato ads",
+      "Restaurant menu engineering",
+      "Cloud kitchen operations",
+      "Aggregator commission and payouts",
+      "Restaurant ratings and reviews",
+    ],
+  },
+} as const;
+
+export type AuthorProfileSlug = keyof typeof authorProfiles;
+
+/** Where a byline should link: the author's profile page if they have one. */
+export function authorHref(slug: string | null | undefined) {
+  return slug && slug in authorProfiles ? `/author/${slug}` : "/about-us";
+}
+
+// ---------------------------------------------------------------------------
+// Answer-first copy. Short, direct answers placed high on a page so search
+// engines and AI assistants can lift them verbatim.
+// ---------------------------------------------------------------------------
+
+export const homeDefinition =
+  "Plateful Consulting is a Swiggy and Zomato restaurant sales consultancy based in Noida and working with restaurants across India. Since 2019 it has helped 650+ restaurants — QSRs, cloud kitchens, cafés, casual and fine dining — grow delivery and dine-in sales through listing optimisation, menu engineering, aggregator ads management and rating recovery.";
+
+export const servicesAnswer = {
+  question: "What does a Swiggy and Zomato consultant do?",
+  answer:
+    "A Swiggy and Zomato consultant improves how a restaurant performs on the delivery platforms. That means auditing the partner dashboards, fixing the ranking signals (acceptance rate, prep time, ratings), rebuilding the menu and listing so they convert, managing aggregator ads against margin, and reporting on net realisation after commission, so more orders also mean more profit.",
+} as const;
+
+export const servicesFaqs = [
+  {
+    q: "Which services does Plateful Consulting offer?",
+    a: "Nine: Swiggy and Zomato onboarding, menu optimisation, delivery sales growth, dine-in sales growth, aggregator ads management, food photography, Meta ads, event consulting and food licensing. Most restaurants start with the growth audit, and the audit decides which of these are worth doing first.",
+  },
+  {
+    q: "How is pricing decided?",
+    a: "Engagements are scoped rather than sold from a rate card. The fee depends on outlet count, the services in scope and whether we execute the work or advise your team. Every engagement starts with a growth audit of your live dashboards, and the proposal is built from what that audit finds.",
+  },
+  {
+    q: "How does an engagement work?",
+    a: "In four stages: a growth audit of your Swiggy and Zomato dashboards in week one, a written plan with owners and targets in week two, execution across menu, listing, ads and operations in weeks three to eight, then ongoing weekly reporting on orders, average order value and net realisation.",
+  },
+  {
+    q: "How long before we see results?",
+    a: "Operational fixes such as acceptance rate and prep-time accuracy typically move ranking within two to four weeks. Menu and listing changes show up in conversion almost immediately. Rating recovery is the slowest lever and generally takes six to eight weeks of consistent review velocity.",
+  },
+  {
+    q: "Do you guarantee a number of orders?",
+    a: "No. Results depend on your city, cuisine, price point and starting position, and no one outside Swiggy and Zomato controls their algorithms. What we commit to is the diagnosis, the execution and weekly reporting against the numbers that matter.",
+  },
+  {
+    q: "Can you reduce what we pay Swiggy and Zomato?",
+    a: "Often, through legitimate levers: reviewing contract terms at renewal, restructuring the discounts you fund, pricing the delivery menu correctly and building direct-ordering channels. The saving typically shows in net realisation per order rather than in the headline commission rate, and it varies by contract.",
+  },
+  {
+    q: "Which cities do you work in?",
+    a: "PAN India, including Delhi NCR, Mumbai, Bengaluru, Pune, Hyderabad, Chennai, Chandigarh, Jaipur, Lucknow and Ahmedabad. Aggregator work is largely remote; photography and event execution are scheduled on site.",
+  },
+  {
+    q: "Do you work with single outlets and cloud kitchens?",
+    a: "Yes. A large share of our work is single-outlet restaurants and cloud kitchens, alongside multi-outlet chains. The diagnosis is the same; the difference is how much of the execution we take on directly.",
+  },
+] as const;
+
+// ---------------------------------------------------------------------------
+// Topic hubs. Each hub groups existing articles by slug; any slug that is not
+// published is skipped, and newer articles whose titles match `keywords` are
+// listed under "More on this topic".
+// ---------------------------------------------------------------------------
+
+export type TopicHub = {
+  slug: string;
+  title: string;
+  /** Short name for links and breadcrumbs. */
+  shortName: string;
+  eyebrow: string;
+  metaTitle: string;
+  metaDescription: string;
+  intro: string;
+  groups: { name: string; description: string; slugs: string[] }[];
+  keywords: string[];
+  /** Service the hub points readers toward. */
+  service: string;
+};
+
+export const topicHubs: TopicHub[] = [
+  {
+    slug: "swiggy-growth-guide",
+    title: "Swiggy growth guide for restaurants",
+    shortName: "Swiggy growth guide",
+    eyebrow: "Topic hub · Swiggy",
+    metaTitle: "Swiggy Growth Guide for Restaurants",
+    metaDescription:
+      "How to grow restaurant sales on Swiggy: ranking signals, listing and menu optimisation, Swiggy ads, ratings and margins. Every Plateful guide, grouped by lever.",
+    intro:
+      "How do you grow restaurant sales on Swiggy? Swiggy ranks restaurants on signals it can measure: how reliably you accept orders, how accurate your prep times are, how well your menu turns browsers into orders, and how your rating moves over time. Growth usually comes from fixing those inputs first, with a complete listing, a cleaner menu, realistic prep times and a rating above the 4.2 visibility threshold, and only then buying visibility with Swiggy ads budgeted by hour against contribution margin. The guides below walk through each lever in the order we apply them with restaurant partners.",
+    groups: [
+      {
+        name: "Ranking and visibility",
+        description: "How Swiggy decides who gets seen, and the listing work that moves you up.",
+        slugs: [
+          "how-swiggy-ranking-algorithm-works-for-restaurants-2026",
+          "swiggy-listing-optimization-the-complete-guide-for-restaurant-owners",
+          "how-to-increase-swiggy-orders-in-30-days",
+          "how-to-increase-swiggy-orders",
+        ],
+      },
+      {
+        name: "Swiggy ads",
+        description: "Budgets, timing and bids that return more than they cost.",
+        slugs: [
+          "swiggy-ads-strategy-how-to-get-5x-roas-without-wasting-budget",
+          "best-time-to-run-ads-on-swiggy-hour-by-hour-breakdown",
+          "swiggy-vs-zomato-ads-where-should-you-spend-your-ad-budget",
+        ],
+      },
+      {
+        name: "Ratings, offers and margins",
+        description: "Rating recovery, discounts and commission, so more orders mean more profit.",
+        slugs: [
+          "swiggy-restaurant-rating-how-to-go-from-3-8-to-4-5-in-60-days",
+          "swiggy-zomato-discounts-which-offers-make-money",
+          "how-to-reduce-swiggy-commission-impact-on-restaurant-margins",
+        ],
+      },
+      {
+        name: "Swiggy vs Zomato",
+        description: "Choosing where to list, where to spend and how to run both.",
+        slugs: [
+          "swiggy-vs-zomato-for-restaurants-which-platform-drives-more-sales",
+          "should-your-restaurant-be-on-both-swiggy-and-zomato",
+          "swiggy-dineout-vs-zomato-dine-in",
+        ],
+      },
+    ],
+    keywords: ["Swiggy"],
+    service: "delivery-sales-growth",
+  },
+  {
+    slug: "zomato-growth-guide",
+    title: "Zomato growth guide for restaurants",
+    shortName: "Zomato growth guide",
+    eyebrow: "Topic hub · Zomato",
+    metaTitle: "Zomato Growth Guide for Restaurants",
+    metaDescription:
+      "How to get more orders on Zomato: ranking, listing optimisation, Zomato ads, ratings and reviews, Dine-In and commission. Every Plateful guide, grouped by lever.",
+    intro:
+      "How do restaurants get more orders on Zomato? Zomato decides who gets seen using signals such as rating and review velocity, delivery and prep-time reliability, listing completeness and how often people who open your menu go on to order. Restaurants that grow consistently fix those signals first: accurate cuisine tags, strong photography, a menu sequenced around bestsellers and a rating that clears the 4.2 mark. Ads come after, once the listing already converts. Zomato Dine-In runs on its own rules for table bookings and walk-ins. The guides below cover ranking, ads, ratings, dine-in and commission in turn.",
+    groups: [
+      {
+        name: "Ranking and listing",
+        description: "How the Zomato algorithm ranks restaurants, and how to build a listing it rewards.",
+        slugs: [
+          "zomato-restaurant-ranking-how-the-algorithm-decides-who-gets-seen",
+          "zomato-listing-optimization-the-complete-guide-for-restaurant-owners",
+          "how-to-increase-zomato-orders-a-data-driven-guide-for-restaurants",
+        ],
+      },
+      {
+        name: "Zomato ads",
+        description: "Strategy and budgets for Zomato advertising.",
+        slugs: [
+          "zomato-ads-for-restaurants-complete-strategy-and-budget-guide",
+          "swiggy-vs-zomato-ads-where-should-you-spend-your-ad-budget",
+        ],
+      },
+      {
+        name: "Ratings and reviews",
+        description: "The fastest lever on Zomato visibility, and how to protect it.",
+        slugs: [
+          "how-to-improve-zomato-ratings-7-proven-tactics-that-work",
+          "how-to-handle-negative-reviews-on-zomato-without-losing-rankings",
+          "restaurant-packaging-for-delivery-how-to-reduce-negative-reviews-by-40",
+        ],
+      },
+      {
+        name: "Dine-In and commission",
+        description: "Table bookings, walk-ins and what Zomato actually charges.",
+        slugs: [
+          "zomato-dine-in-growth-how-to-increase-table-bookings-and-walk-ins",
+          "swiggy-dineout-vs-zomato-dine-in",
+          "zomato-commission-structure-2026-what-restaurants-actually-pay",
+        ],
+      },
+    ],
+    keywords: ["Zomato"],
+    service: "delivery-sales-growth",
+  },
+  {
+    slug: "restaurant-commission-and-payouts",
+    title: "Swiggy and Zomato commission and payouts",
+    shortName: "Commission & payouts",
+    eyebrow: "Topic hub · Margins",
+    metaTitle: "Swiggy & Zomato Commission and Payouts Guide",
+    metaDescription:
+      "What Swiggy and Zomato deduct from each order, how to read your payout statement and the legitimate levers that protect restaurant margins. All guides in one place.",
+    intro:
+      "What do Swiggy and Zomato actually take from each order, and how do you keep more of it? Your payout is the order value minus the platform commission, GST on that commission, payment and other platform fees, any discount you funded and, if you run them, ads billed against your settlements. Commission rates vary by contract, city and the services you opt into, so the number that matters is net realisation per order rather than the headline percentage. Restaurants typically protect margin through legitimate levers: reviewing terms at renewal, restructuring discounts, pricing the menu for delivery and building direct channels. The guides below explain each one.",
+    groups: [
+      {
+        name: "Commission structures",
+        description: "What each platform charges, side by side.",
+        slugs: [
+          "zomato-commission-structure-2026-what-restaurants-actually-pay",
+          "swiggy-vs-zomato-commission-side-by-side-comparison-for-2026",
+          "how-to-reduce-swiggy-commission-impact-on-restaurant-margins",
+        ],
+      },
+      {
+        name: "Payouts and statements",
+        description: "Reading the settlement line by line.",
+        slugs: ["how-to-read-your-swiggy-and-zomato-payout-statement"],
+      },
+      {
+        name: "Discounts, pricing and food cost",
+        description: "Keeping growth in orders from turning into a loss in margin.",
+        slugs: [
+          "swiggy-zomato-discounts-which-offers-make-money",
+          "restaurant-menu-pricing-strategy-for-online-delivery-in-india",
+          "food-cost-control-for-restaurants-how-to-protect-margins-on-delivery",
+        ],
+      },
+      {
+        name: "Lower-commission channels",
+        description: "Direct ordering, ONDC and zero-commission apps, and when they pay off.",
+        slugs: [
+          "direct-ordering-vs-swiggy-and-zomato-when-your-own-channel-pays-off",
+          "restaurant-aggregator-dependency-how-to-build-a-profitable-channel-mix",
+          "ondc-for-restaurants-is-it-worth-listing-in-2026",
+          "rapido-ownly-for-restaurants-is-zero-commission-worth-it",
+        ],
+      },
+    ],
+    keywords: ["commission", "payout", "margin", "fees"],
+    service: "delivery-sales-growth",
+  },
+];
+
+export const topicHubBySlug = (slug: string) => topicHubs.find((h) => h.slug === slug);

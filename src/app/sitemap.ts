@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllPostSlugs } from "@/lib/posts";
 import { absoluteUrl } from "@/lib/utils";
+import { topicHubs, authorProfiles } from "@/lib/site";
 
 export const revalidate = 3600;
 
@@ -32,6 +33,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: absoluteUrl("/about-us"), lastModified: STATIC_UPDATED, changeFrequency: "monthly", priority: 0.8 },
     { url: absoluteUrl("/contact-us"), lastModified: STATIC_UPDATED, changeFrequency: "monthly", priority: 0.8 },
     { url: absoluteUrl("/blogs"), lastModified: latestPost, changeFrequency: "daily", priority: 0.9 },
+    // Topic hubs list articles, so they change when an article does.
+    ...topicHubs.map((h) => ({
+      url: absoluteUrl(`/${h.slug}`),
+      lastModified: latestPost,
+      changeFrequency: "weekly" as const,
+      priority: 0.85,
+    })),
+    ...Object.values(authorProfiles).map((a) => ({
+      url: absoluteUrl(`/author/${a.slug}`),
+      lastModified: latestPost,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
     { url: absoluteUrl("/tools/discount-calculator"), lastModified: STATIC_UPDATED, changeFrequency: "monthly", priority: 0.8 },
     { url: absoluteUrl("/whats-new"), lastModified: latestPost, changeFrequency: "weekly", priority: 0.6 },
     { url: absoluteUrl("/terms-and-condition"), lastModified: LEGAL_UPDATED, changeFrequency: "yearly", priority: 0.2 },

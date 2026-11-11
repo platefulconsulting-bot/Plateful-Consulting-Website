@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react";
-import { site, contact, services, cities } from "@/lib/site";
+import { site, contact, services, cities, topicHubs } from "@/lib/site";
 import { getLatestPosts } from "@/lib/posts";
 import { Logo } from "./Logo";
 import { NewsletterForm } from "./NewsletterForm";
@@ -66,9 +66,9 @@ export async function Footer() {
 
           {/* --- Services --- */}
           <nav aria-label="Services" className="lg:col-span-2">
-            <h2 className="font-display text-sm font-semibold uppercase tracking-[0.14em] text-cream-50">
+            <p className="text-balance font-display text-sm font-semibold uppercase tracking-[0.14em] text-cream-50">
               Services
-            </h2>
+            </p>
             <ul className="mt-5 space-y-2.5">
               {services.slice(0, 6).map((s) => (
                 <li key={s.slug}>
@@ -90,9 +90,9 @@ export async function Footer() {
 
           {/* --- Company --- */}
           <nav aria-label="Company" className="lg:col-span-2">
-            <h2 className="font-display text-sm font-semibold uppercase tracking-[0.14em] text-cream-50">
+            <p className="text-balance font-display text-sm font-semibold uppercase tracking-[0.14em] text-cream-50">
               Company
-            </h2>
+            </p>
             <ul className="mt-5 space-y-2.5">
               {[
                 { label: "About Us", href: "/about-us" },
@@ -114,9 +114,9 @@ export async function Footer() {
 
           {/* --- Latest writing --- */}
           <nav aria-label="Latest articles" className="lg:col-span-2">
-            <h2 className="font-display text-sm font-semibold uppercase tracking-[0.14em] text-cream-50">
+            <p className="text-balance font-display text-sm font-semibold uppercase tracking-[0.14em] text-cream-50">
               Latest reads
-            </h2>
+            </p>
             <ul className="mt-5 space-y-3">
               {recent.map((p) => (
                 <li key={p.slug}>
@@ -133,9 +133,9 @@ export async function Footer() {
 
           {/* --- Contact --- */}
           <div className="lg:col-span-3">
-            <h2 className="font-display text-sm font-semibold uppercase tracking-[0.14em] text-cream-50">
+            <p className="text-balance font-display text-sm font-semibold uppercase tracking-[0.14em] text-cream-50">
               Get in touch
-            </h2>
+            </p>
             <ul className="mt-5 space-y-3.5 text-sm">
               {contact.phones.map((p) => (
                 <li key={p.href}>
@@ -169,8 +169,24 @@ export async function Footer() {
           </div>
         </div>
 
+        {/* --- Topic hubs --- */}
+        <nav aria-label="Topic guides" className="mt-14 border-t border-cream-100/8 pt-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cream-500">
+            Topic guides
+          </p>
+          <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            {topicHubs.map((h) => (
+              <li key={h.slug}>
+                <Link href={`/${h.slug}`} className="text-cream-400 transition-colors hover:text-gold-300">
+                  {h.shortName}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
         {/* --- Cities served --- */}
-        <div className="mt-14 border-t border-cream-100/8 pt-8">
+        <div className="mt-8 border-t border-cream-100/8 pt-8">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cream-500">
             Serving restaurants across
           </p>

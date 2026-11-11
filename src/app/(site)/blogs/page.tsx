@@ -10,6 +10,7 @@ import { LazyScene } from "@/components/three/LazyScene";
 import { getPosts, getCategoriesWithCounts, getFeaturedPosts, POSTS_PER_PAGE } from "@/lib/posts";
 import { jsonLd, breadcrumbSchema } from "@/lib/seo";
 import { cn } from "@/lib/utils";
+import { topicHubs } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: { absolute: "Swiggy & Zomato Growth Guides for Restaurants | PFC Blog" },
@@ -109,6 +110,23 @@ export default async function BlogsPage({ searchParams }: { searchParams: Search
               rating recovery — written from inside real partner dashboards, and updated as
               the platforms change.
             </p>
+            <nav aria-label="Topic guides" className="mt-6">
+              <ul className="flex flex-wrap items-center gap-2.5">
+                <li className="text-xs font-semibold uppercase tracking-[0.14em] text-cream-500">
+                  Start with a topic guide
+                </li>
+                {topicHubs.map((h) => (
+                  <li key={h.slug}>
+                    <Link
+                      href={`/${h.slug}`}
+                      className="inline-flex items-center rounded-full border border-gold-400/30 bg-gold-500/8 px-4 py-2 text-sm font-medium text-gold-300 transition-all duration-300 hover:-translate-y-0.5 hover:border-gold-400/60"
+                    >
+                      {h.shortName}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </Reveal>
 
           {/* Search — a plain GET form, so it works without JavaScript. */}

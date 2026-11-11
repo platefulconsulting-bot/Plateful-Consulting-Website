@@ -10,8 +10,9 @@ import { ServiceIcon } from "@/components/site/ServiceIcon";
 import { CTABand } from "@/components/site/CTABand";
 import { PostCard } from "@/components/site/PostCard";
 import { getPostsBySlugs } from "@/lib/posts";
-import { services, processSteps } from "@/lib/site";
-import { jsonLd, breadcrumbSchema, serviceSchema } from "@/lib/seo";
+import { services, processSteps, servicesAnswer, servicesFaqs, topicHubs } from "@/lib/site";
+import { jsonLd, breadcrumbSchema, serviceSchema, faqSchema } from "@/lib/seo";
+import { FaqList } from "@/components/site/FaqList";
 
 export const revalidate = 3600;
 
@@ -41,6 +42,7 @@ export default async function ServicesPage() {
       { name: "Services", path: "/services" },
     ]),
     ...services.map(serviceSchema),
+    faqSchema(servicesFaqs),
   );
 
   return (
@@ -75,8 +77,8 @@ export default async function ServicesPage() {
             <Reveal immediate delay={0.1}>
               <p className="mt-7 max-w-xl text-lg leading-relaxed text-cream-300">
                 Driving real, measurable sales growth for restaurants on aggregator
-                platforms — pan India. Eight services, sequenced so each one makes the next
-                cheaper.
+                platforms — pan India. {services.length} services, sequenced so each one makes
+                the next cheaper.
               </p>
             </Reveal>
 
@@ -94,6 +96,21 @@ export default async function ServicesPage() {
           </div>
         </div>
       </StageSection>
+
+      {/* ================= DIRECT ANSWER ================= */}
+      <section className="border-t border-cream-100/8 bg-ink-850/70 py-10 lg:py-12" aria-labelledby="svc-answer">
+        <div className="container-x">
+          <Reveal className="max-w-3xl">
+            <h2
+              id="svc-answer"
+              className="font-display text-xl font-bold leading-snug text-cream-50 md:text-2xl"
+            >
+              {servicesAnswer.question}
+            </h2>
+            <p className="mt-4 text-lg leading-relaxed text-cream-200">{servicesAnswer.answer}</p>
+          </Reveal>
+        </div>
+      </section>
 
       {/* ================= INDEX ================= */}
       <StageSection id="index" chapter="menu" className="border-y border-cream-100/8 bg-ink-850/70 py-8" ariaLabel="Service index">
@@ -298,6 +315,36 @@ export default async function ServicesPage() {
           </div>
         </section>
       )}
+
+      {/* ================= FAQ ================= */}
+      <section className="section border-t border-cream-100/8" aria-labelledby="svc-faq">
+        <div className="container-x">
+          <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
+            <Reveal>
+              <p className="eyebrow">Questions</p>
+              <h2
+                id="svc-faq"
+                className="mt-5 text-[length:var(--text-display-lg)] font-bold leading-[1.05]"
+              >
+                Services, pricing and how it works.
+              </h2>
+              <p className="mt-6 leading-relaxed text-cream-400">
+                Want the detail first? Start with a topic guide:{" "}
+                {topicHubs.map((h, i) => (
+                  <span key={h.slug}>
+                    <Link href={`/${h.slug}`} className="font-medium text-gold-400 hover:text-gold-300">
+                      {h.shortName}
+                    </Link>
+                    {i < topicHubs.length - 2 ? ", " : i === topicHubs.length - 2 ? " or " : "."}
+                  </span>
+                ))}
+              </p>
+            </Reveal>
+
+            <FaqList items={servicesFaqs} name="services-faq" />
+          </div>
+        </div>
+      </section>
 
       <CTABand className="border-t border-cream-100/8" />
       </div>

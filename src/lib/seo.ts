@@ -1,4 +1,4 @@
-import { site, contact, services, founders, faqs } from "./site";
+import { site, contact, services, founders, faqs, authorHref } from "./site";
 import { absoluteUrl, isoDate } from "./utils";
 
 /**
@@ -40,6 +40,9 @@ export function organizationSchema() {
     sameAs: contact.socials.map((s) => s.href),
     founder: founders.map((f) => ({
       "@type": "Person",
+      ...(authorHref(f.slug).startsWith("/author/")
+        ? { "@id": absoluteUrl(`${authorHref(f.slug)}#person`), url: absoluteUrl(authorHref(f.slug)) }
+        : {}),
       name: f.name,
       jobTitle: f.role,
       description: f.bio,
@@ -106,7 +109,7 @@ export function articleSchema(post: {
   publishedAt: Date | null;
   updatedAt: Date;
   readingMinutes: number;
-  author: { name: string; role: string } | null;
+  author: { slug?: string; name: string; role: string } | null;
   category: { name: string } | null;
   image?: string;
 }) {
@@ -128,7 +131,7 @@ export function articleSchema(post: {
           "@type": "Person",
           name: post.author.name,
           jobTitle: post.author.role,
-          url: absoluteUrl("/about-us"),
+          url: absoluteUrl(authorHref(post.author.slug)),
           worksFor: { "@id": ORG_ID },
         }
       : { "@id": ORG_ID },
@@ -181,5 +184,71 @@ export function webApplicationSchema(tool: { name: string; description: string; 
     isAccessibleForFree: true,
     offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
     publisher: { "@id": ORG_ID },
+  };
+}
+
+/** A named author with a profile page, linked to the organisation entity. */
+export function personSchema(person: {
+  slug: string;
+  name: string;
+  jobTitle: string;
+  description: string;
+  knowsAbout: readonly string[];
+}) {
+  const url = absoluteUrl(`/author/${person.slug}`);
+  return {
+    "@type": "Person",
+    "@id": `${url}#person`,
+    name: person.name,
+    jobTitle: person.jobTitle,
+    description: person.description,
+    url,
+    worksFor: { "@id": ORG_ID },
+    knowsAbout: [...person.knowsAbout],
+    mainEntityOfPage: { "@type": "ProfilePage", "@id": url },
+  };
+}
+
+/** The profile page that carries a Person as its main entity. */
+export function profilePageSchema(person: { slug: string; name: string }) {
+  const url = absoluteUrl(`/author/${person.slug}`);
+  return {
+    "@type": "ProfilePage",
+    "@id": url,
+    url,
+    name: `${person.name} — ${site.name}`,
+    isPartOf: { "@id": SITE_ID },
+    mainEntity: { "@id": `${url}#person` },
+    inLanguage: "en-IN",
+  };
+}
+
+/** A curated topic hub: a CollectionPage whose main entity is an ItemList of articles. */
+export function collectionPageSchema(page: {
+  path: string;
+  name: string;
+  description: string;
+  items: readonly { slug: string; title: string }[];
+}) {
+  const url = absoluteUrl(page.path);
+  return {
+    "@type": "CollectionPage",
+    "@id": url,
+    url,
+    name: page.name,
+    description: page.description,
+    isPartOf: { "@id": SITE_ID },
+    publisher: { "@id": ORG_ID },
+    inLanguage: "en-IN",
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: page.items.length,
+      itemListElement: page.items.map((item, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        url: absoluteUrl(`/${item.slug}`),
+        name: item.title,
+      })),
+    },
   };
 }

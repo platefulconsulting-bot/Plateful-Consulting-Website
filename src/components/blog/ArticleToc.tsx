@@ -56,12 +56,13 @@ export function ArticleToc({ headings }: { headings: Heading[] }) {
 
   return (
     <nav aria-labelledby="toc-heading" className="text-sm">
-      <h2
+      {/* Not a heading: the article's outline should hold only its own sections. */}
+      <p
         id="toc-heading"
         className="font-display text-xs font-semibold uppercase tracking-[0.16em] text-gold-400"
       >
         On this page
-      </h2>
+      </p>
 
       <ul className="mt-4 max-h-[60vh] space-y-0.5 overflow-y-auto pr-2 [scrollbar-width:thin]">
         {headings.map((h) => (

@@ -8,7 +8,7 @@ import { StageSection } from "@/components/scroll/StageSection";
 import { Reveal } from "@/components/ui/Reveal";
 import { Counter } from "@/components/ui/Counter";
 import { CTABand } from "@/components/site/CTABand";
-import { founders, stats, cities, site, services, contact } from "@/lib/site";
+import { founders, stats, cities, site, services, contact, authorHref } from "@/lib/site";
 import { jsonLd, breadcrumbSchema, organizationSchema } from "@/lib/seo";
 import { ClientGrid } from "@/components/site/ClientWall";
 import { PlatformBand } from "@/components/site/PlatformBand";
@@ -258,6 +258,10 @@ export default function AboutPage() {
                         <Phone className="h-4 w-4" aria-hidden />
                         Talk to Deepak — {contact.primaryPhone.label}
                       </a>
+                      <Link href={authorHref(person.slug)} className="btn btn-outline btn-sm">
+                        Deepak&rsquo;s profile and articles
+                        <ArrowRight className="h-4 w-4" aria-hidden />
+                      </Link>
                     </div>
                   )}
                 </article>

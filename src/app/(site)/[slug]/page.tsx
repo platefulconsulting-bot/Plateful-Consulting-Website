@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, ArrowUpRight, Calendar, ChevronRight, Clock } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Calendar, ChevronRight, Clock, RefreshCw } from "lucide-react";
 
 import { Reveal } from "@/components/ui/Reveal";
 import { PostCard } from "@/components/site/PostCard";
@@ -11,7 +11,7 @@ import { ArticleToc } from "@/components/blog/ArticleToc";
 import { ShareRow } from "@/components/blog/ShareRow";
 import { getAllPostSlugs, getPostBySlug, getRelatedPosts } from "@/lib/posts";
 import { enhanceArticle, extractFaqs } from "@/lib/sanitize";
-import { services } from "@/lib/site";
+import { services, authorHref } from "@/lib/site";
 import { jsonLd, articleSchema, breadcrumbSchema, faqSchema } from "@/lib/seo";
 import { absoluteUrl, formatDate, isoDate, metaDescription, ogImageUrl, seoTitle } from "@/lib/utils";
 
@@ -77,6 +77,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const { html, headings } = enhanceArticle(post.contentHtml);
   const faqs = extractFaqs(post.contentHtml);
   const accent = post.category?.accent ?? "#B47A17";
+  // Only show "Updated" when the article genuinely changed after publishing,
+  // not when a save landed a few hours later.
+  const showUpdated =
+    post.publishedAt !== null &&
+    post.updatedAt.getTime() - post.publishedAt.getTime() > 24 * 60 * 60 * 1000;
+  const authorLink = authorHref(post.author?.slug);
   const url = absoluteUrl(`/${post.slug}`);
 
   // Point the article at the service that solves the problem it describes.
@@ -187,7 +193,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                       .join("")}
                   </span>
                   <span>
-                    <span className="block font-medium text-cream-200">{post.author.name}</span>
+                    <Link
+                      href={authorLink}
+                      rel="author"
+                      className="block font-medium text-cream-200 transition-colors hover:text-gold-300"
+                    >
+                      {post.author.name}
+                    </Link>
                     <span className="block text-xs">{post.author.role}</span>
                   </span>
                 </span>
@@ -196,7 +208,20 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               {post.publishedAt && (
                 <span className="flex items-center gap-1.5">
                   <Calendar className="h-4 w-4" aria-hidden />
-                  <time dateTime={isoDate(post.publishedAt)}>{formatDate(post.publishedAt)}</time>
+                  <span>
+                    <span className="sr-only">Published </span>
+                    <time dateTime={isoDate(post.publishedAt)}>{formatDate(post.publishedAt)}</time>
+                  </span>
+                </span>
+              )}
+
+              {showUpdated && (
+                <span className="flex items-center gap-1.5">
+                  <RefreshCw className="h-4 w-4" aria-hidden />
+                  <span>
+                    Updated{" "}
+                    <time dateTime={isoDate(post.updatedAt)}>{formatDate(post.updatedAt)}</time>
+                  </span>
                 </span>
               )}
 
@@ -252,16 +277,19 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-cream-500">
                       Written by
                     </p>
-                    <h2 className="mt-1.5 font-display text-lg font-bold text-cream-50">
+                    <p className="mt-1.5 text-balance font-display text-lg font-bold tracking-[-0.025em] text-cream-50">
                       {post.author.name}
-                    </h2>
+                    </p>
                     <p className="text-sm font-medium text-gold-400">{post.author.role}</p>
                     <p className="mt-3 text-sm leading-relaxed text-cream-400">{post.author.bio}</p>
                     <Link
-                      href="/about-us"
+                      href={authorLink}
+                      rel="author"
                       className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-gold-400 transition-colors hover:text-gold-300"
                     >
-                      More about the practice
+                      {authorLink === "/about-us"
+                        ? "More about the practice"
+                        : `More from ${post.author.name.split(" ")[0]}`}
                       <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
                     </Link>
                   </div>
@@ -280,9 +308,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gold-400">
                   Related service
                 </p>
-                <h2 className="mt-3 font-display text-base font-bold text-cream-50">
+                <p className="mt-3 text-balance font-display text-base font-bold tracking-[-0.025em] text-cream-50">
                   {matchedService.name}
-                </h2>
+                </p>
                 <p className="mt-2.5 text-sm leading-relaxed text-cream-400">
                   {matchedService.outcome}
                 </p>
@@ -319,12 +347,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <div className="flex flex-wrap items-end justify-between gap-6">
               <Reveal>
                 <p className="eyebrow">Keep reading</p>
-                <h2
+                <p
                   id="related-title"
-                  className="mt-4 text-[length:var(--text-display-md)] font-bold leading-tight"
+                  className="mt-4 text-balance font-display text-[length:var(--text-display-md)] font-bold leading-tight tracking-[-0.025em] text-cream-50"
                 >
                   Related guides
-                </h2>
+                </p>
               </Reveal>
               <Reveal delay={0.08}>
                 <Link href="/blogs" className="btn btn-outline btn-sm">
@@ -337,7 +365,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {related.map((p, i) => (
                 <Reveal key={p.id} delay={i * 0.08} className="h-full">
-                  <PostCard post={p} className="h-full" />
+                  <PostCard post={p} className="h-full" titleAs="p" />
                 </Reveal>
               ))}
             </div>
@@ -345,7 +373,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         </section>
       )}
 
-      <CTABand className="border-t border-cream-100/8" />
+      <CTABand className="border-t border-cream-100/8" headingAs="p" />
     </>
   );
 }

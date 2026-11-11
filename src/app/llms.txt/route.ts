@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { site, contact, services, faqs, leadFounder } from "@/lib/site";
+import { site, contact, services, faqs, leadFounder, topicHubs, authorHref } from "@/lib/site";
 import { absoluteUrl, metaDescription } from "@/lib/utils";
 
 /**
@@ -36,6 +36,8 @@ export async function GET() {
     `- [About ${site.name}](${absoluteUrl("/about-us")})`,
     `- [Services](${absoluteUrl("/services")})`,
     `- [All guides](${absoluteUrl("/blogs")})`,
+    ...topicHubs.map((h) => `- [${h.title}](${absoluteUrl(`/${h.slug}`)}): ${metaDescription(h.metaDescription, 200)}`),
+    `- [${leadFounder.name}, ${leadFounder.role}](${absoluteUrl(authorHref(leadFounder.slug))})`,
     `- [Swiggy & Zomato discount calculator](${absoluteUrl("/tools/discount-calculator")})`,
     `- [Contact / book a growth audit](${absoluteUrl("/contact-us")})`,
     `- [RSS feed](${absoluteUrl("/feed.xml")})`,

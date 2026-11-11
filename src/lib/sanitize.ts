@@ -1,4 +1,5 @@
 import sanitizeHtml from "sanitize-html";
+import { decodeEntities } from "./utils";
 
 /**
  * Article bodies are stored as HTML and rendered with dangerouslySetInnerHTML,
@@ -62,9 +63,14 @@ export function sanitizeArticle(dirty: string) {
   });
 }
 
-/** Plain-text projection, used for excerpts, search and reading time. */
+/**
+ * Plain-text projection, used for excerpts, search, reading time and FAQ
+ * structured data. sanitize-html re-encodes "&" as "&amp;", so the result is
+ * decoded: it is rendered as text (React escapes it) or embedded in JSON-LD,
+ * never injected as HTML.
+ */
 export function htmlToText(html: string) {
-  return sanitizeHtml(html, { allowedTags: [], allowedAttributes: {} })
+  return decodeEntities(sanitizeHtml(html, { allowedTags: [], allowedAttributes: {} }))
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -81,7 +87,9 @@ export function enhanceArticle(html: string) {
   let out = html.replace(
     /<(h2|h3)(\s[^>]*)?>([\s\S]*?)<\/\1>/gi,
     (_match, tag: string, attrs: string = "", inner: string) => {
-      const text = inner.replace(/<[^>]+>/g, "").trim();
+      // Decoded: the contents list renders this as text, and React would
+      // otherwise print "&amp;" literally.
+      const text = decodeEntities(inner.replace(/<[^>]+>/g, "")).replace(/\s+/g, " ").trim();
       if (!text) return `<${tag}${attrs}>${inner}</${tag}>`;
 
       const existing = /\sid=["']([^"']+)["']/i.exec(attrs ?? "");

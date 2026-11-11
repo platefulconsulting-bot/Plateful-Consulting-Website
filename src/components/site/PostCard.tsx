@@ -9,13 +9,18 @@ export function PostCard({
   post,
   priority = false,
   variant = "default",
+  titleAs = "h3",
   className,
 }: {
   post: PostCardData;
   priority?: boolean;
   variant?: "default" | "featured" | "compact";
+  /** "p" where the card is navigation rather than content (e.g. under an article). */
+  titleAs?: "h3" | "p";
   className?: string;
 }) {
+  const Title = titleAs;
+  const titleReset = titleAs === "p" && "font-display text-balance tracking-[-0.025em]";
   const accent = post.category?.accent ?? "#B47A17";
   const href = `/${post.slug}`;
 
@@ -36,9 +41,14 @@ export function PostCard({
           )}
         </div>
         <div className="min-w-0">
-          <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-cream-100 transition-colors group-hover:text-gold-300">
+          <Title
+            className={cn(
+              "line-clamp-2 text-sm font-semibold leading-snug text-cream-100 transition-colors group-hover:text-gold-300",
+              titleReset,
+            )}
+          >
             {post.title}
-          </h3>
+          </Title>
           <p className="mt-1.5 text-xs text-cream-500">{post.readingMinutes} min read</p>
         </div>
       </Link>
@@ -109,17 +119,18 @@ export function PostCard({
           </span>
         </div>
 
-        <h3
+        <Title
           id={`post-${post.id}`}
           className={cn(
             "mt-3 font-display font-semibold leading-snug text-cream-50 transition-colors group-hover:text-gold-300",
             featured ? "text-2xl lg:text-3xl" : "text-lg",
+            titleReset,
           )}
         >
           <Link href={href} className="after:absolute after:inset-0 focus:outline-none">
             {post.title}
           </Link>
-        </h3>
+        </Title>
 
         <p
           className={cn(

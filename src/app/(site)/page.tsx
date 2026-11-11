@@ -11,15 +11,24 @@ import { CTABand } from "@/components/site/CTABand";
 import { PlatformBand, PlatformChips } from "@/components/site/PlatformBand";
 import { ClientMarquee, ClientGrid } from "@/components/site/ClientWall";
 import { getFeaturedPosts, getPostCount } from "@/lib/posts";
-import { stats, processSteps, testimonials, contact, site } from "@/lib/site";
+import { stats, processSteps, testimonials, contact, site, faqs, homeDefinition } from "@/lib/site";
+import { FaqList } from "@/components/site/FaqList";
+import { jsonLd, faqSchema } from "@/lib/seo";
 
 export const revalidate = 3600;
 
 export default async function HomePage() {
   const [posts, postCount] = await Promise.all([getFeaturedPosts(3), getPostCount()]);
 
+  // The FAQ below is visible on the page, so its FAQPage markup is honest.
+  const schema = jsonLd(faqSchema(faqs));
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       {/* The 3D world sits behind the entire page and is driven by scroll.
           Everything below is ordinary DOM at z-10, so the copy stays readable,
           selectable and crawlable with the canvas removed. */}
@@ -117,6 +126,32 @@ export default async function HomePage() {
           </div>
           <ClientMarquee />
         </div>
+
+        {/* Definition-style answer: the one paragraph an AI assistant or a
+            featured snippet should be able to lift verbatim. */}
+        <section className="section-tight" aria-labelledby="about-title">
+          <div className="container-x">
+            <Reveal className="max-w-3xl">
+              <p className="eyebrow">Who we are</p>
+              <h2
+                id="about-title"
+                className="mt-5 text-[length:var(--text-display-md)] font-bold leading-[1.1]"
+              >
+                What is {site.name}?
+              </h2>
+              <p className="mt-5 text-lg leading-relaxed text-cream-200 md:text-xl">
+                {homeDefinition}
+              </p>
+              <Link
+                href="/about-us"
+                className="mt-6 inline-flex items-center gap-2 font-semibold text-gold-400 transition-colors hover:text-gold-300"
+              >
+                More about the team
+                <ArrowUpRight className="h-4 w-4" aria-hidden />
+              </Link>
+            </Reveal>
+          </div>
+        </section>
 
       {/* =====================================================================
           STATS
@@ -418,6 +453,34 @@ export default async function HomePage() {
           </div>
         </div>
       </StageSection>
+
+      {/* =====================================================================
+          FAQ — the same questions as the contact page, emitted as FAQPage
+          ===================================================================== */}
+      <section className="section border-t border-cream-100/8" aria-labelledby="home-faq-title">
+        <div className="container-x">
+          <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
+            <Reveal>
+              <p className="eyebrow">Questions</p>
+              <h2
+                id="home-faq-title"
+                className="mt-5 text-[length:var(--text-display-lg)] font-bold leading-[1.05]"
+              >
+                What restaurant owners ask first.
+              </h2>
+              <p className="mt-6 leading-relaxed text-cream-400">
+                More on scope and pricing on the{" "}
+                <Link href="/services" className="font-medium text-gold-400 hover:text-gold-300">
+                  services page
+                </Link>
+                .
+              </p>
+            </Reveal>
+
+            <FaqList items={faqs} name="home-faq" />
+          </div>
+        </div>
+      </section>
 
         <StageSection id="cta" chapter="orbit" as="div">
           <CTABand className="border-t border-cream-100/8" />

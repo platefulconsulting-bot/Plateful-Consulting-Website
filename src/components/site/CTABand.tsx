@@ -16,14 +16,18 @@ export function CTABand({
   title = "Find out what your listing is actually costing you.",
   body = "A growth audit reads your live Swiggy and Zomato dashboards and tells you where the orders are leaking — ranking signals, menu conversion, ad waste and net realisation. The findings are yours to keep either way.",
   primaryLabel = "Book a growth audit",
+  headingAs = "h2",
   className,
 }: {
   eyebrow?: string;
   title?: string;
   body?: string;
   primaryLabel?: string;
+  /** "p" inside articles, so the band stays out of the article's heading outline. */
+  headingAs?: "h2" | "p";
   className?: string;
 }) {
+  const Heading = headingAs;
   return (
     <section className={cn("relative overflow-hidden", className)} aria-labelledby="cta-title">
       <div className="grid-lines absolute inset-0 opacity-40" aria-hidden />
@@ -35,12 +39,15 @@ export function CTABand({
       <div className="container-x relative section">
         <Reveal className="max-w-2xl">
           <p className="eyebrow">{eyebrow}</p>
-          <h2
+          <Heading
             id="cta-title"
-            className="mt-5 text-[length:var(--text-display-lg)] font-bold leading-[1.05]"
+            className={cn(
+              "mt-5 text-[length:var(--text-display-lg)] font-bold leading-[1.05]",
+              headingAs === "p" && "font-display text-balance tracking-[-0.025em] text-cream-50",
+            )}
           >
             {title}
-          </h2>
+          </Heading>
           <p className="mt-6 text-lg leading-relaxed text-cream-300">{body}</p>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">
