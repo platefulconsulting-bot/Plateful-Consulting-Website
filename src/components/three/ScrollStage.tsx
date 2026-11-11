@@ -27,9 +27,18 @@ const ScrollStageRuntime = dynamic(() => import("./ScrollStageRuntime"), {
  * seconds of main-thread time on a mid-range phone, and doing it during the
  * initial load is what pushed mobile LCP to ~8 s and TBT to ~1.6 s. The CSS
  * ground and bloom already look finished, so the world can wait:
- *  - phones/tablets: on the first scroll, touch or key press;
+ *  - phones (viewport under 768px, or a touch screen under 500px tall): never.
+ *    The CSS backdrop is the whole stage — three.js is not even downloaded;
+ *  - tablets: on the first scroll, touch or key press;
  *  - desktop: once the browser is idle after load (capped at 2.5 s).
  */
+function isPhone() {
+  const narrow = window.matchMedia("(max-width: 767px)").matches;
+  // A phone turned sideways is wider than 767px but still a phone.
+  const landscapePhone = window.matchMedia("(pointer: coarse) and (max-height: 500px)").matches;
+  return narrow || landscapePhone;
+}
+
 function useDeferredStage() {
   const [ready, setReady] = useState(false);
 
@@ -40,6 +49,8 @@ function useDeferredStage() {
       done = true;
       setReady(true);
     };
+
+    if (isPhone()) return;
 
     if (window.innerWidth >= 1024) {
       const w = window as Window & {

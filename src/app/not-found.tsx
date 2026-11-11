@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Home, Search } from "lucide-react";
 
@@ -13,6 +14,16 @@ import { SiteFrame } from "@/components/site/SiteFrame";
  * indexed URLs, so this page treats a miss as a routing opportunity rather than
  * a dead end: search, the main sections, and the articles most people want.
  */
+export const metadata: Metadata = {
+  title: { absolute: "Page not found | Plateful Consulting" },
+  description: "The page you were looking for is not here. Search our Swiggy and Zomato growth guides, or start from the main sections.",
+  // Next.js already emits `<meta name="robots" content="noindex">` for every
+  // 404. Clearing the inherited site-wide robots setting (index, follow) leaves
+  // that as the one and only robots tag, instead of two that contradict.
+  robots: null,
+  alternates: { canonical: null },
+};
+
 export default async function NotFound() {
   const posts = await getFeaturedPosts(3);
 

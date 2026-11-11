@@ -9,7 +9,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Counter } from "@/components/ui/Counter";
 import { CTABand } from "@/components/site/CTABand";
 import { founders, stats, cities, site, services, contact, authorHref } from "@/lib/site";
-import { jsonLd, breadcrumbSchema, organizationSchema } from "@/lib/seo";
+import { jsonLd, breadcrumbSchema } from "@/lib/seo";
 import { ClientGrid } from "@/components/site/ClientWall";
 import { PlatformBand } from "@/components/site/PlatformBand";
 import { cn } from "@/lib/utils";
@@ -19,7 +19,7 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: { absolute: "About Plateful Consulting | Swiggy & Zomato Growth Experts" },
   description:
-    "Plateful Consulting is a specialist Swiggy and Zomato restaurant sales consulting firm helping restaurants grow consistent, high-margin revenue. 650+ restaurants, PAN India, 7+ years.",
+    "Plateful Consulting is a Swiggy and Zomato sales consultancy that has helped 650+ restaurants across India grow high-margin revenue since 2019.",
   alternates: { canonical: "/about-us" },
   openGraph: {
     title: "About Plateful Consulting",
@@ -50,8 +50,8 @@ const principles = [
 ];
 
 export default function AboutPage() {
+  // The Organization node is emitted once, site-wide, by SiteFrame.
   const schema = jsonLd(
-    organizationSchema(),
     breadcrumbSchema([
       { name: "Home", path: "/" },
       { name: "About Us", path: "/about-us" },

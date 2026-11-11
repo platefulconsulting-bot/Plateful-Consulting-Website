@@ -34,13 +34,15 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: resultsPage.title, description, images: [image] },
 };
 
-// Drama and Ivoryy lead (dine-in and premium), then the delivery brands.
+// The larger outlets lead (Drama, then Balaji Dhaba, Ivoryy), then the smaller
+// delivery brands.
 const groups = [
   {
     id: "dine-in",
-    name: "Dine-in and premium outlets",
-    description: "High average order value restaurants where Swiggy and Zomato sit alongside a busy dining room.",
-    slugs: ["drama", "ivoryy-fusion-bar", "limitless"],
+    name: "Dine-in, premium and high-volume outlets",
+    description:
+      "Restaurants doing lakhs a month on Swiggy and Zomato, from busy dining rooms with a high average order value to a high-volume delivery dhaba.",
+    slugs: ["drama", "balaji-dhaba", "ivoryy-fusion-bar", "limitless"],
   },
   {
     id: "delivery",
@@ -203,6 +205,16 @@ export default function ResultsPage() {
                   See our services
                   <ArrowRight className="h-3.5 w-3.5" aria-hidden />
                 </Link>
+                <p className="mt-5 text-sm leading-relaxed text-cream-400">
+                  Comparing consultants?{" "}
+                  <Link
+                    href="/best-restaurant-consultant-in-delhi-ncr-what-to-look-for"
+                    className="font-medium text-gold-400 underline-offset-4 hover:text-gold-300 hover:underline"
+                  >
+                    What to look for in a restaurant consultant
+                  </Link>
+                  .
+                </p>
               </div>
             </Reveal>
             <Reveal delay={0.08}>
@@ -267,7 +279,7 @@ function CaseStudyCard({ study: c }: { study: CaseStudy }) {
             <div className="table-wrap">
               <table>
                 <caption className="sr-only">
-                  {c.name}: before and after PFC ({c.period})
+                  {c.name}: {c.beforeLabel} vs {c.afterLabel} ({c.period})
                 </caption>
                 <thead>
                   <tr>

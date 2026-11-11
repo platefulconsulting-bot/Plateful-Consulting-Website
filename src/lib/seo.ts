@@ -129,6 +129,11 @@ export function articleSchema(post: {
     author: post.author
       ? {
           "@type": "Person",
+          // Authors with a profile page share the Person @id emitted there,
+          // so every byline resolves to the same entity.
+          ...(authorHref(post.author.slug).startsWith("/author/")
+            ? { "@id": absoluteUrl(`${authorHref(post.author.slug)}#person`) }
+            : {}),
           name: post.author.name,
           jobTitle: post.author.role,
           url: absoluteUrl(authorHref(post.author.slug)),
@@ -228,6 +233,8 @@ export function collectionPageSchema(page: {
   path: string;
   name: string;
   description: string;
+  /** ISO date of the newest change to the collection, when known. */
+  dateModified?: string;
   items: readonly { slug: string; title: string }[];
 }) {
   const url = absoluteUrl(page.path);
@@ -237,6 +244,7 @@ export function collectionPageSchema(page: {
     url,
     name: page.name,
     description: page.description,
+    ...(page.dateModified ? { dateModified: page.dateModified } : {}),
     isPartOf: { "@id": SITE_ID },
     publisher: { "@id": ORG_ID },
     inLanguage: "en-IN",

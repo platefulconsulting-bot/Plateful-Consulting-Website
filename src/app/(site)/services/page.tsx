@@ -19,7 +19,7 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: { absolute: "Swiggy & Zomato Sales Consulting Services | PFC" },
   description:
-    "Specialised Swiggy and Zomato dine-in and delivery sales consulting: listing, onboarding, menu optimisation, aggregator ads management, food photography, Meta ads, events and licensing.",
+    "Swiggy and Zomato sales consulting: onboarding, menu optimisation, aggregator ads, food photography, Meta ads, events and licensing for restaurants.",
   alternates: { canonical: "/services" },
   openGraph: {
     title: "Swiggy & Zomato Sales Consulting Services (Pan India)",

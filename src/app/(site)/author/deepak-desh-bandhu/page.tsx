@@ -17,19 +17,19 @@ const path = `/author/${author.slug}`;
 
 export const metadata: Metadata = {
   title: { absolute: seoTitle(`${author.name}, Swiggy & Zomato Consultant`) },
-  description: metaDescription(author.summary),
+  description: metaDescription(author.metaDescription),
   alternates: { canonical: path },
   openGraph: {
     type: "profile",
     title: `${author.name} — ${author.role}, ${site.name}`,
-    description: metaDescription(author.summary),
+    description: metaDescription(author.metaDescription),
     url: path,
     images: [{ url: ogImageUrl(author.name, author.role), width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${author.name} — ${author.role}`,
-    description: metaDescription(author.summary),
+    description: metaDescription(author.metaDescription),
     images: [ogImageUrl(author.name, author.role)],
   },
 };

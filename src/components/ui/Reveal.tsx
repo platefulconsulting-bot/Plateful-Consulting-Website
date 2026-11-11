@@ -18,6 +18,10 @@ import { cn } from "@/lib/utils";
  *    to need it.
  *  - The hidden/shown styles live in globals.css (`[data-reveal]`), and the
  *    reduced-motion rule there collapses the whole effect.
+ *  - Nothing is hidden unless JavaScript is running (`html[data-js]`, set by
+ *    the inline bootstrap script), and `immediate` reveals are a CSS-only,
+ *    transform-only entrance — so above-the-fold copy paints from the server
+ *    HTML and is never held back by the JS bundle.
  */
 
 type Direction = "up" | "down" | "left" | "right" | "none";
@@ -39,8 +43,9 @@ export function Reveal({
   as?: ElementType;
   once?: boolean;
   /**
-   * Reveal on mount instead of on scroll-in. For above-the-fold content — a
-   * hero headline and its call to action should not wait on an observer.
+   * Animate in on first paint instead of on scroll-in. For above-the-fold
+   * content — a hero headline and its call to action should not wait on an
+   * observer, or on JavaScript at all. CSS-only and always visible.
    */
   immediate?: boolean;
 }) {
@@ -50,11 +55,9 @@ export function Reveal({
     const el = ref.current;
     if (!el) return;
 
-    if (immediate) {
-      // Next frame, so the hidden state paints first and the transition runs.
-      const id = requestAnimationFrame(() => el.setAttribute("data-shown", ""));
-      return () => cancelAnimationFrame(id);
-    }
+    // Immediate reveals are pure CSS (see globals.css) and visible from the
+    // server HTML — nothing to do here, so the hero never waits on hydration.
+    if (immediate) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -79,7 +82,11 @@ export function Reveal({
       ref,
       "data-reveal": direction,
       "data-immediate": immediate ? "" : undefined,
-      style: delay ? { transitionDelay: `${delay}s` } : undefined,
+      style: delay
+        ? immediate
+          ? { animationDelay: `${delay}s` }
+          : { transitionDelay: `${delay}s` }
+        : undefined,
       className: cn(className),
     },
     children,

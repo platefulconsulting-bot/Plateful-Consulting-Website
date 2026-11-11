@@ -17,6 +17,9 @@ export const site = {
   tagline: "We don't manage platforms. We drive sales.",
   description:
     "Specialist Swiggy and Zomato restaurant sales consultants across India. Listing, onboarding, menu optimisation, aggregator ads management and structured growth systems for delivery and dine-in.",
+  /** Homepage search snippet: ≤155 characters, ends on a full sentence. */
+  metaDescription:
+    "Swiggy and Zomato sales consultants for restaurants across India: listing, menu optimisation, aggregator ads and growth systems for delivery and dine-in.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://platefulconsulting.com",
   founded: 2019,
   locale: "en_IN",
@@ -190,7 +193,8 @@ export const services: Service[] = [
     icon: "truck",
     accent: "#EA552B",
     relatedPosts: [
-      "how-to-increase-swiggy-orders-in-30-days",
+      // The 30-day guide redirects here since the November 2026 merge.
+      "how-to-increase-swiggy-orders",
       "how-to-increase-zomato-orders-a-data-driven-guide-for-restaurants",
       "how-swiggy-ranking-algorithm-works-for-restaurants-2026",
       "why-most-restaurants-fail-on-swiggy-and-zomato-and-how-to-fix-it",
@@ -598,6 +602,9 @@ export const authorProfiles = {
     slug: "deepak-desh-bandhu",
     name: "Deepak Desh Bandhu",
     role: "Founder & Lead Consultant",
+    /** Search snippet for the profile page: ≤155 characters, full sentence. */
+    metaDescription:
+      "Deepak Desh Bandhu, founder of Plateful Consulting, has spent 7+ years inside Swiggy and Zomato dashboards and worked with 650+ restaurants.",
     summary:
       "Deepak Desh Bandhu is the founder and lead consultant of Plateful Consulting. He has spent 7+ years working inside Swiggy and Zomato partner dashboards, has worked with 650+ restaurants and has managed ₹8Cr+ in aggregator ad spend.",
     story: [
@@ -708,7 +715,7 @@ export const topicHubs: TopicHub[] = [
     eyebrow: "Topic hub · Swiggy",
     metaTitle: "Swiggy Growth Guide for Restaurants",
     metaDescription:
-      "How to grow restaurant sales on Swiggy: ranking signals, listing and menu optimisation, Swiggy ads, ratings and margins. Every Plateful guide, grouped by lever.",
+      "How to grow restaurant sales on Swiggy: ranking signals, listing and menu optimisation, Swiggy ads, ratings and margins, grouped by lever.",
     intro:
       "How do you grow restaurant sales on Swiggy? Swiggy ranks restaurants on signals it can measure: how reliably you accept orders, how accurate your prep times are, how well your menu turns browsers into orders, and how your rating moves over time. Growth usually comes from fixing those inputs first, with a complete listing, a cleaner menu, realistic prep times and a rating above the 4.2 visibility threshold, and only then buying visibility with Swiggy ads budgeted by hour against contribution margin. The guides below walk through each lever in the order we apply them with restaurant partners.",
     groups: [
@@ -718,7 +725,6 @@ export const topicHubs: TopicHub[] = [
         slugs: [
           "how-swiggy-ranking-algorithm-works-for-restaurants-2026",
           "swiggy-listing-optimization-the-complete-guide-for-restaurant-owners",
-          "how-to-increase-swiggy-orders-in-30-days",
           "how-to-increase-swiggy-orders",
         ],
       },
@@ -744,10 +750,14 @@ export const topicHubs: TopicHub[] = [
         name: "Swiggy vs Zomato",
         description: "Choosing where to list, where to spend and how to run both.",
         slugs: [
-          "swiggy-vs-zomato-for-restaurants-which-platform-drives-more-sales",
           "should-your-restaurant-be-on-both-swiggy-and-zomato",
           "swiggy-dineout-vs-zomato-dine-in",
         ],
+      },
+      {
+        name: "Getting expert help",
+        description: "When to bring in a consultant, and what to check before you hire one.",
+        slugs: ["best-restaurant-consultant-in-delhi-ncr-what-to-look-for"],
       },
     ],
     keywords: ["Swiggy"],
@@ -760,7 +770,7 @@ export const topicHubs: TopicHub[] = [
     eyebrow: "Topic hub · Zomato",
     metaTitle: "Zomato Growth Guide for Restaurants",
     metaDescription:
-      "How to get more orders on Zomato: ranking, listing optimisation, Zomato ads, ratings and reviews, Dine-In and commission. Every Plateful guide, grouped by lever.",
+      "How to get more orders on Zomato: ranking, listing optimisation, Zomato ads, ratings and reviews, Dine-In and commission, grouped by lever.",
     intro:
       "How do restaurants get more orders on Zomato? Zomato decides who gets seen using signals such as rating and review velocity, delivery and prep-time reliability, listing completeness and how often people who open your menu go on to order. Restaurants that grow consistently fix those signals first: accurate cuisine tags, strong photography, a menu sequenced around bestsellers and a rating that clears the 4.2 mark. Ads come after, once the listing already converts. Zomato Dine-In runs on its own rules for table bookings and walk-ins. The guides below cover ranking, ads, ratings, dine-in and commission in turn.",
     groups: [
@@ -810,7 +820,7 @@ export const topicHubs: TopicHub[] = [
     eyebrow: "Topic hub · Margins",
     metaTitle: "Swiggy & Zomato Commission and Payouts Guide",
     metaDescription:
-      "What Swiggy and Zomato deduct from each order, how to read your payout statement and the legitimate levers that protect restaurant margins. All guides in one place.",
+      "What Swiggy and Zomato deduct from each order, how to read your payout statement and the legitimate levers that protect restaurant margins.",
     intro:
       "What do Swiggy and Zomato actually take from each order, and how do you keep more of it? Your payout is the order value minus the platform commission, GST on that commission, payment and other platform fees, any discount you funded and, if you run them, ads billed against your settlements. Commission rates vary by contract, city and the services you opt into, so the number that matters is net realisation per order rather than the headline percentage. Restaurants typically protect margin through legitimate levers: reviewing terms at renewal, restructuring discounts, pricing the menu for delivery and building direct channels. The guides below explain each one.",
     groups: [
@@ -895,9 +905,9 @@ export const resultsPage = {
   shortName: "Client results",
   metaTitle: "Client Results: Swiggy & Zomato Case Studies",
   metaDescription:
-    "Before-and-after Swiggy and Zomato sales for seven Plateful Consulting client outlets, with ad spend and method shown. Individual results, not guarantees.",
+    "Swiggy and Zomato sales before and after for eight Plateful Consulting client outlets, with ad spend and method shown. Individual results, not guarantees.",
   intro:
-    "Plateful Consulting works inside a restaurant's Swiggy and Zomato dashboards: listing and visibility, menu, ad structure and new-customer targeting. For the seven outlets below, platform sales after onboarding ranged from 22.1% higher (Drama on Zomato) to several times the starting level for newer delivery brands. Where we have spend data, ad or discount spend rose too, and we show it.",
+    "Plateful Consulting works inside a restaurant's Swiggy and Zomato dashboards: listing and visibility, menu, ad structure and new-customer targeting. For the eight outlets below, from New Delhi to Hyderabad, platform sales after onboarding ranged from 22.1% higher (Drama on Zomato) to several times the starting level for newer delivery brands. Balaji Dhaba, our first Hyderabad case, shows growth tracked over time on a monthly retainer. Where we have spend data, ad or discount spend rose too, and we show it.",
   disclaimer:
     "Results vary; these are individual client outcomes, not guarantees. City, cuisine, price point and starting position all change what is possible.",
   source:
@@ -942,6 +952,35 @@ export const caseStudies: CaseStudy[] = [
     work: "Visibility and listing work, ad restructuring on both platforms and new-customer acquisition targeting.",
     notes: [
       "Ad spend rose from ₹1.94 lakh to ₹6.19 lakh a month. Each ₹1 of added ad spend came with ₹4.12 of added net sale overall: ₹5.67 on Swiggy and ₹2.29 on Zomato.",
+    ],
+  },
+  {
+    slug: "balaji-dhaba",
+    name: "Balaji Dhaba, Marredpally, Hyderabad",
+    type: "Dhaba · delivery",
+    highlight: "Zomato weekly orders ~236 → ~796 (3.4x)",
+    onboarded: "Monthly retainer; Zomato tracked over about a year",
+    period:
+      "Zomato: average weekly delivered orders over about a year, and monthly figures over five months. Swiggy: about 10 weeks of dashboard data, month one vs month two and the first week vs the peak week.",
+    beforeLabel: "Earlier",
+    afterLabel: "Later",
+    rows: [
+      { metric: "Zomato delivered orders / week (average)", before: "~236", after: "~796", change: "3.4x" },
+      { metric: "Zomato sales / month", before: "₹7.60 lakh", after: "₹12.17 lakh", change: "+60%" },
+      { metric: "Zomato delivered orders / month", before: "2,054", after: "3,031", change: "+48%" },
+      { metric: "Zomato average order value", before: "₹370", after: "₹401" },
+      { metric: "Zomato menu-to-order conversion", before: "7.6%", after: "8.8%" },
+      { metric: "Swiggy revenue / month (month one vs two)", before: "₹14.47 lakh", after: "₹16.99 lakh", change: "+17.4%" },
+      { metric: "Swiggy orders / month (month one vs two)", before: "2,788", after: "3,444", change: "+23.5%" },
+      { metric: "Swiggy orders / week (first week vs peak)", before: "547", after: "906", change: "+66%" },
+    ],
+    work: "Delivery growth on a monthly retainer: visibility, menu conversion and ad efficiency on Zomato and Swiggy.",
+    notes: [
+      "The peak week flatters the Swiggy picture. On a sustained basis, the last three full weeks vs the first three were up 16% in orders and 13% in revenue.",
+      "Over six months, Zomato sales totalled ₹59.6 lakh from 15,262 delivered orders. Across about 10 weeks, Swiggy revenue was ₹37.5 lakh from 7,363 orders, and Swiggy ads returned 16.6x (₹17.2 lakh of ads GMV on ₹1.04 lakh of spend).",
+      "Growth came from a mix of visibility, conversion and ads. Zomato tags most of this outlet's sales as ad-attributed.",
+      "The Swiggy figures compare weeks within the tracked window, not before and after PFC.",
+      "PFC does not claim credit for rating changes, so ratings are not shown.",
     ],
   },
   {

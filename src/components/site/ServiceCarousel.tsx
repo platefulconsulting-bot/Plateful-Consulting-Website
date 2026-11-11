@@ -218,9 +218,12 @@ export function ServiceCarousel() {
                       alt=""
                       width={200}
                       height={200}
-                      // Lazy loading can't see into a 3D-transformed ring, so
-                      // cards round the back would arrive blank. They're small.
-                      loading="eager"
+                      // Decorative and well below the fold: lazy, low priority,
+                      // so they never compete with the hero on first load. The
+                      // browser's lazy-load margin (1250px+) covers the whole
+                      // ring, so cards round the back still arrive in time.
+                      loading="lazy"
+                      fetchPriority="low"
                       className="h-full max-h-[calc(var(--card-w)*0.42)] w-auto object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.35)]"
                     />
                   ) : (

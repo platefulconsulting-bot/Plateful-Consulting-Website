@@ -451,7 +451,7 @@ export default async function HomePage() {
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {posts.map((post, i) => (
               <Reveal key={post.id} delay={i * 0.08} className="h-full">
-                <PostCard post={post} className="h-full" priority={i === 0} />
+                <PostCard post={post} className="h-full" />
               </Reveal>
             ))}
           </div>

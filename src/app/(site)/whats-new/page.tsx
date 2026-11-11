@@ -4,7 +4,7 @@ import { ArrowUpRight, ChevronRight } from "lucide-react";
 
 import { whatsNew } from "@/lib/whats-new";
 import { jsonLd, breadcrumbSchema } from "@/lib/seo";
-import { formatDate } from "@/lib/utils";
+import { formatDate, ogImageUrl } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "What's New — Tools & Guides for Restaurant Growth",
@@ -15,6 +15,13 @@ export const metadata: Metadata = {
     title: "What's new at Plateful Consulting",
     description: "New free tools and guides for restaurants growing on Swiggy and Zomato.",
     url: "/whats-new",
+    images: [{ url: ogImageUrl("What's New at Plateful Consulting"), width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "What's new at Plateful Consulting",
+    description: "New free tools and guides for restaurants growing on Swiggy and Zomato.",
+    images: [ogImageUrl("What's New at Plateful Consulting")],
   },
 };
 

@@ -683,26 +683,71 @@
    rather than as utility classes so React never has to own the shown state.
    =========================================================================== */
 
-[data-reveal] {
+/* Content is visible by default. Scroll reveals only hide their content once
+   the inline bootstrap script in the root layout has set `data-js` on <html>,
+   so a visitor (or crawler) without JavaScript never sees a blank section.
+
+   Above-the-fold reveals (`data-immediate`) never depend on JavaScript at all:
+   they run a pure-CSS entrance straight from the server HTML, animating only
+   `transform`. Opacity stays at 1 throughout, so the hero headline is painted
+   — and counted as the Largest Contentful Paint — on the first frame instead
+   of after hydration. */
+
+[data-reveal]:not([data-immediate]) {
   transition:
     opacity 0.9s var(--ease-out-expo),
     transform 0.9s var(--ease-out-expo);
 }
-[data-reveal][data-immediate] {
-  transition-duration: 0.6s;
-}
-[data-reveal]:not([data-shown]) {
+[data-js] [data-reveal]:not([data-immediate]):not([data-shown]) {
   opacity: 0;
 }
-[data-reveal="up"]:not([data-shown]) {
+[data-js] [data-reveal="up"]:not([data-immediate]):not([data-shown]) {
   transform: translate3d(0, 2rem, 0);
 }
-[data-reveal="down"]:not([data-shown]) {
+[data-js] [data-reveal="down"]:not([data-immediate]):not([data-shown]) {
   transform: translate3d(0, -2rem, 0);
 }
-[data-reveal="left"]:not([data-shown]) {
+[data-js] [data-reveal="left"]:not([data-immediate]):not([data-shown]) {
   transform: translate3d(2rem, 0, 0);
 }
-[data-reveal="right"]:not([data-shown]) {
+[data-js] [data-reveal="right"]:not([data-immediate]):not([data-shown]) {
   transform: translate3d(-2rem, 0, 0);
+}
+
+[data-reveal][data-immediate] {
+  animation: 0.7s var(--ease-out-expo) both reveal-rise;
+}
+[data-reveal="down"][data-immediate] {
+  animation-name: reveal-drop;
+}
+[data-reveal="left"][data-immediate] {
+  animation-name: reveal-from-right;
+}
+[data-reveal="right"][data-immediate] {
+  animation-name: reveal-from-left;
+}
+/* A small, non-text cue (e.g. the hero scroll hint): a plain fade is fine
+   here, it is never the LCP element. */
+[data-reveal="none"][data-immediate] {
+  animation-name: reveal-fade;
+}
+@keyframes reveal-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes reveal-rise {
+  from { transform: translate3d(0, 1.25rem, 0); }
+  to { transform: none; }
+}
+@keyframes reveal-drop {
+  from { transform: translate3d(0, -1.25rem, 0); }
+  to { transform: none; }
+}
+@keyframes reveal-from-right {
+  from { transform: translate3d(1.25rem, 0, 0); }
+  to { transform: none; }
+}
+@keyframes reveal-from-left {
+  from { transform: translate3d(-1.25rem, 0, 0); }
+  to { transform: none; }
 }

@@ -8,7 +8,7 @@ import { CTABand } from "@/components/site/CTABand";
 import { getPostsBySlugs, getPostsByTitleKeywords } from "@/lib/posts";
 import { serviceBySlug, topicHubs, type TopicHub } from "@/lib/site";
 import { jsonLd, breadcrumbSchema, collectionPageSchema } from "@/lib/seo";
-import { metaDescription, ogImageUrl, seoTitle } from "@/lib/utils";
+import { formatDate, isoDate, metaDescription, ogImageUrl, seoTitle } from "@/lib/utils";
 
 /**
  * Topic hub: a curated, grouped index of existing articles on one subject
@@ -58,11 +58,20 @@ export async function TopicHubPage({ hub }: { hub: TopicHub }) {
   const service = serviceBySlug(hub.service);
   const otherHubs = topicHubs.filter((h) => h.slug !== hub.slug);
 
+  // The hub changes when an article in it does, so its date is the newest
+  // publish date among the listed articles. (Not `updatedAt`: the view
+  // counter bumps that on every read.)
+  const lastUpdated = listed.reduce<Date | null>((latest, p) => {
+    if (!p.publishedAt) return latest;
+    return !latest || p.publishedAt > latest ? p.publishedAt : latest;
+  }, null);
+
   const schema = jsonLd(
     collectionPageSchema({
       path,
       name: hub.title,
       description: hub.metaDescription,
+      dateModified: isoDate(lastUpdated) || undefined,
       items: listed.map((p) => ({ slug: p.slug, title: p.title })),
     }),
     breadcrumbSchema([
@@ -114,6 +123,14 @@ export async function TopicHubPage({ hub }: { hub: TopicHub }) {
               {hub.title}
             </h1>
             <p className="mt-7 max-w-2xl text-lg leading-relaxed text-cream-300">{hub.intro}</p>
+            {lastUpdated && (
+              <p className="mt-5 text-sm text-cream-500">
+                Last updated{" "}
+                <time dateTime={isoDate(lastUpdated)} className="text-cream-300">
+                  {formatDate(lastUpdated)}
+                </time>
+              </p>
+            )}
           </Reveal>
 
           {groups.length > 1 && (

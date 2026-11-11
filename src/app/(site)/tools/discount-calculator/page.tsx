@@ -5,6 +5,7 @@ import { ArrowRight, ChevronRight } from "lucide-react";
 import { DiscountCalculator } from "@/components/tools/DiscountCalculator";
 import { CTABand } from "@/components/site/CTABand";
 import { jsonLd, breadcrumbSchema, faqSchema, webApplicationSchema } from "@/lib/seo";
+import { ogImageUrl } from "@/lib/utils";
 
 const PATH = "/tools/discount-calculator";
 const DESCRIPTION =
@@ -18,6 +19,13 @@ export const metadata: Metadata = {
     title: "Swiggy & Zomato Discount Calculator",
     description: "Will that offer make money or burn margin? Find out in 30 seconds.",
     url: PATH,
+    images: [{ url: ogImageUrl("Swiggy & Zomato Discount Calculator", "Free tool"), width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Swiggy & Zomato Discount Calculator",
+    description: "Will that offer make money or burn margin? Find out in 30 seconds.",
+    images: [ogImageUrl("Swiggy & Zomato Discount Calculator", "Free tool")],
   },
 };
 

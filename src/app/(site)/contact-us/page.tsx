@@ -7,12 +7,12 @@ import { LazyScene } from "@/components/three/LazyScene";
 import { Reveal } from "@/components/ui/Reveal";
 import { ContactForm } from "@/components/site/ContactForm";
 import { contact, faqs, site } from "@/lib/site";
-import { jsonLd, breadcrumbSchema, faqSchema, organizationSchema } from "@/lib/seo";
+import { jsonLd, breadcrumbSchema, faqSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: { absolute: "Contact Us | Book a Swiggy & Zomato Growth Audit | PFC" },
   description:
-    "Talk to Plateful Consulting about growing your restaurant's Swiggy and Zomato sales. Call +91 81300 32195, email info@platefulconsulting.com, or request a growth audit.",
+    "Book a Swiggy and Zomato growth audit with Plateful Consulting. Call or WhatsApp +91 81300 32195, or email info@platefulconsulting.com.",
   alternates: { canonical: "/contact-us" },
   openGraph: {
     title: "Contact Plateful Consulting",
@@ -23,8 +23,8 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
+  // The Organization node is emitted once, site-wide, by SiteFrame.
   const schema = jsonLd(
-    organizationSchema(),
     breadcrumbSchema([
       { name: "Home", path: "/" },
       { name: "Contact Us", path: "/contact-us" },

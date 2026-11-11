@@ -15,7 +15,7 @@ import { topicHubs } from "@/lib/site";
 export const metadata: Metadata = {
   title: { absolute: "Swiggy & Zomato Growth Guides for Restaurants | PFC Blog" },
   description:
-    "In-depth guides on Swiggy and Zomato ranking, commissions, menu optimisation, ads and ratings — written from inside real restaurant partner dashboards.",
+    "Guides to Swiggy and Zomato ranking, commission, menu optimisation, ads and ratings, written from inside real restaurant partner dashboards.",
   alternates: { canonical: "/blogs" },
   openGraph: {
     title: "Plateful Consulting — Restaurant growth guides",
@@ -225,6 +225,14 @@ export default async function BlogsPage({ searchParams }: { searchParams: Search
                 Clear filters
               </Link>
             </div>
+          )}
+
+          {/* Unfiltered view: a heading so the article cards (h3) do not skip a
+              level under the page h1. Filtered views have their own h2 above. */}
+          {!isFiltered && (
+            <h2 id="all-articles" className="sr-only">
+              All articles
+            </h2>
           )}
 
           {/* Featured hero article */}
