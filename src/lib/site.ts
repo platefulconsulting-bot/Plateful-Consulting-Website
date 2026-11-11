@@ -434,6 +434,12 @@ export const clients = [
   { name: "GoodGaon", logo: "/clients/goodgaon.png", type: "Restaurant" },
   { name: "The Burrito Bros", logo: "/clients/burrito-bros.png", type: "Indo-Mexican · Pune" },
   { name: "Uncle Peter's Pancakes", logo: "/clients/uncle-peters-pancakes.png", type: "Pancakes & desserts" },
+  { name: "Ruva Sweets", logo: "/clients/ruva-sweets.png", type: "Chocolates & desserts" },
+  { name: "Pink Paprika", logo: "/clients/pink-paprika.png", type: "Restaurant" },
+  { name: "Vintage Kitchen", logo: "/clients/vintage-kitchen.png", type: "Restaurant" },
+  { name: "Swad Monk", logo: "/clients/swad-monk.png", type: "Restaurant" },
+  { name: "The BBQ Company", logo: "/clients/the-bbq-company.png", type: "Live grill buffet & bar" },
+  { name: "Love Laban", logo: "/clients/love-laban.png", type: "Food & beverage" },
 ] as const;
 
 // ---------------------------------------------------------------------------
