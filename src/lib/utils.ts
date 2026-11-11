@@ -79,6 +79,9 @@ export function metaDescription(text: string | null | undefined, max = 155) {
 
 /** Page title that stays near 60 characters with the brand suffix. */
 export function seoTitle(title: string, brand = "Plateful Consulting") {
+  // A hand-written meta title from the Studio that already carries a brand
+  // suffix ("… | PFC") is used exactly as written.
+  if (/\|\s*(PFC|Plateful Consulting)\s*$/i.test(title)) return title;
   const full = `${title} | ${brand}`;
   if (full.length <= 60) return full;
   const short = `${title} | PFC`;
