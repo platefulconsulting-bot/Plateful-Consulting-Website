@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Instagram, Youtube, Mail, Phone, MapPin, Linkedin } from "lucide-react";
-import { site, contact, services, cities, topicHubs } from "@/lib/site";
+import { site, contact, services, cities, cityPages, topicHubs } from "@/lib/site";
 import { getLatestPosts } from "@/lib/posts";
 import { Logo } from "./Logo";
 import { NewsletterForm } from "./NewsletterForm";
@@ -182,6 +182,22 @@ export async function Footer() {
               <li key={h.slug}>
                 <Link href={`/${h.slug}`} className="text-cream-400 transition-colors hover:text-gold-300">
                   {h.shortName}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* --- City pages --- */}
+        <nav aria-label="Cities" className="mt-8 border-t border-cream-100/8 pt-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cream-500">
+            Cities
+          </p>
+          <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            {cityPages.map((c) => (
+              <li key={c.slug}>
+                <Link href={`/${c.slug}`} className="text-cream-400 transition-colors hover:text-gold-300">
+                  Swiggy &amp; Zomato consultant in {c.shortName}
                 </Link>
               </li>
             ))}

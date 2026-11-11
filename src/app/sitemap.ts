@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllPostSlugs } from "@/lib/posts";
 import { absoluteUrl } from "@/lib/utils";
-import { topicHubs, authorProfiles } from "@/lib/site";
+import { topicHubs, authorProfiles, cityPages } from "@/lib/site";
 
 export const revalidate = 3600;
 
@@ -40,6 +40,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: latestPost,
       changeFrequency: "weekly" as const,
       priority: 0.85,
+    })),
+    ...cityPages.map((c) => ({
+      url: absoluteUrl(`/${c.slug}`),
+      lastModified: STATIC_UPDATED,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
     })),
     ...Object.values(authorProfiles).map((a) => ({
       url: absoluteUrl(`/author/${a.slug}`),

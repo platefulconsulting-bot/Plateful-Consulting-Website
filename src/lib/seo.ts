@@ -262,3 +262,17 @@ export function collectionPageSchema(page: {
     },
   };
 }
+
+/** A city landing page: the consulting service, scoped to one city. */
+export function cityServiceSchema(page: { path: string; name: string; description: string; city: string }) {
+  return {
+    "@type": "Service",
+    "@id": absoluteUrl(`${page.path}#service`),
+    name: page.name,
+    description: page.description,
+    serviceType: "Swiggy and Zomato restaurant growth consulting",
+    provider: { "@id": ORG_ID },
+    areaServed: { "@type": "City", name: page.city },
+    url: absoluteUrl(page.path),
+  };
+}

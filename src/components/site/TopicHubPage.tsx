@@ -6,7 +6,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { PostCard } from "@/components/site/PostCard";
 import { CTABand } from "@/components/site/CTABand";
 import { getPostsBySlugs, getPostsByTitleKeywords } from "@/lib/posts";
-import { serviceBySlug, topicHubs, type TopicHub } from "@/lib/site";
+import { cityPages, serviceBySlug, topicHubs, type TopicHub } from "@/lib/site";
 import { jsonLd, breadcrumbSchema, collectionPageSchema } from "@/lib/seo";
 import { formatDate, isoDate, metaDescription, ogImageUrl, seoTitle } from "@/lib/utils";
 
@@ -232,6 +232,17 @@ export async function TopicHubPage({ hub }: { hub: TopicHub }) {
                     See how it works
                     <ArrowRight className="h-3.5 w-3.5" aria-hidden />
                   </Link>
+                  <p className="mt-5 text-sm leading-relaxed text-cream-400">
+                    Local results:{" "}
+                    {cityPages.map((c, i) => (
+                      <span key={c.slug}>
+                        <Link href={`/${c.slug}`} className="font-medium text-gold-400 hover:text-gold-300">
+                          {c.shortName}
+                        </Link>
+                        {i < cityPages.length - 1 ? " · " : "."}
+                      </span>
+                    ))}
+                  </p>
                 </div>
               </Reveal>
             )}

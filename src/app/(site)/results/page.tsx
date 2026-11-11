@@ -4,9 +4,9 @@ import { ArrowRight, ArrowUpRight, ChevronRight } from "lucide-react";
 
 import { Reveal } from "@/components/ui/Reveal";
 import { CTABand } from "@/components/site/CTABand";
-import { caseStudies, resultsPage, topicHubs, type CaseStudy } from "@/lib/site";
+import { caseStudies, cityPages, resultsPage, topicHubs, type CaseStudy } from "@/lib/site";
 import { jsonLd, breadcrumbSchema, collectionPageSchema } from "@/lib/seo";
-import { metaDescription, ogImageUrl, seoTitle } from "@/lib/utils";
+import { metaDescription, ogImageUrl, seoTitle, slugify } from "@/lib/utils";
 
 /**
  * /results: named client case studies with before-and-after tables.
@@ -34,21 +34,21 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: resultsPage.title, description, images: [image] },
 };
 
-// The larger outlets lead (Drama, then Balaji Dhaba, Ivoryy), then the smaller
-// delivery brands.
+// The larger outlets lead (Drama, then Balaji Dhaba, Punjabi Rasoi, Ivoryy),
+// then the delivery brands, strongest multi-month cases first.
 const groups = [
   {
     id: "dine-in",
     name: "Dine-in, premium and high-volume outlets",
     description:
       "Restaurants doing lakhs a month on Swiggy and Zomato, from busy dining rooms with a high average order value to a high-volume delivery dhaba.",
-    slugs: ["drama", "balaji-dhaba", "ivoryy-fusion-bar", "limitless"],
+    slugs: ["drama", "balaji-dhaba", "punjabi-rasoi", "ivoryy-fusion-bar", "limitless"],
   },
   {
     id: "delivery",
     name: "Delivery brands",
-    description: "Smaller delivery-led outlets, compared month on month from onboarding.",
-    slugs: ["pasta-express", "regenta-inn", "tsoyum", "good-gaon"],
+    description: "Delivery-led outlets and launches, compared month on month from onboarding or launch.",
+    slugs: ["burrito-bros", "mohan-sweets", "olantic-8", "pasta-express", "regenta-inn", "tsoyum", "good-gaon"],
   },
 ].map((g) => ({
   ...g,
@@ -58,6 +58,9 @@ const groups = [
 }));
 
 const ordered = groups.flatMap((g) => g.items);
+
+/** Filter key for a case: the city slug, or "none" where no city is recorded. */
+const cityKey = (c: CaseStudy) => (c.city ? slugify(c.city) : "none");
 
 export default function ResultsPage() {
   const schema = jsonLd(
@@ -117,7 +120,7 @@ export default function ResultsPage() {
           <Reveal immediate delay={0.08}>
             <ul className="mt-9 flex flex-wrap gap-2.5" aria-label="Case studies">
               {ordered.map((c) => (
-                <li key={c.slug}>
+                <li key={c.slug} data-city={cityKey(c)}>
                   <a
                     href={`#${c.slug}`}
                     className="inline-flex items-center rounded-full border border-cream-100/12 px-4 py-2 text-sm text-cream-300 transition-all duration-300 hover:-translate-y-0.5 hover:border-gold-400/50 hover:text-gold-300"
@@ -127,6 +130,47 @@ export default function ResultsPage() {
                 </li>
               ))}
             </ul>
+          </Reveal>
+
+          <Reveal immediate delay={0.12}>
+            <fieldset className="mt-8">
+              <legend className="text-xs font-semibold uppercase tracking-[0.18em] text-cream-500">
+                Filter by city
+              </legend>
+              <div className="mt-3 flex flex-wrap gap-2.5">
+                {[{ key: "all", label: "All" }, ...cityPages.map((c) => ({ key: slugify(c.city), label: c.shortName }))].map(
+                  (opt) => (
+                    <div key={opt.key}>
+                      <input
+                        type="radio"
+                        name="city-filter"
+                        id={`city-filter-${opt.key}`}
+                        value={opt.key}
+                        defaultChecked={opt.key === "all"}
+                        className="peer sr-only"
+                      />
+                      <label
+                        htmlFor={`city-filter-${opt.key}`}
+                        className="inline-flex cursor-pointer items-center rounded-full border border-cream-100/12 px-4 py-2 text-sm text-cream-300 transition-colors duration-300 hover:border-gold-400/50 hover:text-gold-300 peer-checked:border-gold-400/70 peer-checked:bg-gold-500/10 peer-checked:text-gold-300 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-gold-400"
+                      >
+                        {opt.label}
+                      </label>
+                    </div>
+                  ),
+                )}
+              </div>
+            </fieldset>
+            <p className="mt-4 text-sm text-cream-400">
+              City pages:{" "}
+              {cityPages.map((c, i) => (
+                <span key={c.slug}>
+                  <Link href={`/${c.slug}`} className="font-medium text-gold-400 hover:text-gold-300">
+                    Swiggy &amp; Zomato consultant in {c.shortName}
+                  </Link>
+                  {i < cityPages.length - 1 ? " · " : ""}
+                </span>
+              ))}
+            </p>
           </Reveal>
         </div>
       </header>
@@ -159,6 +203,7 @@ export default function ResultsPage() {
           <section
             key={group.id}
             id={group.id}
+            data-city-group
             className="section-tight scroll-mt-28"
             aria-labelledby={`${group.id}-title`}
           >
@@ -175,9 +220,11 @@ export default function ResultsPage() {
 
               <div className="mt-10 grid gap-6">
                 {group.items.map((c) => (
-                  <Reveal key={c.slug}>
-                    <CaseStudyCard study={c} />
-                  </Reveal>
+                  <div key={c.slug} data-city={cityKey(c)}>
+                    <Reveal>
+                      <CaseStudyCard study={c} />
+                    </Reveal>
+                  </div>
                 ))}
               </div>
             </div>
@@ -272,6 +319,16 @@ function CaseStudyCard({ study: c }: { study: CaseStudy }) {
               <dd className="mt-0.5 text-cream-400">{c.work}</dd>
             </div>
           </dl>
+
+          {c.post && (
+            <Link
+              href={`/${c.post}`}
+              className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-gold-400 hover:text-gold-300"
+            >
+              Read the full case study
+              <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+            </Link>
+          )}
         </div>
 
         <div>
