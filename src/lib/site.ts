@@ -445,6 +445,7 @@ export const clients = [
   { name: "Pizza Workshop", logo: "/clients/pizza-workshop.png", type: "Pizza · Delhi NCR & Agra" },
   { name: "Hishi Cafe", logo: "/clients/hishi-cafe.png", type: "Sandwich café" },
   { name: "Bakes & Blooms", logo: "/clients/bakes-and-blooms.png", type: "Eggless bakery" },
+  { name: "Mohan Sweets", logo: "/clients/mohan-sweets.png", type: "Sweets & mithai" },
 ] as const;
 
 // ---------------------------------------------------------------------------
