@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import Script from "next/script";
 import { usePathname } from "next/navigation";
-import { META_PIXEL_ID, track } from "@/lib/analytics";
+import { META_PIXEL_ID, track, adsConversion } from "@/lib/analytics";
 
 /**
  * Meta Pixel for the public site: page views (including client-side
@@ -27,8 +27,14 @@ export function MetaPixel() {
     function onClick(e: MouseEvent) {
       const link = (e.target as HTMLElement | null)?.closest("a");
       const href = link?.getAttribute("href") ?? "";
-      if (href.startsWith("tel:")) track("Contact", { method: "phone" });
-      else if (/wa\.me|whatsapp\.com/.test(href)) track("Contact", { method: "whatsapp" });
+      if (href.startsWith("tel:")) {
+        track("Contact", { method: "phone" });
+        adsConversion("call");
+      } else if (/wa\.me\/918130032195|whatsapp\.com\/send\?phone=918130032195/.test(href)) {
+        // Only chats with PFC count; blog "share on WhatsApp" links do not.
+        track("Contact", { method: "whatsapp" });
+        adsConversion("whatsapp");
+      }
     }
     document.addEventListener("click", onClick);
     return () => document.removeEventListener("click", onClick);

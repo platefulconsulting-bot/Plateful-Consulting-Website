@@ -5,15 +5,16 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, Loader2, AlertCircle } from "lucide-react";
 import { services, cities } from "@/lib/site";
 import { cn } from "@/lib/utils";
-import { track } from "@/lib/analytics";
+import { track, adsConversion, toE164 } from "@/lib/analytics";
 
 /**
  * Enquiry form.
  *
  * Deliberately asks for restaurant, city and service alongside the basics: the
  * first reply is far more useful when we already know whether we are talking to
- * a single cloud kitchen in Pune or a twelve-outlet chain. Only name, email and
- * message are required, so the extra fields never cost a submission.
+ * a single cloud kitchen in Pune or a twelve-outlet chain. Name, mobile, email
+ * and message are required: the team follows up by call and WhatsApp, so an
+ * enquiry without a number usually goes cold.
  */
 
 const FIELD =
@@ -37,6 +38,13 @@ export function ContactForm() {
     const form = new FormData(e.currentTarget);
     const payload = Object.fromEntries(form.entries());
 
+    const phone = toE164(String(payload.phone ?? ""));
+    if (!phone) {
+      setState("error");
+      setError("Please enter a valid 10-digit mobile number so we can reach you.");
+      return;
+    }
+
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -52,6 +60,7 @@ export function ContactForm() {
       }
 
       track("Lead", { content_name: "contact_form" });
+      adsConversion("lead", { email: String(payload.email ?? "").trim().toLowerCase(), phone_number: phone });
       router.push("/thank-you");
     } catch {
       setState("error");
@@ -77,12 +86,13 @@ export function ContactForm() {
 
         <div>
           <label htmlFor="phone" className={LABEL}>
-            Mobile number
+            Mobile number <span className="text-ember-400">*</span>
           </label>
           <input
             id="phone"
             name="phone"
             type="tel"
+            required
             autoComplete="tel"
             inputMode="tel"
             className={cn(FIELD, "mt-2")}

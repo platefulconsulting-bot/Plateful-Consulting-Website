@@ -5,6 +5,7 @@ import { jsonLd, organizationSchema, websiteSchema } from "@/lib/seo";
 import { SmoothScroll } from "@/components/scroll/SmoothScroll";
 import { MetaPixel } from "./MetaPixel";
 import { GoogleTag } from "./GoogleTag";
+import { WhatsAppButton } from "./WhatsAppButton";
 
 /**
  * The public site's chrome.
@@ -30,6 +31,7 @@ export function SiteFrame({ children }: { children: ReactNode }) {
         {children}
       </main>
       <Footer />
+      <WhatsAppButton />
     </>
   );
 }

@@ -31,7 +31,8 @@ export function NewsletterForm({ className, source = "footer" }: { className?: s
         return;
       }
 
-      track("Lead", { content_name: `newsletter_${source}` });
+      // A newsletter signup is not a sales lead; keep it out of Lead / generate_lead.
+      track("Subscribe", { content_name: `newsletter_${source}` });
       setState("done");
       setMessage(data.message ?? "You're on the list.");
       setEmail("");
