@@ -253,9 +253,9 @@ export function AdsRoasCalculator() {
 
       <p className="mt-4 text-xs leading-relaxed text-cream-500">
         Illustrative only. Profit per ad order = order value − commission (with 18% GST) − food cost − packaging − ad
-        spend ÷ ad orders. Break-even ROAS = order value ÷ what an order leaves before ads. Payment gateway fees,
-        discounts you fund and GST on the ad invoice are not included; if they apply to you, your real break-even is
-        higher. The figures shown are examples, not Swiggy&apos;s or Zomato&apos;s rates: your commission is set by your
+        spend ÷ ad orders. Break-even ROAS = order value ÷ what an order leaves before ads. Payment gateway fees
+        and discounts you fund are not included; if they apply, your real break-even is higher. Enter ad spend including
+        GST if you cannot claim it back as input tax credit. The figures shown are examples, not Swiggy&apos;s or Zomato&apos;s rates: your commission is set by your
         agreement with each platform.
       </p>
     </div>

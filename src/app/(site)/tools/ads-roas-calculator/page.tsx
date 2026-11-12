@@ -9,7 +9,7 @@ import { ogImageUrl } from "@/lib/utils";
 
 const PATH = "/tools/ads-roas-calculator";
 const DESCRIPTION =
-  "Free Swiggy and Zomato ads ROAS calculator: enter your ad spend, ad sales and costs to see ROAS, profit per ad order, your break-even ROAS and whether the ads make money.";
+  "Free Swiggy and Zomato ads ROAS calculator: enter ad spend, ad sales and costs to see ROAS, profit per ad order and your break-even ROAS.";
 
 export const metadata: Metadata = {
   title: { absolute: "Swiggy & Zomato Ads ROAS Calculator | PFC" },

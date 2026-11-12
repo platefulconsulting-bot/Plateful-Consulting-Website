@@ -82,7 +82,7 @@ const checks = [
   {
     icon: Wallet,
     title: "Pricing vs commission",
-    body: "Whether your app prices still leave a margin once commission (usually somewhere in the 15–30% range, plus GST), packaging and discounts come off.",
+    body: "Whether your app prices still leave a margin once commission and GST (usually around 20–28% of an order), packaging and discounts come off.",
   },
   {
     icon: BadgePercent,
@@ -168,7 +168,7 @@ const faqs = [
   },
   {
     q: "What do you need from me for the audit?",
-    a: "Your name, mobile number, restaurant name, city, number of outlets and which platforms you are on. Most checks run on your public Swiggy and Zomato listings, so you do not need to share logins to start.",
+    a: "Your name, mobile number, email, restaurant name, city, number of outlets and which platforms you are on. Most checks run on your public Swiggy and Zomato listings, so you do not need to share logins to start.",
   },
   {
     q: "How long does the audit take?",

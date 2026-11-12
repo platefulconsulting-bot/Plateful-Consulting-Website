@@ -411,7 +411,7 @@ export default function AccountManagementPage() {
         <div className="container-x">
           <Reveal className="max-w-2xl">
             <h2 id="results-title" className="text-[length:var(--text-display-md)] font-bold leading-[1.1]">
-              Results from accounts we manage
+              Results from accounts we have managed
             </h2>
             <p className="mt-3 text-base leading-relaxed text-cream-400">
               Named clients, from their own Swiggy and Zomato partner dashboards. {resultsPage.disclaimer}

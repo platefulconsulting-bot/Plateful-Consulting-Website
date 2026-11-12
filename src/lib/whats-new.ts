@@ -20,6 +20,21 @@ export type WhatsNewEntry = {
 export const whatsNew: WhatsNewEntry[] = [
   {
     date: "2026-11-12",
+    kind: "New feature",
+    title: "Free growth audit, account management, two new calculators and Noida & Gurugram pages",
+    summary:
+      "Get a free Swiggy and Zomato growth audit, see what our account management covers, try the new ads ROAS and menu-price-after-commission calculators, and read our new Noida and Gurugram pages with named local results. Every guide now ends with a matching service, tool and client result.",
+    links: [
+      { label: "Free growth audit", href: "/free-growth-audit" },
+      { label: "Account management", href: "/swiggy-zomato-account-management" },
+      { label: "Ads ROAS calculator", href: "/tools/ads-roas-calculator" },
+      { label: "Menu price calculator", href: "/tools/menu-price-calculator" },
+      { label: "Noida", href: "/swiggy-zomato-consultant-noida" },
+      { label: "Gurugram", href: "/swiggy-zomato-consultant-gurugram" },
+    ],
+  },
+  {
+    date: "2026-11-12",
     kind: "New tool",
     title: "Free Swiggy & Zomato commission calculator",
     summary:

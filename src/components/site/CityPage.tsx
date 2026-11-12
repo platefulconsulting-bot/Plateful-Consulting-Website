@@ -189,7 +189,7 @@ export function CityLandingPage({ page }: { page: CityPage }) {
                 Where we work in {page.shortName}
               </h2>
               <p className="mt-3 text-base leading-relaxed text-cream-400">
-                The same team and the same order of work across the {page.shortName}, with named clients in each area.
+                The same team and the same order of work across {page.shortName}, with named clients in each area.
               </p>
             </Reveal>
 

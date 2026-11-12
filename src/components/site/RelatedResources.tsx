@@ -31,12 +31,12 @@ export function RelatedResources({
     <section className={cn("section-tight border-t border-cream-100/8", className)} aria-labelledby="keep-going-title">
       <div className="container-x">
         <p className="eyebrow">Keep going</p>
-        <p
+        <h2
           id="keep-going-title"
           className="mt-4 text-balance font-display text-[length:var(--text-display-md)] font-bold leading-tight tracking-[-0.025em] text-cream-50"
         >
           {variant === "case-study" ? "More results, or a look at your outlet" : "Related tools and results"}
-        </p>
+        </h2>
 
         <ul className={cn("mt-10 grid gap-6 md:grid-cols-2", variant === "full" && "lg:grid-cols-3")}>
           {links.map((l) => {

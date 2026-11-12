@@ -334,11 +334,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                   Want this run on your outlet?
                 </p>
                 <p className="mt-2.5 text-sm leading-relaxed text-cream-400">
-                  We will audit your live Swiggy and Zomato dashboards and show you where the
-                  orders are leaking.
+                  We will compare your Swiggy and Zomato listings with your nearest competitors and
+                  show you where the orders are leaking.
                 </p>
-                <Link href="/contact-us" className="btn btn-primary btn-sm mt-5 w-full">
-                  Book a growth audit
+                <Link href="/free-growth-audit" className="btn btn-primary btn-sm mt-5 w-full">
+                  Get a free growth audit
                 </Link>
               </div>
             </div>

@@ -107,7 +107,7 @@ const SERVICES = {
     kind: "service",
     eyebrow: "Service",
     title: "Swiggy & Zomato account management",
-    body: "Listing, menu, ratings, ads and offers run for you every week, with a monthly report against the numbers that matter.",
+    body: "Listing, menu, ratings, ads and offers run for you every week, with a weekly one-page report and a monthly review.",
     href: "/swiggy-zomato-account-management",
     cta: "See how it works",
   },

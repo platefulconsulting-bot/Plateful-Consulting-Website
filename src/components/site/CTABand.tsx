@@ -14,9 +14,9 @@ import { cn } from "@/lib/utils";
 export function CTABand({
   eyebrow = "Next step",
   title = "Find out what your listing is actually costing you.",
-  body = "A growth audit reads your live Swiggy and Zomato dashboards and tells you where the orders are leaking — ranking signals, menu conversion, ad waste and net realisation. The findings are yours to keep either way.",
-  primaryLabel = "Book a growth audit",
-  primaryHref = "/contact-us",
+  body = "A free growth audit compares your Swiggy and Zomato listings with your nearest competitors and shows where orders and margin are leaking: ranking signals, menu conversion, ad waste and net realisation. The findings are yours to keep either way.",
+  primaryLabel = "Get a free growth audit",
+  primaryHref = "/free-growth-audit",
   headingAs = "h2",
   className,
 }: {

@@ -1328,7 +1328,7 @@ export const cityPages: CityPage[] = [
       {
         name: "Noida",
         href: "/swiggy-zomato-consultant-noida",
-        body: "Where our office is. Noida clients include Limitless, Drama's second outlet, the new delivery brand TsoYum! and Punjabi Rasoi's second outlet, so much of the work here is launches, second outlets and keeping discount spend in check.",
+        body: "Where our office is. Noida clients include Limitless (Drama's second outlet), the new delivery brand TsoYum! and Punjabi Rasoi's second outlet, so much of the work here is launches, second outlets and keeping discount spend in check.",
       },
       {
         name: "Gurugram",
