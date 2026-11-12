@@ -42,6 +42,7 @@ export async function GET() {
     ...cityPages.map((c) => `- [${c.title}](${absoluteUrl(`/${c.slug}`)}): ${metaDescription(c.metaDescription, 200)}`),
     `- [${leadFounder.name}, ${leadFounder.role}](${absoluteUrl(authorHref(leadFounder.slug))})`,
     `- [Commission Reduction Program: typically brings the real Swiggy & Zomato take-rate under 25%](${absoluteUrl("/commission-reduction")})`,
+    `- [Swiggy & Zomato commission calculator](${absoluteUrl("/tools/commission-calculator")}): payout per order after commission, payment fee and 18% GST, side by side for both apps.`,
     `- [Swiggy & Zomato discount calculator](${absoluteUrl("/tools/discount-calculator")})`,
     `- [Contact / book a growth audit](${absoluteUrl("/contact-us")})`,
     `- [RSS feed](${absoluteUrl("/feed.xml")})`,

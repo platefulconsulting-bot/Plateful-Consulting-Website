@@ -19,6 +19,14 @@ export type WhatsNewEntry = {
 
 export const whatsNew: WhatsNewEntry[] = [
   {
+    date: "2026-11-12",
+    kind: "New tool",
+    title: "Free Swiggy & Zomato commission calculator",
+    summary:
+      "Enter your order value, the discount you fund, and the commission and payment fee on each app. The calculator shows your payout per order after 18% GST, what is left after food and packaging, and what each 1% of commission costs you a month.",
+    links: [{ label: "Try the calculator", href: "/tools/commission-calculator" }],
+  },
+  {
     date: "2026-11-04",
     kind: "Industry update",
     title: "Swiggy's Toing: budget food delivery, now in 11 cities",
