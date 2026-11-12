@@ -6,6 +6,7 @@ import { ArrowRight, Loader2, AlertCircle } from "lucide-react";
 import { services, cities } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { track, adsConversion, toE164 } from "@/lib/analytics";
+import { AUDIT_OUTLET_BANDS, AUDIT_PLATFORMS, AUDIT_SOURCE } from "@/lib/growth-audit";
 
 /**
  * Enquiry form.
@@ -15,13 +16,18 @@ import { track, adsConversion, toE164 } from "@/lib/analytics";
  * a single cloud kitchen in Pune or a twelve-outlet chain. Name, mobile, email
  * and message are required: the team follows up by call and WhatsApp, so an
  * enquiry without a number usually goes cold.
+ *
+ * The "audit" variant powers /free-growth-audit: it swaps the service picker
+ * for outlet-count and platform questions, makes the message optional and
+ * tags the lead with source "free-growth-audit". Same API, same events.
  */
 
 const FIELD =
   "w-full rounded-xl border border-cream-100/12 bg-ink-800/70 px-4 py-3 text-sm text-cream-100 placeholder:text-cream-500 transition-colors focus:border-gold-400/60 focus:outline-none focus:ring-2 focus:ring-gold-400/20";
 const LABEL = "block text-xs font-semibold uppercase tracking-[0.14em] text-cream-400";
 
-export function ContactForm() {
+export function ContactForm({ variant = "contact" }: { variant?: "contact" | "audit" }) {
+  const isAudit = variant === "audit";
   const router = useRouter();
   const params = useSearchParams();
 
@@ -36,7 +42,8 @@ export function ContactForm() {
     setError("");
 
     const form = new FormData(e.currentTarget);
-    const payload = Object.fromEntries(form.entries());
+    const payload: Record<string, FormDataEntryValue> = Object.fromEntries(form.entries());
+    if (isAudit) payload.source = AUDIT_SOURCE;
 
     const phone = toE164(String(payload.phone ?? ""));
     if (!phone) {
@@ -59,7 +66,7 @@ export function ContactForm() {
         return;
       }
 
-      track("Lead", { content_name: "contact_form" });
+      track("Lead", { content_name: isAudit ? "free_growth_audit" : "contact_form" });
       adsConversion("lead", { email: String(payload.email ?? "").trim().toLowerCase(), phone_number: phone });
       router.push("/thank-you");
     } catch {
@@ -143,36 +150,81 @@ export function ContactForm() {
         </div>
       </div>
 
-      <div>
-        <label htmlFor="service" className={LABEL}>
-          What do you need help with?
-        </label>
-        <select
-          id="service"
-          name="service"
-          defaultValue={params.get("service") ?? ""}
-          className={cn(FIELD, "mt-2 appearance-none bg-[length:0]")}
-        >
-          <option value="">Not sure yet — start with the audit</option>
-          {services.map((s) => (
-            <option key={s.slug} value={s.slug}>
-              {s.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      {isAudit ? (
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="outlets" className={LABEL}>
+              Outlets <span className="text-ember-400">*</span>
+            </label>
+            <select id="outlets" name="outlets" required defaultValue="" className={cn(FIELD, "mt-2")}>
+              <option value="" disabled>
+                Select
+              </option>
+              {AUDIT_OUTLET_BANDS.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="platforms" className={LABEL}>
+              Platforms <span className="text-ember-400">*</span>
+            </label>
+            <select id="platforms" name="platforms" required defaultValue="" className={cn(FIELD, "mt-2")}>
+              <option value="" disabled>
+                Select
+              </option>
+              {AUDIT_PLATFORMS.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      ) : (
+        <div>
+          <label htmlFor="service" className={LABEL}>
+            What do you need help with?
+          </label>
+          <select
+            id="service"
+            name="service"
+            defaultValue={params.get("service") ?? ""}
+            className={cn(FIELD, "mt-2 appearance-none bg-[length:0]")}
+          >
+            <option value="">Not sure yet — start with the audit</option>
+            {services.map((s) => (
+              <option key={s.slug} value={s.slug}>
+                {s.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <div>
         <label htmlFor="message" className={LABEL}>
-          Where are you stuck? <span className="text-ember-400">*</span>
+          {isAudit ? (
+            "Anything we should look at first?"
+          ) : (
+            <>
+              Where are you stuck? <span className="text-ember-400">*</span>
+            </>
+          )}
         </label>
         <textarea
           id="message"
           name="message"
-          required
-          rows={5}
+          required={!isAudit}
+          rows={isAudit ? 3 : 5}
           className={cn(FIELD, "mt-2 resize-y")}
-          placeholder="Roughly how many orders a month, what you have already tried, and what is not moving."
+          placeholder={
+            isAudit
+              ? "Optional. Your Swiggy or Zomato listing link, or what is not moving."
+              : "Roughly how many orders a month, what you have already tried, and what is not moving."
+          }
         />
       </div>
 
@@ -191,15 +243,16 @@ export function ContactForm() {
           </>
         ) : (
           <>
-            Request my growth audit
+            {isAudit ? "Get my free audit" : "Request my growth audit"}
             <ArrowRight className="h-4 w-4" aria-hidden />
           </>
         )}
       </button>
 
       <p className="text-xs leading-relaxed text-cream-500">
-        We reply within one business day. Your details are used only to respond to this
-        enquiry — never sold or shared.
+        {isAudit
+          ? "We call within 24 hours on working days. Your details are used only for this audit, never sold or shared."
+          : "We reply within one business day. Your details are used only to respond to this enquiry — never sold or shared."}
       </p>
     </form>
   );

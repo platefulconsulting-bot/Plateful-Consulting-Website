@@ -276,3 +276,27 @@ export function cityServiceSchema(page: { path: string; name: string; descriptio
     url: absoluteUrl(page.path),
   };
 }
+
+/** A service landing page (e.g. account management, the free audit), offered across India. */
+export function landingServiceSchema(page: {
+  path: string;
+  name: string;
+  description: string;
+  serviceType: string;
+  /** Set for a free offer, such as the growth audit. */
+  free?: boolean;
+}) {
+  return {
+    "@type": "Service",
+    "@id": absoluteUrl(`${page.path}#service`),
+    name: page.name,
+    description: page.description,
+    serviceType: page.serviceType,
+    provider: { "@id": ORG_ID },
+    areaServed: { "@type": "Country", name: "India" },
+    url: absoluteUrl(page.path),
+    ...(page.free
+      ? { offers: { "@type": "Offer", price: "0", priceCurrency: "INR" } }
+      : {}),
+  };
+}

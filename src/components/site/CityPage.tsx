@@ -273,7 +273,8 @@ export function CityLandingPage({ page }: { page: CityPage }) {
   );
 }
 
-function LocalCaseCard({ study: c }: { study: CaseStudy }) {
+/** Case study summary card: headline chip, first three rows, links to the full numbers. Reused on service landing pages. */
+export function LocalCaseCard({ study: c }: { study: CaseStudy }) {
   return (
     <article className="card card-sheen flex h-full flex-col p-7 md:p-8" aria-labelledby={`${c.slug}-title`}>
       <span className="chip self-start">{c.highlight}</span>

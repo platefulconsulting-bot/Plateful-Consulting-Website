@@ -16,6 +16,7 @@ export function CTABand({
   title = "Find out what your listing is actually costing you.",
   body = "A growth audit reads your live Swiggy and Zomato dashboards and tells you where the orders are leaking — ranking signals, menu conversion, ad waste and net realisation. The findings are yours to keep either way.",
   primaryLabel = "Book a growth audit",
+  primaryHref = "/contact-us",
   headingAs = "h2",
   className,
 }: {
@@ -23,6 +24,8 @@ export function CTABand({
   title?: string;
   body?: string;
   primaryLabel?: string;
+  /** Where the primary button goes. Defaults to the contact page. */
+  primaryHref?: string;
   /** "p" inside articles, so the band stays out of the article's heading outline. */
   headingAs?: "h2" | "p";
   className?: string;
@@ -51,7 +54,7 @@ export function CTABand({
           <p className="mt-6 text-lg leading-relaxed text-cream-300">{body}</p>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">
-            <Link href="/contact-us" className="btn btn-primary btn-lg">
+            <Link href={primaryHref} className="btn btn-primary btn-lg">
               {primaryLabel}
               <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
