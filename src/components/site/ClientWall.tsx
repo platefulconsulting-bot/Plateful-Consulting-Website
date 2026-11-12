@@ -64,26 +64,46 @@ export function ClientMarquee({ className }: { className?: string }) {
   );
 }
 
-/** Full grid with names — the emphasised "brands we've scaled" block. */
+/**
+ * The emphasised "brands we've scaled" block: two rows of named logos that
+ * drift in opposite directions. Hovering a row pauses it so a name can be read;
+ * reduced-motion users get the rows still (globals.css stops animations).
+ */
 export function ClientGrid({ className }: { className?: string }) {
+  const half = Math.ceil(clients.length / 2);
+  const rows = [clients.slice(0, half), clients.slice(half)];
+
   return (
-    <ul
-      className={cn(
-        "grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-5",
-        className,
-      )}
-    >
-      {clients.map((client) => (
-        <li key={client.name} className="group flex flex-col items-center text-center">
-          <span className="transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-1.5">
-            <ClientLogo client={client} size="lg" />
-          </span>
-          <span className="mt-4 font-display text-sm font-semibold leading-snug text-cream-100">
-            {client.name}
-          </span>
-          <span className="mt-1 text-xs leading-snug text-cream-500">{client.type}</span>
-        </li>
+    <div className={cn("relative flex flex-col gap-10", className)}>
+      {rows.map((row, r) => (
+        <div key={r} className="mask-fade-x flex overflow-hidden">
+          {/* Duplicated once so the -50% translate loops seamlessly. */}
+          <ul
+            className={cn(
+              "flex shrink-0 items-start gap-6 pr-6 hover:[animation-play-state:paused] sm:gap-10 sm:pr-10",
+              r === 0
+                ? "animate-[marquee_60s_linear_infinite]"
+                : "animate-[marquee_60s_linear_infinite_reverse]",
+            )}
+          >
+            {[...row, ...row].map((client, i) => (
+              <li
+                key={`${client.name}-${i}`}
+                aria-hidden={i >= row.length ? true : undefined}
+                className="group flex w-36 shrink-0 flex-col items-center text-center sm:w-44"
+              >
+                <span className="transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-1.5">
+                  <ClientLogo client={client} size="lg" />
+                </span>
+                <span className="mt-4 font-display text-sm font-semibold leading-snug text-cream-100">
+                  {client.name}
+                </span>
+                <span className="mt-1 text-xs leading-snug text-cream-500">{client.type}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 }
