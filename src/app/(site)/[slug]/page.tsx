@@ -6,6 +6,7 @@ import { ArrowRight, ArrowUpRight, Calendar, ChevronRight, Clock, RefreshCw } fr
 import { Reveal } from "@/components/ui/Reveal";
 import { PostCard } from "@/components/site/PostCard";
 import { CTABand } from "@/components/site/CTABand";
+import { RelatedResources } from "@/components/site/RelatedResources";
 import { ReadingProgress } from "@/components/blog/ReadingProgress";
 import { ArticleToc } from "@/components/blog/ArticleToc";
 import { ShareRow } from "@/components/blog/ShareRow";
@@ -344,6 +345,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           </aside>
         </div>
       </div>
+
+      {/* ================= KEEP GOING: service, tool, result ================= */}
+      <RelatedResources
+        post={{ slug: post.slug, title: post.title, category: post.category, tags: post.tags }}
+      />
 
       {/* ================= RELATED ================= */}
       {related.length > 0 && (
