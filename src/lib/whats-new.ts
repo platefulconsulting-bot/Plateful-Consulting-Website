@@ -23,7 +23,7 @@ export const whatsNew: WhatsNewEntry[] = [
     kind: "New tool",
     title: "Free Swiggy & Zomato commission calculator",
     summary:
-      "Enter your order value, the discount you fund, and the commission and payment fee on each app. The calculator shows your payout per order after 18% GST, what is left after food and packaging, and what each 1% of commission costs you a month.",
+      "Type your monthly Swiggy and Zomato sales and your commission and payment gateway rates. The calculator shows your total commission with 18% GST, and how much a lower negotiated rate would save you each month and year.",
     links: [{ label: "Try the calculator", href: "/tools/commission-calculator" }],
   },
   {

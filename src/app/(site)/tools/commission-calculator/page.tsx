@@ -9,7 +9,7 @@ import { ogImageUrl } from "@/lib/utils";
 
 const PATH = "/tools/commission-calculator";
 const DESCRIPTION =
-  "Free Swiggy and Zomato commission calculator: see your payout per order after commission, fees and GST, and what each 1% of commission costs you a month.";
+  "Free Swiggy and Zomato commission calculator: enter your monthly sales and rates to see total commission with GST, and how much a lower rate would save you.";
 
 export const metadata: Metadata = {
   title: { absolute: "Swiggy & Zomato Commission Calculator | PFC" },
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   alternates: { canonical: PATH },
   openGraph: {
     title: "Swiggy & Zomato Commission Calculator",
-    description: "What does each order really pay you after commission, fees and GST? Find out in 30 seconds.",
+    description: "How much commission do you pay a month, and what would a lower rate save? Find out in 30 seconds.",
     url: PATH,
     images: [{ url: ogImageUrl("Swiggy & Zomato Commission Calculator", "Free tool"), width: 1200, height: 630 }],
   },
@@ -97,9 +97,8 @@ export default function CommissionCalculatorPage() {
             Swiggy &amp; Zomato commission calculator
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-cream-300">
-            Enter your order value, commission and fees for each app. See what every order actually pays you after
-            commission, fees and GST, what is left after food and packaging, and what each 1% of commission costs
-            you a month.
+            Type your monthly sales on each app. See the total commission you pay with payment gateway charges and
+            GST, and how much you would save a month at a lower, negotiated rate.
           </p>
         </div>
       </header>
@@ -116,16 +115,16 @@ export default function CommissionCalculatorPage() {
             </h2>
             <div className="mt-6 space-y-4 leading-relaxed text-cream-300">
               <p>
-                Any discount you fund comes off the order value first. Commission and the payment or collection fee
-                are charged on what remains, and 18% GST is added to both. The rest is your payout.
+                For each app: total commission = monthly sales × (commission % + payment gateway %), plus 18% GST
+                on both. The Current column is what you pay today; the Target column is the rate you are aiming for.
               </p>
               <p>
-                Food and packaging costs are then taken from the payout to show what each order really leaves you.
-                The take-rate shows how much of the menu value is gone before money reaches your account.
+                The difference between the two is what you save each month. The best moment to lower your rate is
+                at onboarding or at a contract review, through the platform&apos;s official partner team.
               </p>
               <p>
-                Rates differ by contract, so the calculator keeps Swiggy and Zomato separate. Take your numbers from
-                the latest weekly payout statement, not from memory.
+                Take your current rates from your agreement or your latest weekly payout statement, not from memory.
+                Discounts and ads also cut into what you keep; see the related guides below.
               </p>
             </div>
             <h3 className="mt-10 font-display text-base font-semibold text-cream-50">Related guides and tools</h3>

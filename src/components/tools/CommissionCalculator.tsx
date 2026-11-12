@@ -5,123 +5,173 @@ import { cn } from "@/lib/utils";
 import { track } from "@/lib/analytics";
 
 /**
- * Swiggy & Zomato commission calculator.
+ * Swiggy & Zomato commission calculator (simple monthly version).
  *
- * Per order: commission and the payment / collection fee are charged on the
- * order value after any restaurant-funded discount, with 18% GST on both.
- * What is left is the payout; food and packaging then come out of that.
- * Swiggy and Zomato sit side by side because most outlets have different
- * terms on each. Defaults are example values, not either platform's rates.
+ * Same layout as PFC's sales calculator: per platform, monthly sales, then
+ * the current rate vs a target rate after negotiation.
+ * Total commission = sales × (commission % + payment gateway %) × (1 + 18% GST).
+ * Defaults are examples only; the target column is not a promised rate.
  */
 
-const FIELD =
-  "w-full rounded-xl border border-cream-100/12 bg-ink-800/70 px-4 py-3 text-sm text-cream-100 placeholder:text-cream-500 transition-colors focus:border-gold-400/60 focus:outline-none focus:ring-2 focus:ring-gold-400/20";
-const LABEL = "block text-xs font-semibold uppercase tracking-[0.14em] text-cream-400";
-
 const GST = 0.18;
-
-const inr = (n: number) =>
-  `${n < 0 ? "−" : ""}₹${Math.abs(n).toLocaleString("en-IN", { maximumFractionDigits: Math.abs(n) >= 100 ? 0 : 1 })}`;
-
-/** ₹ in Indian units for monthly totals: ₹4.2 L, ₹85,000. */
-function inrShort(n: number) {
-  const v = Math.abs(n);
-  const sign = n < 0 ? "−" : "";
-  if (v >= 1e7) return `${sign}₹${(v / 1e7).toFixed(2)} Cr`;
-  if (v >= 1e5) return `${sign}₹${(v / 1e5).toFixed(2)} L`;
-  return `${sign}₹${Math.round(v).toLocaleString("en-IN")}`;
-}
+const FIELD =
+  "w-full rounded-xl border border-cream-100/12 bg-ink-800/70 px-3 py-2.5 text-sm text-cream-100 transition-colors focus:border-gold-400/60 focus:outline-none focus:ring-2 focus:ring-gold-400/20";
+const LABEL = "block text-xs font-semibold uppercase tracking-[0.14em] text-cream-400";
 
 function num(value: string) {
   const n = Number.parseFloat(value);
   return Number.isFinite(n) && n >= 0 ? n : 0;
 }
 
-function Field({
-  id,
-  label,
-  hint,
-  value,
-  onChange,
-  prefix,
-  suffix,
-}: {
-  id: string;
-  label: string;
-  hint?: string;
-  value: string;
-  onChange: (v: string) => void;
-  prefix?: string;
-  suffix?: string;
-}) {
+/** ₹ in Indian units: ₹3.07 L, ₹85,000, ₹1.2 Cr. */
+function inr(n: number) {
+  const v = Math.abs(n);
+  const s = n < 0 ? "−" : "";
+  if (v >= 1e7) return `${s}₹${(v / 1e7).toFixed(2)} Cr`;
+  if (v >= 1e5) return `${s}₹${(v / 1e5).toFixed(2)} L`;
+  return `${s}₹${Math.round(v).toLocaleString("en-IN")}`;
+}
+
+type Rates = { commission: string; gateway: string };
+type Platform = { sales: string; current: Rates; target: Rates };
+
+function cost(sales: number, r: Rates) {
+  const total = sales * ((num(r.commission) + num(r.gateway)) / 100) * (1 + GST);
+  return { total, pct: sales > 0 ? (total / sales) * 100 : 0 };
+}
+
+function PctInput({ id, value, onChange, label }: { id: string; value: string; onChange: (v: string) => void; label: string }) {
   return (
-    <div>
-      <label htmlFor={id} className={LABEL}>
+    <div className="relative">
+      <label htmlFor={id} className="sr-only">
         {label}
       </label>
-      <div className="relative mt-2">
-        {prefix && (
-          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-cream-500">
-            {prefix}
-          </span>
-        )}
-        <input
-          id={id}
-          type="number"
-          inputMode="decimal"
-          min={0}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className={cn(FIELD, prefix && "pl-8", suffix && "pr-9")}
-        />
-        {suffix && (
-          <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-cream-500">
-            {suffix}
-          </span>
-        )}
-      </div>
-      {hint && <p className="mt-1.5 text-xs text-cream-500">{hint}</p>}
+      <input
+        id={id}
+        type="number"
+        inputMode="decimal"
+        min={0}
+        max={100}
+        step="0.5"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={cn(FIELD, "pr-8 text-right tabular-nums")}
+      />
+      <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-cream-500">%</span>
     </div>
   );
 }
 
-type PlatformInput = { commission: string; fee: string; orders: string };
+function PlatformCard({ id, name, p, set }: { id: string; name: string; p: Platform; set: (p: Platform) => void }) {
+  const sales = num(p.sales);
+  const cur = cost(sales, p.current);
+  const tgt = cost(sales, p.target);
+  const saved = cur.total - tgt.total;
 
-function compute(
-  p: PlatformInput,
-  shared: { aov: number; discount: number; foodPct: number; packaging: number },
-) {
-  const net = Math.max(0, shared.aov - shared.discount);
-  const commission = net * (num(p.commission) / 100);
-  const fee = net * (num(p.fee) / 100);
-  const gst = (commission + fee) * GST;
-  const payout = net - commission - fee - gst;
-  const food = shared.aov * (shared.foodPct / 100);
-  const profit = payout - food - shared.packaging;
-  const orders = num(p.orders);
-  const platformCut = commission + fee + gst;
-  // Take-rate: everything the order loses before it reaches you, as a share of menu value.
-  const takeRate = shared.aov > 0 ? ((platformCut + shared.discount) / shared.aov) * 100 : 0;
-  const perPoint = net * 0.01 * (1 + GST) * orders;
-  return { net, commission, fee, gst, payout, food, profit, orders, platformCut, takeRate, perPoint };
+  const row = (label: string, key: keyof Rates) => (
+    <tr className="border-b border-cream-100/6">
+      <td className="py-2.5 pr-3 text-cream-300">{label}</td>
+      <td className="py-2 pr-2">
+        <PctInput
+          id={`${id}-cur-${key}`}
+          label={`${name} current ${label}`}
+          value={p.current[key]}
+          onChange={(v) => set({ ...p, current: { ...p.current, [key]: v } })}
+        />
+      </td>
+      <td className="py-2">
+        <PctInput
+          id={`${id}-tgt-${key}`}
+          label={`${name} target ${label}`}
+          value={p.target[key]}
+          onChange={(v) => set({ ...p, target: { ...p.target, [key]: v } })}
+        />
+      </td>
+    </tr>
+  );
+
+  return (
+    <div className="card card-sheen p-6 md:p-7">
+      <p className="font-display text-xl font-bold text-cream-50">{name}</p>
+
+      <label htmlFor={`${id}-sales`} className={cn(LABEL, "mt-5")}>
+        Monthly sales on {name}
+      </label>
+      <div className="relative mt-2">
+        <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-base font-semibold text-gold-300">₹</span>
+        <input
+          id={`${id}-sales`}
+          type="number"
+          inputMode="decimal"
+          min={0}
+          value={p.sales}
+          onChange={(e) => set({ ...p, sales: e.target.value })}
+          className="w-full rounded-xl border-2 border-gold-400/60 bg-gold-500/10 py-3 pl-9 pr-4 text-lg font-semibold tabular-nums text-cream-50 focus:outline-none focus:ring-2 focus:ring-gold-400/30"
+        />
+      </div>
+
+      <div className="mt-6 overflow-x-auto">
+        <table className="w-full min-w-[19rem] text-sm">
+          <thead>
+            <tr className="border-b border-cream-100/10 text-left text-xs uppercase tracking-[0.12em] text-cream-500">
+              <th className="py-2 pr-3 font-semibold"> </th>
+              <th className="py-2 pr-2 text-right font-semibold">Current</th>
+              <th className="py-2 text-right font-semibold text-gold-300">Target</th>
+            </tr>
+          </thead>
+          <tbody>
+            {row("Commission", "commission")}
+            {row("Payment gateway", "gateway")}
+            <tr className="border-b border-cream-100/6">
+              <td className="py-2.5 pr-3 text-cream-300">GST on both</td>
+              <td className="py-2.5 pr-2 text-right tabular-nums text-cream-400">18%</td>
+              <td className="py-2.5 text-right tabular-nums text-cream-400">18%</td>
+            </tr>
+            <tr className="border-b border-cream-100/6 font-semibold text-cream-50">
+              <td className="py-3 pr-3">Total commission / month</td>
+              <td className="py-3 pr-2 text-right tabular-nums">{inr(cur.total)}</td>
+              <td className="py-3 text-right tabular-nums text-gold-300">{inr(tgt.total)}</td>
+            </tr>
+            <tr className="text-cream-300">
+              <td className="py-2.5 pr-3">Total % of sales</td>
+              <td className="py-2.5 pr-2 text-right tabular-nums">{sales > 0 ? `${cur.pct.toFixed(1)}%` : "—"}</td>
+              <td className="py-2.5 text-right tabular-nums text-gold-300">{sales > 0 ? `${tgt.pct.toFixed(1)}%` : "—"}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="mt-5 rounded-2xl border border-emerald-400/25 bg-emerald-500/8 px-5 py-4">
+        <p className={LABEL}>₹ saved on {name}</p>
+        <p className={cn("mt-1.5 font-display text-2xl font-bold tabular-nums", saved >= 0 ? "text-emerald-400" : "text-red-400")}>
+          {inr(saved)}
+          <span className="ml-1.5 text-sm font-semibold text-cream-400">/ month</span>
+        </p>
+        <p className="mt-0.5 text-xs text-cream-400">{inr(saved * 12)} a year</p>
+      </div>
+    </div>
+  );
 }
 
 export function CommissionCalculator() {
-  const [aov, setAov] = useState("400");
-  const [discount, setDiscount] = useState("30");
-  const [foodPct, setFoodPct] = useState("32");
-  const [packaging, setPackaging] = useState("20");
-  const [swiggy, setSwiggy] = useState<PlatformInput>({ commission: "22", fee: "2", orders: "600" });
-  const [zomato, setZomato] = useState<PlatformInput>({ commission: "22", fee: "2", orders: "600" });
+  const [swiggy, setSwiggy] = useState<Platform>({
+    sales: "1000000",
+    current: { commission: "24", gateway: "2" },
+    target: { commission: "15", gateway: "2" },
+  });
+  const [zomato, setZomato] = useState<Platform>({
+    sales: "1000000",
+    current: { commission: "27", gateway: "2" },
+    target: { commission: "18", gateway: "2" },
+  });
 
-  const r = useMemo(() => {
-    const shared = { aov: num(aov), discount: num(discount), foodPct: num(foodPct), packaging: num(packaging) };
-    const s = compute(swiggy, shared);
-    const z = compute(zomato, shared);
-    return { s, z, shared };
-  }, [aov, discount, foodPct, packaging, swiggy, zomato]);
+  const totalSaved = useMemo(() => {
+    const s = cost(num(swiggy.sales), swiggy.current).total - cost(num(swiggy.sales), swiggy.target).total;
+    const z = cost(num(zomato.sales), zomato.current).total - cost(num(zomato.sales), zomato.target).total;
+    return s + z;
+  }, [swiggy, zomato]);
 
-  const inputs = [aov, discount, foodPct, packaging, JSON.stringify(swiggy), JSON.stringify(zomato)].join("|");
+  const inputs = JSON.stringify([swiggy, zomato]);
   const initial = useRef(inputs);
   const tracked = useRef(false);
   useEffect(() => {
@@ -130,168 +180,30 @@ export function CommissionCalculator() {
     track("calculator_use", { tool: "commission_calculator" });
   }, [inputs]);
 
-  const rows: [string, number, number][] = [
-    ["Order value (menu prices)", r.shared.aov, r.shared.aov],
-    ["Discount you fund", -r.shared.discount, -r.shared.discount],
-    ["Commission", -r.s.commission, -r.z.commission],
-    ["Payment / collection fee", -r.s.fee, -r.z.fee],
-    ["18% GST on commission and fee", -r.s.gst, -r.z.gst],
-  ];
-
-  const monthlyCut = r.s.platformCut * r.s.orders + r.z.platformCut * r.z.orders;
-  const monthlyProfit = r.s.profit * r.s.orders + r.z.profit * r.z.orders;
-
-  const platformFields = (
-    key: "s" | "z",
-    name: string,
-    value: PlatformInput,
-    set: (v: PlatformInput) => void,
-  ) => (
-    <div className="rounded-2xl border border-cream-100/10 p-5">
-      <p className="font-display text-base font-semibold text-cream-50">{name}</p>
-      <div className="mt-4 grid gap-4">
-        <Field
-          id={`${key}-comm`}
-          label="Commission"
-          suffix="%"
-          value={value.commission}
-          onChange={(v) => set({ ...value, commission: v })}
-        />
-        <Field
-          id={`${key}-fee`}
-          label="Payment / collection fee"
-          suffix="%"
-          value={value.fee}
-          onChange={(v) => set({ ...value, fee: v })}
-        />
-        <Field
-          id={`${key}-orders`}
-          label="Orders per month"
-          value={value.orders}
-          onChange={(v) => set({ ...value, orders: v })}
-        />
-      </div>
-    </div>
-  );
-
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:gap-10">
-      {/* ---------------- Inputs ---------------- */}
-      <div className="card card-sheen p-6 md:p-8">
-        <h2 className="font-display text-lg font-semibold text-cream-50">Your numbers</h2>
-        <p className="mt-1.5 text-sm text-cream-400">
-          The figures below are examples. Replace them with the rates in your own agreement and payout statement.
-        </p>
-        <div className="mt-6 grid gap-5 sm:grid-cols-2">
-          <Field id="cc-aov" label="Average order value" prefix="₹" value={aov} onChange={setAov} />
-          <Field
-            id="cc-disc"
-            label="Discount you fund per order"
-            prefix="₹"
-            hint="Average across all orders"
-            value={discount}
-            onChange={setDiscount}
-          />
-          <Field id="cc-food" label="Food cost" suffix="%" value={foodPct} onChange={setFoodPct} />
-          <Field id="cc-pack" label="Packaging per order" prefix="₹" value={packaging} onChange={setPackaging} />
-        </div>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          {platformFields("s", "Swiggy", swiggy, setSwiggy)}
-          {platformFields("z", "Zomato", zomato, setZomato)}
-        </div>
+    <div>
+      <div className="grid gap-6 lg:grid-cols-2">
+        <PlatformCard id="sw" name="Swiggy" p={swiggy} set={setSwiggy} />
+        <PlatformCard id="zo" name="Zomato" p={zomato} set={setZomato} />
       </div>
 
-      {/* ---------------- Results ---------------- */}
-      <div className="card p-6 md:p-8" aria-live="polite">
-        <div className="grid gap-6 sm:grid-cols-2">
-          {(
-            [
-              ["Swiggy", r.s],
-              ["Zomato", r.z],
-            ] as const
-          ).map(([name, x]) => (
-            <div key={name}>
-              <p className={LABEL}>{name} payout per order</p>
-              <p className="mt-3 font-display text-[length:var(--text-display-md)] font-bold leading-none tabular-nums text-cream-50">
-                {inr(x.payout)}
-              </p>
-              <p
-                className={cn(
-                  "mt-2 text-sm font-semibold tabular-nums",
-                  x.takeRate > 35 ? "text-red-400" : x.takeRate > 28 ? "text-gold-300" : "text-emerald-400",
-                )}
-              >
-                {x.takeRate.toFixed(1)}% of the order goes before it reaches you
-              </p>
-            </div>
-          ))}
+      <div className="mt-6 flex flex-col items-start justify-between gap-3 rounded-2xl border border-gold-400/30 bg-gold-500/10 p-6 sm:flex-row sm:items-center" aria-live="polite">
+        <div>
+          <p className={LABEL}>Total saved on both apps</p>
+          <p className="mt-1.5 font-display text-[length:var(--text-display-md)] font-bold leading-none tabular-nums text-gold-300">
+            {inr(totalSaved)}
+            <span className="ml-2 text-base font-semibold text-cream-400">/ month</span>
+          </p>
         </div>
-
-        <div className="mt-7 overflow-x-auto">
-          <table className="w-full min-w-[22rem] text-sm">
-            <thead>
-              <tr className="border-b border-cream-100/10 text-left text-xs uppercase tracking-[0.12em] text-cream-500">
-                <th className="py-2.5 pr-3 font-semibold">Per order</th>
-                <th className="py-2.5 pr-3 text-right font-semibold">Swiggy</th>
-                <th className="py-2.5 text-right font-semibold">Zomato</th>
-              </tr>
-            </thead>
-            <tbody className="text-cream-300">
-              {rows.map(([label, a, b]) => (
-                <tr key={label} className="border-b border-cream-100/6">
-                  <td className="py-2.5 pr-3">{label}</td>
-                  <td className="py-2.5 pr-3 text-right tabular-nums">{inr(a)}</td>
-                  <td className="py-2.5 text-right tabular-nums">{inr(b)}</td>
-                </tr>
-              ))}
-              <tr className="border-b border-cream-100/10 font-semibold text-cream-50">
-                <td className="py-3 pr-3">Payout to you</td>
-                <td className="py-3 pr-3 text-right tabular-nums">{inr(r.s.payout)}</td>
-                <td className="py-3 text-right tabular-nums">{inr(r.z.payout)}</td>
-              </tr>
-              <tr className="border-b border-cream-100/6">
-                <td className="py-2.5 pr-3">Food and packaging</td>
-                <td className="py-2.5 pr-3 text-right tabular-nums">{inr(-(r.s.food + r.shared.packaging))}</td>
-                <td className="py-2.5 text-right tabular-nums">{inr(-(r.z.food + r.shared.packaging))}</td>
-              </tr>
-              <tr className="font-semibold text-cream-50">
-                <td className="py-3 pr-3">Left per order</td>
-                <td className={cn("py-3 pr-3 text-right tabular-nums", r.s.profit < 0 && "text-red-400")}>
-                  {inr(r.s.profit)}
-                </td>
-                <td className={cn("py-3 text-right tabular-nums", r.z.profit < 0 && "text-red-400")}>
-                  {inr(r.z.profit)}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div className="mt-7 grid gap-4 rounded-2xl border border-gold-400/25 bg-gold-500/8 p-5 sm:grid-cols-2">
-          <div>
-            <p className={LABEL}>Commission, fees and GST a month</p>
-            <p className="mt-2 font-display text-2xl font-bold tabular-nums text-gold-300">{inrShort(monthlyCut)}</p>
-            <p className="mt-1 text-xs text-cream-400">Both apps, at your monthly orders</p>
-          </div>
-          <div>
-            <p className={LABEL}>Each 1% of commission costs</p>
-            <p className="mt-2 font-display text-2xl font-bold tabular-nums text-gold-300">
-              {inrShort(r.s.perPoint + r.z.perPoint)}
-              <span className="ml-1 text-sm font-semibold text-cream-400">/month</span>
-            </p>
-            <p className="mt-1 text-xs text-cream-400">
-              Left after food and packaging: {inrShort(monthlyProfit)} a month
-            </p>
-          </div>
-        </div>
-
-        <p className="mt-4 text-xs leading-relaxed text-cream-500">
-          Assumes commission and the payment fee are charged on the order value after a discount you fund, with 18%
-          GST on both. Excludes the 5% GST on food (collected by the platform), ads, long-distance or other per-order
-          fees, and TDS (which you can claim back). Your actual rates and their base are set in your agreement, so
-          check them against a real payout statement.
-        </p>
+        <p className="font-display text-xl font-semibold tabular-nums text-cream-100">{inr(totalSaved * 12)} a year</p>
       </div>
+
+      <p className="mt-4 text-xs leading-relaxed text-cream-500">
+        Total commission = monthly sales × (commission % + payment gateway %) + 18% GST. Type your own numbers in any
+        box. The current and target figures shown are examples, not Swiggy&apos;s or Zomato&apos;s published rates and
+        not a promised rate: your commission is set in your agreement with each platform. Discounts and ads are not
+        included.
+      </p>
     </div>
   );
 }
