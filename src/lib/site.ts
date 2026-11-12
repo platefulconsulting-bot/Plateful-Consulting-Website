@@ -1255,7 +1255,18 @@ export const caseStudies: CaseStudy[] = [
 
 export type CityPage = {
   slug: string;
+  /**
+   * Case-study city this page draws on. Area pages inside a metro (Noida,
+   * Gurugram) keep the metro's value, because their cases are recorded under
+   * it, and set `parent` instead.
+   */
   city: CaseCity;
+  /**
+   * Slug of the metro page an area page sits under (e.g. Noida under Delhi
+   * NCR). Area pages are left out of the /results city filter, which filters
+   * by `city`, and are linked from the parent's `areas` section.
+   */
+  parent?: string;
   /** Name used for schema.org areaServed (City). */
   areaServed: string;
   title: string;
@@ -1268,6 +1279,11 @@ export type CityPage = {
   /** Case-study slugs, in display order. */
   cases: string[];
   differences: { title: string; body: string }[];
+  /**
+   * Optional "where we work" cards, for a metro page that covers several
+   * areas. `href` links an area to its own page.
+   */
+  areas?: { name: string; body: string; href?: string }[];
   faqs: { q: string; a: string }[];
   guides: { label: string; href: string }[];
 };
@@ -1288,7 +1304,7 @@ export const cityPages: CityPage[] = [
     metaDescription:
       "Swiggy and Zomato consultant for Delhi NCR restaurants, based in Noida, with named results from Connaught Place, Rohini, Dwarka, Noida and Gurugram.",
     intro:
-      "Plateful Consulting is a Swiggy and Zomato consultant for Delhi NCR restaurants, based in Noida. We work inside your partner dashboards on listing, menu, ads, discounts and kitchen operations. NCR clients include Drama in Delhi, a Connaught Place fusion bar, a two-outlet North Indian kitchen in Rohini and Noida, a Dwarka sweet shop, and delivery brands in Noida and Gurugram.",
+      "Plateful Consulting is a Swiggy and Zomato consultant for restaurants across Delhi, Noida and Gurugram, based in Noida. We work inside your partner dashboards on listing, menu, ads, discounts and operations. NCR clients include Drama in Delhi, a Connaught Place fusion bar, a two-outlet kitchen in Rohini and Noida, a Dwarka sweet shop, and delivery brands in Noida and Gurugram.",
     cases: ["drama", "ivoryy-fusion-bar", "punjabi-rasoi", "mohan-sweets", "olantic-8", "limitless", "pasta-express", "tsoyum", "good-gaon"],
     differences: [
       {
@@ -1304,10 +1320,38 @@ export const cityPages: CityPage[] = [
         body: "For high-volume NCR kitchens the win is profitable growth. Punjabi Rasoi's Swiggy effective discount fell from 27.3% to 13.4% while Swiggy sales grew, and Mohan Sweets moved from deep discount codes to flat, approved discounts when the owners prioritised margin.",
       },
     ],
+    areas: [
+      {
+        name: "Delhi",
+        body: "Established dine-in and delivery outlets: Drama, a Connaught Place fusion bar, Punjabi Rasoi in Rohini, Mohan Sweets in Dwarka and Pasta Express. Here the work is usually restructuring ads, menus and discounts on outlets that already sell, on both Swiggy and Zomato.",
+      },
+      {
+        name: "Noida",
+        href: "/swiggy-zomato-consultant-noida",
+        body: "Where our office is. Noida clients include Limitless, Drama's second outlet, the new delivery brand TsoYum! and Punjabi Rasoi's second outlet, so much of the work here is launches, second outlets and keeping discount spend in check.",
+      },
+      {
+        name: "Gurugram",
+        href: "/swiggy-zomato-consultant-gurugram",
+        body: "Delivery kitchens and launches. We launched Olantic 8 on both apps from a new listing, and worked on Good Gaon's Swiggy and Zomato listings, menu and ads. The focus is a delivery-first menu, fast prep and ads that pay back.",
+      },
+    ],
     faqs: [
       {
         q: "Do you work with restaurants across Delhi, Noida and Gurugram?",
         a: "Yes. Our office is in Sector 142, Noida, and our named NCR clients trade in Connaught Place, Rohini and Dwarka in Delhi, in Noida and in Gurugram. Aggregator work is largely remote, inside your Swiggy and Zomato dashboards; photography and event execution are scheduled on site.",
+      },
+      {
+        q: "Are you a Zomato consultant in Delhi, or only Swiggy?",
+        a: "Both. We work on Zomato and Swiggy together, because most Delhi outlets sell on both and one app's discounts or ads affect the other. Drama's Zomato net sale went from ₹20.19 lakh to ₹24.66 lakh a month alongside its Swiggy growth, and Pasta Express went from 149 to 746 Zomato orders a month.",
+      },
+      {
+        q: "Is the work different for Noida and Gurugram restaurants?",
+        a: "The order of work is the same: availability, menu and prep time first, then ads as they pay back. What differs is the starting point. Many of our Noida and Gurugram cases are launches or second outlets, such as TsoYum! and Olantic 8, while our Delhi cases are more often established outlets that need restructuring.",
+      },
+      {
+        q: "Are you an official Swiggy or Zomato partner?",
+        a: "No. Plateful Consulting is an independent consultancy, not part of Swiggy or Zomato. We work inside your own partner dashboards with access you give us, and we do not claim any special access to either platform's ranking or commission terms.",
       },
       {
         q: "Can you help us launch a second outlet on Swiggy and Zomato?",
@@ -1326,8 +1370,115 @@ export const cityPages: CityPage[] = [
     guides: [
       { label: "What to look for in a restaurant consultant in Delhi NCR", href: "/best-restaurant-consultant-in-delhi-ncr-what-to-look-for" },
       { label: "Is hiring a Swiggy and Zomato consultant worth it?", href: "/is-hiring-a-swiggy-and-zomato-consultant-worth-it-roi-case-study" },
+      { label: "Zomato growth guide for restaurants", href: "/zomato-growth-guide" },
       { label: "Swiggy growth guide for restaurants", href: "/swiggy-growth-guide" },
       { label: "Swiggy and Zomato commission and payouts", href: "/restaurant-commission-and-payouts" },
+    ],
+  },
+  {
+    slug: "swiggy-zomato-consultant-noida",
+    city: "Delhi NCR",
+    parent: "swiggy-zomato-consultant-delhi-ncr",
+    areaServed: "Noida",
+    title: "Swiggy & Zomato Consultant in Noida",
+    shortName: "Noida",
+    metaTitle: "Swiggy & Zomato Consultant in Noida",
+    metaDescription:
+      "Swiggy and Zomato consultant in Noida, based in Sector 142. Named results: Limitless, Swiggy net order value +243.9%; TsoYum!, 32 to 233 orders a month.",
+    intro:
+      "Plateful Consulting is a Swiggy and Zomato consultant based in Sector 142, Noida, working inside your partner dashboards on listing, menu, ads, discounts and kitchen operations. Noida clients include Limitless, whose Swiggy net order value rose from ₹5.23 lakh to ₹18.00 lakh a month, the new delivery brand TsoYum!, and Punjabi Rasoi's second outlet.",
+    cases: ["limitless", "tsoyum", "punjabi-rasoi"],
+    differences: [
+      {
+        title: "New brands and second outlets",
+        body: "Much of our Noida work is launches. TsoYum! went from 32 to 233 Swiggy orders a month within two months of launch, and Punjabi Rasoi's Noida outlet from ₹1.11 lakh in its first month live to ₹6.03 lakh in month four. Both started from a small base.",
+      },
+      {
+        title: "Discount-led growth has a cost",
+        body: "Limitless grew Swiggy net order value by 243.9% in two months, but discount spend rose from ₹2.28 lakh to ₹14.44 lakh a month. Growth bought with discounts is expensive, so the work now is holding sales while spending less on offers.",
+      },
+      {
+        title: "Office and residential demand",
+        body: "Noida has office areas such as Sector 62, busy markets such as Sector 18 and residential sectors along the Expressway, so lunch and dinner demand can look quite different by outlet. We read your own hourly orders in the partner dashboard before setting ad slots and menu order.",
+      },
+    ],
+    faqs: [
+      {
+        q: "Is your team based in Noida?",
+        a: "Yes. Our office is in Sector 142 on the Noida Expressway. Most aggregator work happens remotely inside your Swiggy and Zomato dashboards, but Noida clients can meet us in person, and photography and other on-site work are scheduled at your outlet.",
+      },
+      {
+        q: "Do you work with restaurants in Greater Noida and Noida Extension too?",
+        a: "Yes. Because the work is done inside your partner dashboards, it is not limited to a few sectors. We work with outlets across Noida, Greater Noida and the wider NCR; see our Delhi NCR page for clients in Delhi and Gurugram.",
+      },
+      {
+        q: "We are launching a new delivery brand in Noida. What comes first?",
+        a: "Listings on both apps, a delivery menu with photos and variants, and reliable prep time, before any real ad spend. Ads are then scaled as they pay back. TsoYum! followed this order and went from 32 to 233 Swiggy orders a month within two months of launch, from a small launch-month base.",
+      },
+      {
+        q: "Our Swiggy sales went up, but so did our discount spend. Is that a problem?",
+        a: "It can be. Limitless grew fast on Swiggy, but discount spend rose more than sixfold over the same two months. We look at net payout after discounts, commission and ads, not just order value, and then cut offers that do not pay for themselves while trying to hold the sales.",
+      },
+      noGuaranteeFaq,
+    ],
+    guides: [
+      { label: "Swiggy and Zomato discount calculator", href: "/tools/discount-calculator" },
+      { label: "How to start a cloud kitchen on Swiggy and Zomato", href: "/how-to-start-a-cloud-kitchen-on-swiggy-and-zomato-2026-guide" },
+      { label: "What to look for in a restaurant consultant in Delhi NCR", href: "/best-restaurant-consultant-in-delhi-ncr-what-to-look-for" },
+      { label: "Swiggy and Zomato consultant in Delhi NCR", href: "/swiggy-zomato-consultant-delhi-ncr" },
+    ],
+  },
+  {
+    slug: "swiggy-zomato-consultant-gurugram",
+    city: "Delhi NCR",
+    parent: "swiggy-zomato-consultant-delhi-ncr",
+    areaServed: "Gurugram",
+    title: "Swiggy & Zomato Consultant in Gurugram",
+    shortName: "Gurugram",
+    metaTitle: "Swiggy & Zomato Consultant in Gurugram",
+    metaDescription:
+      "Swiggy and Zomato consultant in Gurugram. Olantic 8 grew online sales 12.9x from launch; Good Gaon's Swiggy orders rose from 78 to 260 a month.",
+    intro:
+      "Plateful Consulting is a Swiggy and Zomato consultant for Gurugram restaurants and delivery kitchens, working inside your partner dashboards from our Noida office. We launched Olantic 8 on both apps, where online sales grew 12.9x from the first full month to month seven, and Good Gaon's Swiggy orders went from 78 to 260 a month.",
+    cases: ["olantic-8", "good-gaon"],
+    differences: [
+      {
+        title: "Launching from zero",
+        body: "Olantic 8 started as a new listing doing ₹28.2K in its first full month and reached ₹3.65 lakh in month seven. Ads were scaled only as they paid back: Swiggy ad spend grew from about ₹4.6K to ₹40.6K a month while platform-reported returns held.",
+      },
+      {
+        title: "Kitchen speed and order count",
+        body: "Olantic 8's Zomato kitchen prep time came down from 26 to 11 minutes. Average order value held around ₹330–355 after the first month, so the growth came from more orders, not bigger bills.",
+      },
+      {
+        title: "Each app read on its own",
+        body: "Good Gaon's Zomato sales were already rising before we started, so its bigger gap was Swiggy, where orders went from 78 to 260 a month. We judge each platform against its own trend rather than credit ourselves with growth that was already under way.",
+      },
+    ],
+    faqs: [
+      {
+        q: "Do you work with restaurants across Gurugram?",
+        a: "Yes, from office areas such as Cyber Hub and Golf Course Road to the newer residential sectors. Aggregator work happens inside your Swiggy and Zomato dashboards, so most of it is remote from our Noida office; photography and other on-site work are scheduled at your outlet.",
+      },
+      {
+        q: "We are opening a delivery kitchen in Gurugram. How would you launch it?",
+        a: "On both apps at once, with a delivery-first menu, then ads scaled only as they pay back and monthly reviews of prep time, availability and complaints. For Olantic 8 that also meant a shared discount with Swiggy on a 70:30 split. Results vary by location, cuisine and starting point.",
+      },
+      {
+        q: "Our Zomato sales are already growing. Do we still need help?",
+        a: "Possibly on the other app. Good Gaon's Zomato sales were rising before onboarding, but its Swiggy orders were low; after listing, menu and ads work on both platforms, Swiggy orders went from 78 to 260 a month. An audit shows which platform has the bigger gap.",
+      },
+      {
+        q: "Should we run more than one brand from the same Gurugram kitchen?",
+        a: "Sometimes. Olantic 8 added two extra brand storefronts from the same kitchen. Each brand needs its own menu, listing and rating work, and a weak one can pull attention from the main brand, so we plan it as a separate brand with its own numbers.",
+      },
+      noGuaranteeFaq,
+    ],
+    guides: [
+      { label: "How to start a cloud kitchen on Swiggy and Zomato", href: "/how-to-start-a-cloud-kitchen-on-swiggy-and-zomato-2026-guide" },
+      { label: "Should your restaurant be on both Swiggy and Zomato?", href: "/should-your-restaurant-be-on-both-swiggy-and-zomato" },
+      { label: "Swiggy ads strategy without wasting budget", href: "/swiggy-ads-strategy-how-to-get-5x-roas-without-wasting-budget" },
+      { label: "Swiggy and Zomato consultant in Delhi NCR", href: "/swiggy-zomato-consultant-delhi-ncr" },
     ],
   },
   {
@@ -1437,4 +1588,7 @@ export const cityPages: CityPage[] = [
 ];
 
 export const cityPageBySlug = (slug: string) => cityPages.find((c) => c.slug === slug);
-export const cityPageByCity = (city: CaseCity) => cityPages.find((c) => c.city === city);
+/** The metro page for a case city (never an area page such as Noida). */
+export const cityPageByCity = (city: CaseCity) => cityPages.find((c) => c.city === city && !c.parent);
+/** Metro-level city pages only: one per case city, for city filters. */
+export const metroCityPages = cityPages.filter((c) => !c.parent);

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { Fragment } from "react";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, ChevronRight } from "lucide-react";
 
 import { Reveal } from "@/components/ui/Reveal";
 import { CTABand } from "@/components/site/CTABand";
 import { FaqList } from "@/components/site/FaqList";
-import { caseStudies, cityPages, resultsPage, services, type CaseStudy, type CityPage } from "@/lib/site";
+import { caseStudies, cityPageBySlug, cityPages, resultsPage, services, type CaseStudy, type CityPage } from "@/lib/site";
 import { jsonLd, breadcrumbSchema, cityServiceSchema, faqSchema } from "@/lib/seo";
 import { metaDescription, ogImageUrl, seoTitle } from "@/lib/utils";
 
@@ -44,13 +45,22 @@ export function CityLandingPage({ page }: { page: CityPage }) {
     .map((s) => caseStudies.find((c) => c.slug === s))
     .filter((c): c is CaseStudy => Boolean(c));
   const otherCities = cityPages.filter((c) => c.slug !== page.slug);
+  // Area pages (Noida, Gurugram) sit under their metro page in the breadcrumb.
+  const parent = page.parent ? cityPageBySlug(page.parent) : undefined;
+  const crumbs = [
+    { name: "Services", path: "/services" },
+    ...(parent ? [{ name: parent.shortName, path: `/${parent.slug}` }] : []),
+  ];
+  const sections = [
+    { id: "local-results", label: "Local results" },
+    { id: "delivery", label: `Delivery in ${page.shortName}` },
+    ...(page.areas?.length ? [{ id: "areas", label: "Where we work" }] : []),
+    { id: "services", label: "Services" },
+    { id: "faq", label: "Questions" },
+  ];
 
   const schema = jsonLd(
-    breadcrumbSchema([
-      { name: "Home", path: "/" },
-      { name: "Services", path: "/services" },
-      { name: page.shortName, path },
-    ]),
+    breadcrumbSchema([{ name: "Home", path: "/" }, ...crumbs, { name: page.shortName, path }]),
     cityServiceSchema({ path, name: page.title, description: page.metaDescription, city: page.areaServed }),
     faqSchema(page.faqs),
   );
@@ -78,12 +88,16 @@ export function CityLandingPage({ page }: { page: CityPage }) {
                   Home
                 </Link>
               </li>
-              <ChevronRight className="h-3.5 w-3.5" aria-hidden />
-              <li>
-                <Link href="/services" className="transition-colors hover:text-gold-300">
-                  Services
-                </Link>
-              </li>
+              {crumbs.map((c) => (
+                <Fragment key={c.path}>
+                  <ChevronRight className="h-3.5 w-3.5" aria-hidden />
+                  <li>
+                    <Link href={c.path} className="transition-colors hover:text-gold-300">
+                      {c.name}
+                    </Link>
+                  </li>
+                </Fragment>
+              ))}
               <ChevronRight className="h-3.5 w-3.5" aria-hidden />
               <li aria-current="page" className="text-cream-300">
                 {page.shortName}
@@ -101,12 +115,7 @@ export function CityLandingPage({ page }: { page: CityPage }) {
 
           <Reveal immediate delay={0.08}>
             <ul className="mt-9 flex flex-wrap gap-2.5" aria-label="Sections">
-              {[
-                { id: "local-results", label: "Local results" },
-                { id: "delivery", label: `Delivery in ${page.shortName}` },
-                { id: "services", label: "Services" },
-                { id: "faq", label: "Questions" },
-              ].map((s) => (
+              {sections.map((s) => (
                 <li key={s.id}>
                   <a
                     href={`#${s.id}`}
@@ -170,6 +179,42 @@ export function CityLandingPage({ page }: { page: CityPage }) {
           </dl>
         </div>
       </section>
+
+      {/* ================= AREAS (metro pages only) ================= */}
+      {page.areas?.length ? (
+        <section id="areas" className="section-tight scroll-mt-28 border-t border-cream-100/8" aria-labelledby="areas-title">
+          <div className="container-x">
+            <Reveal className="max-w-2xl">
+              <h2 id="areas-title" className="text-[length:var(--text-display-md)] font-bold leading-[1.1]">
+                Where we work in {page.shortName}
+              </h2>
+              <p className="mt-3 text-base leading-relaxed text-cream-400">
+                The same team and the same order of work across the {page.shortName}, with named clients in each area.
+              </p>
+            </Reveal>
+
+            <div className="mt-10 grid gap-6 md:grid-cols-3">
+              {page.areas.map((a, i) => (
+                <Reveal key={a.name} delay={i * 0.08} className="h-full">
+                  <div className="card flex h-full flex-col p-7">
+                    <h3 className="font-display text-base font-semibold text-cream-50">{a.name}</h3>
+                    <p className="mt-3 text-sm leading-relaxed text-cream-400">{a.body}</p>
+                    {a.href && (
+                      <Link
+                        href={a.href}
+                        className="mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-medium text-gold-400 hover:text-gold-300"
+                      >
+                        Swiggy &amp; Zomato consultant in {a.name}
+                        <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+                      </Link>
+                    )}
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {/* ================= SERVICES + GUIDES ================= */}
       <section

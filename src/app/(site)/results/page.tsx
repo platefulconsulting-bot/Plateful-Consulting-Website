@@ -4,7 +4,7 @@ import { ArrowRight, ArrowUpRight, ChevronRight } from "lucide-react";
 
 import { Reveal } from "@/components/ui/Reveal";
 import { CTABand } from "@/components/site/CTABand";
-import { caseStudies, cityPages, resultsPage, topicHubs, type CaseStudy } from "@/lib/site";
+import { caseStudies, cityPages, metroCityPages, resultsPage, topicHubs, type CaseStudy } from "@/lib/site";
 import { jsonLd, breadcrumbSchema, collectionPageSchema } from "@/lib/seo";
 import { metaDescription, ogImageUrl, seoTitle, slugify } from "@/lib/utils";
 
@@ -138,7 +138,7 @@ export default function ResultsPage() {
                 Filter by city
               </legend>
               <div className="mt-3 flex flex-wrap gap-2.5">
-                {[{ key: "all", label: "All" }, ...cityPages.map((c) => ({ key: slugify(c.city), label: c.shortName }))].map(
+                {[{ key: "all", label: "All" }, ...metroCityPages.map((c) => ({ key: slugify(c.city), label: c.shortName }))].map(
                   (opt) => (
                     <div key={opt.key}>
                       <input
